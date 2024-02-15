@@ -63,7 +63,7 @@ Oh, you can press 1 or 2 on the keyboard to fake remote button presses for testi
 
 ## The config file
 
-Edit config.txt to change the default settings.  The file itself has some basic descroptions of its options.
+Edit config.txt to change the default settings.  The file itself has some basic descriptions of its options.
 
 ## Comand line options
 
