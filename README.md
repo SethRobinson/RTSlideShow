@@ -65,9 +65,9 @@ Oh, you can press 1 or 2 on the keyboard to fake remote button presses for testi
 
 Edit config.txt to change the default settings.  The file itself has some basic descriptions of its options.
 
-## Comand line options
+## Command line options
 
-You can add -fulscreen to force fullscreen mode.  An additional parm can be the config file to use, this way many different kinds of kiosks/presentations can be ready to go from the same directory.  Example:  RTSlideShow.exe myconfig.txt
+You can add -fullscreen to force fullscreen mode.  An additional parm can be the config file to use, this way many different kinds of kiosks/presentations can be ready to go from the same directory.  Example:  RTSlideShow.exe myconfig.txt
 
 # How to compile it from source
 
