@@ -1,0 +1,1125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug GL|x64">
+      <Configuration>Debug GL</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release GL|x64">
+      <Configuration>Release GL</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{EDF3C631-F9BD-4E50-BD8F-804734B7ECAF}</ProjectGuid>
+    <RootNamespace>RTSlideShow</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>16.0.31727.243</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>$(ProjectName)_$(Configuration)_$(Platform)</TargetName>
+    <OutDir>..\bin\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\bin\</OutDir>
+    <TargetName>$(ProjectName)_$(Configuration)_$(Platform)</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\source;..\..\shared;..\..\shared\win\;..\..\shared\util\boost;..\..\shared\ClanLib-2.0\Sources;..\..\shared\win\include;..\..\shared\FliteTTS\include;..\..\shared\Irrlicht\include;..\hueplusplus\include;..\..\shared\\win\libVLC\sdk\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN;WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;BOOST_ALL_NO_LIB;C_GL_MODE;_HAS_ITERATOR_DEBUGGING=0;_SECURE_SCL=0;_NO_DEBUG_HEAP=1;RT_JPG_SUPPORT;RT_PNG_SUPPORT;RT_WIN_MULTITOUCH_SUPPORT;RT_RUNS_IN_BACKGROUND;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_SILENCE_CXX20_CISO646_REMOVED_WARNING;_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>PlatformPrecomp.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>opengl32.lib;audiere.lib;zlibwapi.lib;ws2_32.lib;dinput8.lib;dxguid.lib;libvlccore.lib;libvlc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>..\..\shared\win\lib\64;..\..\shared\win\fmodstudio\api\lowlevel\lib;..\..\shared\win\audiere\lib64;D:\pro\dxsdk\Lib\x64;..\..\shared\win\libVLC\sdk\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(OutDir)RTSlideShow.pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\source;..\..\shared;..\..\shared\win\;..\..\shared\util\boost;..\..\shared\ClanLib-2.0\Sources;..\..\shared\win\include;..\..\shared\FliteTTS\include;..\hueplusplus\include;..\..\shared\\win\libVLC\sdk\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;BOOST_ALL_NO_LIB;C_GL_MODE;RT_JPG_SUPPORT;RT_PNG_SUPPORT;RT_WIN_MULTITOUCH_SUPPORT;RT_RUNS_IN_BACKGROUND;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_SILENCE_CXX20_CISO646_REMOVED_WARNING;_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>PlatformPrecomp.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4267;4244;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>opengl32.lib;audiere.lib;zlibwapi.lib;ws2_32.lib;dinput8.lib;dxguid.lib;libvlccore.lib;libvlc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>..\..\shared\win\lib\64;..\..\shared\win\fmod\api\lib;..\..\shared\win\audiere\lib64;..\..\shared\win\lib\x64;..\..\shared\win\fmodstudio\api\lowlevel\lib;D:\pro\dxsdk\Lib\x64;..\..\shared\win\libVLC\sdk\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\shared\android\AndroidUtils.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\android\v2_src\cpp\AndroidApp.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Audio\AudioManager.cpp" />
+    <ClCompile Include="..\..\shared\Audio\AudioManagerAndroid.cpp" />
+    <ClCompile Include="..\..\shared\Audio\AudioManagerAudiere.cpp" />
+    <ClCompile Include="..\..\shared\Audio\AudioManagerFMOD.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Audio\AudioManagerFMODStudio.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Audio\AudioManagerSDL.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\BaseApp.cpp" />
+    <ClCompile Include="..\..\shared\ClanLib-2.0\Sources\Core\Math\angle.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\ClanLib-2.0\Sources\Core\Math\mat3.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\ClanLib-2.0\Sources\Core\Math\mat4.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\ClanLib-2.0\Sources\Core\Math\rect.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\ClanLib-2.0\Sources\Core\Math\vec2.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\ClanLib-2.0\Sources\Core\Math\vec3.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\ClanLib-2.0\Sources\Core\Math\vec4.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\ArcadeInputComponent.cpp" />
+    <ClCompile Include="..\..\shared\Entity\Button2DComponent.cpp" />
+    <ClCompile Include="..\..\shared\Entity\Component.cpp" />
+    <ClCompile Include="..\..\shared\Entity\CustomInputComponent.cpp" />
+    <ClCompile Include="..\..\shared\Entity\DPadComponent.cpp" />
+    <ClCompile Include="..\..\shared\Entity\EmitVirtualKeyComponent.cpp" />
+    <ClCompile Include="..\..\shared\Entity\Entity.cpp" />
+    <ClCompile Include="..\..\shared\Entity\EntityUtils.cpp" />
+    <ClCompile Include="..\..\shared\Entity\FilterInputComponent.cpp" />
+    <ClCompile Include="..\..\shared\Entity\FocusInputComponent.cpp" />
+    <ClCompile Include="..\..\shared\Entity\FocusRenderComponent.cpp" />
+    <ClCompile Include="..\..\shared\Entity\FocusUpdateComponent.cpp" />
+    <ClCompile Include="..\..\shared\Entity\HTTPComponent.cpp" />
+    <ClCompile Include="..\..\shared\Entity\InputTextRenderComponent.cpp" />
+    <ClCompile Include="..\..\shared\Entity\InterpolateComponent.cpp" />
+    <ClCompile Include="..\..\shared\Entity\LibVlcStreamComponent.cpp" />
+    <ClCompile Include="..\..\shared\Entity\LogDisplayComponent.cpp" />
+    <ClCompile Include="..\..\shared\Entity\OverlayRenderComponent.cpp" />
+    <ClCompile Include="..\..\shared\Entity\ProgressBarComponent.cpp" />
+    <ClCompile Include="..\..\shared\Entity\RectRenderComponent.cpp" />
+    <ClCompile Include="..\..\shared\Entity\RenderScissorComponent.cpp" />
+    <ClCompile Include="..\..\shared\Entity\ScrollBarRenderComponent.cpp" />
+    <ClCompile Include="..\..\shared\Entity\ScrollComponent.cpp" />
+    <ClCompile Include="..\..\shared\Entity\ScrollToZoomComponent.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\SelectButtonWithCustomInputComponent.cpp" />
+    <ClCompile Include="..\..\shared\Entity\SliderComponent.cpp" />
+    <ClCompile Include="..\..\shared\Entity\TapSequenceDetectComponent.cpp" />
+    <ClCompile Include="..\..\shared\Entity\TemplateComponent.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\TextBoxRenderComponent.cpp" />
+    <ClCompile Include="..\..\shared\Entity\TextRenderComponent.cpp" />
+    <ClCompile Include="..\..\shared\Entity\TouchDragComponent.cpp" />
+    <ClCompile Include="..\..\shared\Entity\TouchDragMarkupComponent.cpp" />
+    <ClCompile Include="..\..\shared\Entity\TouchDragMoveComponent.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\TouchHandlerComponent.cpp" />
+    <ClCompile Include="..\..\shared\Entity\TouchStripComponent.cpp" />
+    <ClCompile Include="..\..\shared\Entity\TrailRenderComponent.cpp" />
+    <ClCompile Include="..\..\shared\Entity\TyperComponent.cpp" />
+    <ClCompile Include="..\..\shared\Entity\UnderlineRenderComponent.cpp" />
+    <ClCompile Include="..\..\shared\FileSystem\FileManager.cpp" />
+    <ClCompile Include="..\..\shared\FileSystem\FileSystem.cpp" />
+    <ClCompile Include="..\..\shared\FileSystem\FileSystemZip.cpp" />
+    <ClCompile Include="..\..\shared\FileSystem\StreamingInstance.cpp" />
+    <ClCompile Include="..\..\shared\FileSystem\StreamingInstanceFile.cpp" />
+    <ClCompile Include="..\..\shared\FileSystem\StreamingInstanceZip.cpp" />
+    <ClCompile Include="..\..\shared\Gamepad\Gamepad.cpp" />
+    <ClCompile Include="..\..\shared\Gamepad\GamepadDirectX.cpp" />
+    <ClCompile Include="..\..\shared\Gamepad\GamepadiCade.cpp" />
+    <ClCompile Include="..\..\shared\Gamepad\GamepadManager.cpp" />
+    <ClCompile Include="..\..\shared\Gamepad\GamepadMoga.cpp" />
+    <ClCompile Include="..\..\shared\Gamepad\GamepadProvider.cpp" />
+    <ClCompile Include="..\..\shared\Gamepad\GamepadProviderDirectX.cpp" />
+    <ClCompile Include="..\..\shared\Gamepad\GamepadProvideriCade.cpp" />
+    <ClCompile Include="..\..\shared\Gamepad\GamepadProviderMoga.cpp" />
+    <ClCompile Include="..\..\shared\Gamepad\GamepadProviderXInput.cpp" />
+    <ClCompile Include="..\..\shared\Gamepad\GamepadXInput.cpp" />
+    <ClCompile Include="..\..\shared\GUI\RTFont.cpp" />
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jcapimin.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jcapistd.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jccoefct.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jccolor.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jcdctmgr.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jchuff.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jcinit.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jcmainct.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jcmarker.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jcmaster.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jcomapi.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jcparam.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jcphuff.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jcprepct.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jcsample.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jctrans.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdapimin.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdapistd.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdatadst.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdatasrc.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdcoefct.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdcolor.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jddctmgr.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdhuff.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdinput.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdmainct.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdmarker.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdmaster.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdmerge.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdphuff.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdpostct.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdsample.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdtrans.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jerror.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jfdctflt.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jfdctfst.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jfdctint.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jidctflt.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jidctfst.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jidctint.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jidctred.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jmemmgr.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jmemnobs.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jquant1.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jquant2.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jutils.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\png.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngerror.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pnggccrd.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngget.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngmem.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngpread.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngread.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngrio.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngrtran.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngrutil.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngset.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngtrans.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngvcrd.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngwio.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngwrite.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngwtran.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngwutil.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Manager\Console.cpp" />
+    <ClCompile Include="..\..\shared\Manager\GameTimer.cpp" />
+    <ClCompile Include="..\..\shared\Manager\HueManager.cpp" />
+    <ClCompile Include="..\..\shared\Manager\libVLC_RTSP.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Manager\MessageManager.cpp" />
+    <ClCompile Include="..\..\shared\Manager\ResourceManager.cpp" />
+    <ClCompile Include="..\..\shared\Manager\VariantDB.cpp" />
+    <ClCompile Include="..\..\shared\Math\rtPlane.cpp" />
+    <ClCompile Include="..\..\shared\Math\rtRect.cpp" />
+    <ClCompile Include="..\..\shared\Math\WeightRand.cpp" />
+    <ClCompile Include="..\..\shared\Network\NetHTTP.cpp" />
+    <ClCompile Include="..\..\shared\Network\NetSocket.cpp" />
+    <ClCompile Include="..\..\shared\Network\NetUtils.cpp" />
+    <ClCompile Include="..\..\shared\PlatformPrecomp.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\PlatformSetup.cpp" />
+    <ClCompile Include="..\..\shared\Renderer\JPGSurfaceLoader.cpp" />
+    <ClCompile Include="..\..\shared\Renderer\linearparticle\sources\L_Defination.cpp" />
+    <ClCompile Include="..\..\shared\Renderer\linearparticle\sources\L_DroppingEffect.cpp" />
+    <ClCompile Include="..\..\shared\Renderer\linearparticle\sources\L_EffectEmitter.cpp" />
+    <ClCompile Include="..\..\shared\Renderer\linearparticle\sources\L_EffectManager.cpp" />
+    <ClCompile Include="..\..\shared\Renderer\linearparticle\sources\L_ExplosionEffect.cpp" />
+    <ClCompile Include="..\..\shared\Renderer\linearparticle\sources\L_MotionController.cpp" />
+    <ClCompile Include="..\..\shared\Renderer\linearparticle\sources\L_Particle.cpp" />
+    <ClCompile Include="..\..\shared\Renderer\linearparticle\sources\L_ParticleEffect.cpp" />
+    <ClCompile Include="..\..\shared\Renderer\linearparticle\sources\L_ParticleMem.cpp" />
+    <ClCompile Include="..\..\shared\Renderer\linearparticle\sources\L_ParticleSystem.cpp" />
+    <ClCompile Include="..\..\shared\Renderer\linearparticle\sources\L_ShootingEffect.cpp" />
+    <ClCompile Include="..\..\shared\Renderer\RenderBatcher.cpp" />
+    <ClCompile Include="..\..\shared\Renderer\RTGLESExt.cpp" />
+    <ClCompile Include="..\..\shared\Renderer\SoftSurface.cpp" />
+    <ClCompile Include="..\..\shared\Renderer\Surface.cpp" />
+    <ClCompile Include="..\..\shared\Renderer\SurfaceAnim.cpp" />
+    <ClCompile Include="..\..\shared\util\cJSON.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\util\cJSON_Utils.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\util\CRandom.cpp" />
+    <ClCompile Include="..\..\shared\util\GLESUtils.cpp" />
+    <ClCompile Include="..\..\shared\util\MathUtils.cpp" />
+    <ClCompile Include="..\..\shared\util\MiscUtils.cpp" />
+    <ClCompile Include="..\..\shared\util\PrimeSearch.cpp" />
+    <ClCompile Include="..\..\shared\util\RenderUtils.cpp" />
+    <ClCompile Include="..\..\shared\util\ResourceUtils.cpp" />
+    <ClCompile Include="..\..\shared\util\TextScanner.cpp" />
+    <ClCompile Include="..\..\shared\util\unzip\ioapi.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\util\unzip\unzip.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\util\Variant.cpp" />
+    <ClCompile Include="..\..\shared\WebOS\SDLMain.cpp" />
+    <ClCompile Include="..\..\shared\WebOS\WebOSUtils.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\win\app\main.cpp" />
+    <ClCompile Include="..\..\shared\win\MemMgr.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">true</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">true</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\win\WinUtils.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\Action.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\APICache.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\BaseDevice.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\BaseHttpHandler.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\Bridge.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\BridgeConfig.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\CLIPSensors.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\ColorUnits.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\ExtendedColorHueStrategy.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\ExtendedColorTemperatureStrategy.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\Group.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\HueCommandAPI.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\HueDeviceTypes.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\HueException.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\Light.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\ModelPictures.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\NewDeviceList.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\Rule.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\Scene.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\Schedule.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\Sensor.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\SimpleBrightnessStrategy.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\SimpleColorHueStrategy.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\SimpleColorTemperatureStrategy.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\StateTransaction.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\TimePattern.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\UPnP.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\Utils.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\WinHttpHandler.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\ZLLSensors.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\source\App.cpp" />
+    <ClCompile Include="..\source\FoobarManager.cpp" />
+    <ClCompile Include="..\source\GUI\IntroMenu.cpp" />
+    <ClCompile Include="..\source\NowPlayingManager.cpp" />
+    <ClCompile Include="..\source\RestClient.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="..\source\RestManager.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="..\source\Script.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="..\source\SlideManager.cpp" />
+    <ClCompile Include="..\source\SpotifyManager.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="..\source\VariableManager.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\shared\android\AndroidUtils.h" />
+    <ClInclude Include="..\..\shared\android\PlatformSetupAndroid.h" />
+    <ClInclude Include="..\..\shared\Audio\AudioManager.h" />
+    <ClInclude Include="..\..\shared\Audio\AudioManagerAndroid.h" />
+    <ClInclude Include="..\..\shared\Entity\LibVlcStreamComponent.h" />
+    <ClInclude Include="..\..\shared\Entity\ScrollToZoomComponent.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\TouchDragMarkupComponent.h" />
+    <ClInclude Include="..\..\shared\Manager\HueManager.h" />
+    <ClInclude Include="..\..\shared\Manager\libVLC_RTSP.h" />
+    <ClInclude Include="..\source\SpotifyManager.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="..\source\VariableManager.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <CustomBuild Include="..\..\shared\Audio\AudioManagerAudiere.h" />
+    <ClInclude Include="..\..\shared\Audio\AudioManagerDenshion.h" />
+    <CustomBuild Include="..\..\shared\Audio\AudioManagerFMOD.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">true</ExcludedFromBuild>
+    </CustomBuild>
+    <ClInclude Include="..\..\shared\Audio\AudioManagerFMODStudio.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Audio\AudioManagerOS.h" />
+    <ClInclude Include="..\..\shared\Audio\AudioManagerSDL.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Audio\CocosDenshion\CDAudioManager.h" />
+    <ClInclude Include="..\..\shared\Audio\CocosDenshion\CDConfig.h" />
+    <ClInclude Include="..\..\shared\Audio\CocosDenshion\CDOpenALSupport.h" />
+    <ClInclude Include="..\..\shared\Audio\CocosDenshion\CocosDenshion.h" />
+    <ClInclude Include="..\..\shared\Audio\CocosDenshion\SimpleAudioEngine.h" />
+    <ClInclude Include="..\..\shared\BaseApp.h" />
+    <ClInclude Include="..\..\shared\Entity\ArcadeInputComponent.h" />
+    <ClInclude Include="..\..\shared\Entity\Button2DComponent.h" />
+    <ClInclude Include="..\..\shared\Entity\Component.h" />
+    <ClInclude Include="..\..\shared\Entity\CustomInputComponent.h" />
+    <ClInclude Include="..\..\shared\Entity\DPadComponent.h" />
+    <ClInclude Include="..\..\shared\Entity\EmitVirtualKeyComponent.h" />
+    <ClInclude Include="..\..\shared\Entity\Entity.h" />
+    <ClInclude Include="..\..\shared\Entity\EntityUtils.h" />
+    <ClInclude Include="..\..\shared\Entity\FilterInputComponent.h" />
+    <ClInclude Include="..\..\shared\Entity\FocusInputComponent.h" />
+    <ClInclude Include="..\..\shared\Entity\FocusRenderComponent.h" />
+    <ClInclude Include="..\..\shared\Entity\FocusUpdateComponent.h" />
+    <ClInclude Include="..\..\shared\Entity\HTTPComponent.h" />
+    <ClInclude Include="..\..\shared\Entity\InputTextRenderComponent.h" />
+    <ClInclude Include="..\..\shared\Entity\InterpolateComponent.h" />
+    <ClInclude Include="..\..\shared\Entity\LogDisplayComponent.h" />
+    <ClInclude Include="..\..\shared\Entity\OverlayRenderComponent.h" />
+    <ClInclude Include="..\..\shared\Entity\ProgressBarComponent.h" />
+    <ClInclude Include="..\..\shared\Entity\RectRenderComponent.h" />
+    <ClInclude Include="..\..\shared\Entity\RenderScissorComponent.h" />
+    <ClInclude Include="..\..\shared\Entity\ScrollBarRenderComponent.h" />
+    <ClInclude Include="..\..\shared\Entity\ScrollComponent.h" />
+    <ClInclude Include="..\..\shared\Entity\SelectButtonWithCustomInputComponent.h" />
+    <ClInclude Include="..\..\shared\Entity\SliderComponent.h" />
+    <ClInclude Include="..\..\shared\Entity\TapSequenceDetectComponent.h" />
+    <CustomBuild Include="..\..\shared\Entity\TemplateComponent.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">true</ExcludedFromBuild>
+    </CustomBuild>
+    <ClInclude Include="..\..\shared\Entity\TextBoxRenderComponent.h" />
+    <ClInclude Include="..\..\shared\Entity\TextRenderComponent.h" />
+    <ClInclude Include="..\..\shared\Entity\TouchDragComponent.h" />
+    <ClInclude Include="..\..\shared\Entity\TouchDragMoveComponent.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\TouchHandlerComponent.h" />
+    <ClInclude Include="..\..\shared\Entity\TouchStripComponent.h" />
+    <ClInclude Include="..\..\shared\Entity\TrailRenderComponent.h" />
+    <ClInclude Include="..\..\shared\Entity\TyperComponent.h" />
+    <ClInclude Include="..\..\shared\Entity\UnderlineRenderComponent.h" />
+    <ClInclude Include="..\..\shared\FileSystem\FileManager.h" />
+    <ClInclude Include="..\..\shared\FileSystem\FileSystem.h" />
+    <ClInclude Include="..\..\shared\FileSystem\FileSystemZip.h" />
+    <ClInclude Include="..\..\shared\FileSystem\StreamingInstance.h" />
+    <ClInclude Include="..\..\shared\FileSystem\StreamingInstanceFile.h" />
+    <ClInclude Include="..\..\shared\FileSystem\StreamingInstanceZip.h" />
+    <ClInclude Include="..\..\shared\Gamepad\Gamepad.h" />
+    <ClInclude Include="..\..\shared\Gamepad\Gamepad60Beat.h" />
+    <ClInclude Include="..\..\shared\Gamepad\GamepadDirectX.h" />
+    <ClInclude Include="..\..\shared\Gamepad\GamepadiCade.h" />
+    <ClInclude Include="..\..\shared\Gamepad\GamepadManager.h" />
+    <ClInclude Include="..\..\shared\Gamepad\GamepadMoga.h" />
+    <ClInclude Include="..\..\shared\Gamepad\GamepadProvider.h" />
+    <ClInclude Include="..\..\shared\Gamepad\GamepadProvider60Beat.h" />
+    <ClInclude Include="..\..\shared\Gamepad\GamepadProvider60BeatNative.h" />
+    <ClInclude Include="..\..\shared\Gamepad\GamepadProviderDirectX.h" />
+    <ClInclude Include="..\..\shared\Gamepad\GamepadProvideriCade.h" />
+    <ClInclude Include="..\..\shared\Gamepad\GamepadProviderMoga.h" />
+    <ClInclude Include="..\..\shared\Gamepad\GamepadProviderXInput.h" />
+    <ClInclude Include="..\..\shared\Gamepad\GamepadXInput.h" />
+    <ClInclude Include="..\..\shared\GUI\RTFont.h" />
+    <ClInclude Include="..\..\shared\GUI\RTFontFileFormat.h" />
+    <ClInclude Include="..\..\shared\iOS\app\EAGLView.h" />
+    <ClInclude Include="..\..\shared\iOS\app\MyAppDelegate.h" />
+    <ClInclude Include="..\..\shared\iOS\app\MyViewController.h" />
+    <ClInclude Include="..\..\shared\iOS\iOSUtils.h" />
+    <ClInclude Include="..\..\shared\iOS\PlatformSetupIOS.h" />
+    <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\cderror.h" />
+    <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\cdjpeg.h" />
+    <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jchuff.h" />
+    <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jconfig.h" />
+    <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdct.h" />
+    <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdhuff.h" />
+    <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jerror.h" />
+    <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jinclude.h" />
+    <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jmemsys.h" />
+    <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jmorecfg.h" />
+    <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jpegint.h" />
+    <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jpeglib.h" />
+    <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jversion.h" />
+    <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\transupp.h" />
+    <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\png.h" />
+    <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngconf.h" />
+    <ClInclude Include="..\..\shared\Manager\Console.h" />
+    <ClInclude Include="..\..\shared\Manager\GameTimer.h" />
+    <ClInclude Include="..\..\shared\Manager\MessageManager.h" />
+    <ClInclude Include="..\..\shared\Manager\ResourceManager.h" />
+    <ClInclude Include="..\..\shared\Manager\VariantDB.h" />
+    <ClInclude Include="..\..\shared\Math\rtPlane.h" />
+    <ClInclude Include="..\..\shared\Math\rtRect.h" />
+    <ClInclude Include="..\..\shared\Math\WeightRand.h" />
+    <ClInclude Include="..\..\shared\Network\NetHTTP.h" />
+    <ClInclude Include="..\..\shared\Network\NetSocket.h" />
+    <ClInclude Include="..\..\shared\Network\NetUtils.h" />
+    <ClInclude Include="..\..\shared\OSX\app\MainController.h" />
+    <ClInclude Include="..\..\shared\OSX\app\MyApplication.h" />
+    <ClInclude Include="..\..\shared\OSX\app\MyOpenGLView.h" />
+    <ClInclude Include="..\..\shared\OSX\OSXUtils.h" />
+    <ClInclude Include="..\..\shared\OSX\PlatformSetupOSX.h" />
+    <ClInclude Include="..\..\shared\platformenums.h" />
+    <ClInclude Include="..\..\shared\PlatformPrecomp.h" />
+    <ClInclude Include="..\..\shared\PlatformSetup.h" />
+    <ClInclude Include="..\..\shared\Renderer\bitmap.h" />
+    <ClInclude Include="..\..\shared\Renderer\JPGSurfaceLoader.h" />
+    <ClInclude Include="..\..\shared\Renderer\LinearParticle.h" />
+    <ClInclude Include="..\..\shared\Renderer\linearparticle\sources\L_Defination.h" />
+    <ClInclude Include="..\..\shared\Renderer\linearparticle\sources\L_DroppingEffect.h" />
+    <ClInclude Include="..\..\shared\Renderer\linearparticle\sources\L_EffectEmitter.h" />
+    <ClInclude Include="..\..\shared\Renderer\linearparticle\sources\L_EffectManager.h" />
+    <ClInclude Include="..\..\shared\Renderer\linearparticle\sources\L_ExplosionEffect.h" />
+    <ClInclude Include="..\..\shared\Renderer\linearparticle\sources\L_MotionController.h" />
+    <ClInclude Include="..\..\shared\Renderer\linearparticle\sources\L_Particle.h" />
+    <ClInclude Include="..\..\shared\Renderer\linearparticle\sources\L_ParticleEffect.h" />
+    <ClInclude Include="..\..\shared\Renderer\linearparticle\sources\L_ParticleMem.h" />
+    <ClInclude Include="..\..\shared\Renderer\linearparticle\sources\L_ParticleSystem.h" />
+    <ClInclude Include="..\..\shared\Renderer\linearparticle\sources\L_ShootingEffect.h" />
+    <ClInclude Include="..\..\shared\Renderer\RenderBatcher.h" />
+    <ClInclude Include="..\..\shared\Renderer\RTGLESExt.h" />
+    <ClInclude Include="..\..\shared\Renderer\SoftSurface.h" />
+    <ClInclude Include="..\..\shared\Renderer\Surface.h" />
+    <ClInclude Include="..\..\shared\Renderer\SurfaceAnim.h" />
+    <ClInclude Include="..\..\shared\util\CRandom.h" />
+    <ClInclude Include="..\..\shared\util\GLESUtils.h" />
+    <ClInclude Include="..\..\shared\util\MathUtils.h" />
+    <ClInclude Include="..\..\shared\util\MiscUtils.h" />
+    <ClInclude Include="..\..\shared\util\PrimeSearch.h" />
+    <ClInclude Include="..\..\shared\util\RenderUtils.h" />
+    <ClInclude Include="..\..\shared\util\ResourceUtils.h" />
+    <ClInclude Include="..\..\shared\util\RTFileFormat.h" />
+    <ClInclude Include="..\..\shared\util\TextScanner.h" />
+    <ClInclude Include="..\..\shared\util\unzip\crypt.h" />
+    <ClInclude Include="..\..\shared\util\unzip\ioapi.h" />
+    <ClInclude Include="..\..\shared\util\unzip\unzip.h" />
+    <ClInclude Include="..\..\shared\util\Variant.h" />
+    <ClInclude Include="..\..\shared\WebOS\PlatformSetupWebOS.h" />
+    <ClInclude Include="..\..\shared\WebOS\SDLMain.h" />
+    <ClInclude Include="..\..\shared\WebOS\WebOSUtils.h" />
+    <ClInclude Include="..\..\shared\win\app\main.h" />
+    <ClInclude Include="..\..\shared\win\MemMgr.h" />
+    <ClInclude Include="..\..\shared\win\PlatformSetupWin.h" />
+    <ClInclude Include="..\..\shared\win\powerVR\OGLES\Include\GLES\egl.h" />
+    <ClInclude Include="..\..\shared\win\powerVR\OGLES\Include\GLES\gl.h" />
+    <ClInclude Include="..\..\shared\win\WinUtils.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\Action.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\APICache.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\BaseDevice.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\BaseHttpHandler.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\Bridge.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\BridgeConfig.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\BrightnessStrategy.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\CLIPSensors.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\ColorHueStrategy.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\ColorTemperatureStrategy.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\ColorUnits.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\Condition.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\ExtendedColorHueStrategy.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\ExtendedColorTemperatureStrategy.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\Group.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\HueCommandAPI.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\HueDeviceTypes.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\HueException.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\HueExceptionMacro.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\IHttpHandler.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\LibConfig.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\Light.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\ModelPictures.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\NewDeviceList.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\ResourceList.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\Rule.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\Scene.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\Schedule.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\Sensor.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\SensorList.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\SimpleBrightnessStrategy.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\SimpleColorHueStrategy.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\SimpleColorTemperatureStrategy.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\StateTransaction.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\TimePattern.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\UPnP.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\Utils.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\WinHttpHandler.h" />
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\ZLLSensors.h" />
+    <ClInclude Include="..\source\App.h" />
+    <ClInclude Include="..\source\FoobarManager.h" />
+    <ClInclude Include="..\source\GUI\IntroMenu.h" />
+    <ClInclude Include="..\source\NowPlayingManager.h" />
+    <ClInclude Include="..\source\RestClient.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="..\source\RestManager.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="..\source\Script.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="..\source\SlideManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\shared\android\v2_src\java\BillingReceiver.java" />
+    <None Include="..\..\shared\android\v2_src\java\BillingService.java" />
+    <None Include="..\..\shared\android\v2_src\java\Consts.java" />
+    <None Include="..\..\shared\android\v2_src\java\PurchaseObserver.java" />
+    <None Include="..\..\shared\android\v2_src\java\ResponseHandler.java" />
+    <None Include="..\..\shared\android\v2_src\java\Security.java" />
+    <None Include="..\..\shared\android\v2_src\java\SharedActivity.java" />
+    <None Include="..\..\shared\android\v2_src\java\SharedMultiTouchInput.java" />
+    <None Include="..\..\shared\Audio\AudioManagerDenshion.mm" />
+    <CustomBuild Include="..\..\shared\Audio\AudioManagerOS.mm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">true</ExcludedFromBuild>
+    </CustomBuild>
+    <None Include="..\..\shared\Audio\CocosDenshion\CDAudioManager.m" />
+    <None Include="..\..\shared\Audio\CocosDenshion\CDOpenALSupport.m" />
+    <None Include="..\..\shared\Audio\CocosDenshion\CocosDenshion.m" />
+    <None Include="..\..\shared\Audio\CocosDenshion\LICENSE.cocosdenshion" />
+    <None Include="..\..\shared\Audio\CocosDenshion\SimpleAudioEngine.m" />
+    <None Include="..\..\shared\Gamepad\Gamepad60Beat.mm" />
+    <None Include="..\..\shared\Gamepad\GamepadProvider60Beat.mm" />
+    <None Include="..\..\shared\Gamepad\GamepadProvider60BeatNative.mm" />
+    <None Include="..\..\shared\iOS\app\EAGLView.mm" />
+    <None Include="..\..\shared\iOS\app\main.mm" />
+    <None Include="..\..\shared\iOS\app\MyAppDelegate.mm" />
+    <None Include="..\..\shared\iOS\app\MyViewController.mm" />
+    <None Include="..\..\shared\iOS\iOSUtils.mm" />
+    <None Include="..\..\shared\OSX\app\main.m" />
+    <None Include="..\..\shared\OSX\app\MainController.mm" />
+    <None Include="..\..\shared\OSX\app\MyApplication.m" />
+    <None Include="..\..\shared\OSX\app\MyOpenGLView.mm" />
+    <None Include="..\..\shared\OSX\OSXUtils.mm" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\license.txt" />
+    <Text Include="..\..\Programmer Readme.txt" />
+    <Text Include="..\Project Readme.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,1510 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="source\Managers">
+      <UniqueIdentifier>{0e2a045c-af11-42f2-a709-415b3bfd31d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\GUI">
+      <UniqueIdentifier>{d7d5e45d-27f6-408b-965b-b9bcfb0b226e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared">
+      <UniqueIdentifier>{adee3f17-d2c8-4ed6-a460-3a5b846fd4dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared\win">
+      <UniqueIdentifier>{1b5ad0b2-cdc3-48e6-aeb4-6694bb8b283a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared\util">
+      <UniqueIdentifier>{cbb33d8d-5f88-49fe-9d1f-dbf5839d3f5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared\util\unzip">
+      <UniqueIdentifier>{e3b5a07e-a836-4756-86dc-b4757c5001c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared\iOS">
+      <UniqueIdentifier>{3e6f14bb-6331-481e-bb60-2e7323be6a87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared\iOS\app">
+      <UniqueIdentifier>{0d5da6d9-bef5-48fe-b1e9-11e6ad645a98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared\Manager">
+      <UniqueIdentifier>{20b96d58-9cb4-44ce-a497-e6de8e8b4f07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared\Renderer">
+      <UniqueIdentifier>{e9001a35-3367-4e4d-a6b0-8b12fd593538}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared\Renderer\LinearParticle">
+      <UniqueIdentifier>{10a270f0-84ef-4cfc-91f9-5a1b3ff550a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared\Renderer\LibJPeg">
+      <UniqueIdentifier>{c216c353-3f5d-45d1-9566-48af27735c9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared\GUI">
+      <UniqueIdentifier>{9b218f4e-fa54-4ed7-acec-0342b63b115f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared\Entity">
+      <UniqueIdentifier>{7a4cd9c4-fbc5-47cd-b80e-e950f00f3f2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared\Entity\Component">
+      <UniqueIdentifier>{89eb7178-3969-4b87-b3d7-94546b90e1fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared\ClanLib">
+      <UniqueIdentifier>{8d87942c-fc39-425a-8e02-ae3741fbec8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared\ClanLib\Core">
+      <UniqueIdentifier>{5d882328-7b0a-4970-b530-b651a9bdb04e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared\ClanLib\Core\Math">
+      <UniqueIdentifier>{2d473225-b649-4ee7-8086-52ba1b41ae98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared\ClanLib\Math">
+      <UniqueIdentifier>{5ac56898-1538-48e4-a42c-9ef1b7893b13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared\Audio">
+      <UniqueIdentifier>{af457688-1552-4dd4-b706-cb4c7dcec25d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared\Audio\Denshion">
+      <UniqueIdentifier>{f9ae807f-f2a9-4769-adf8-6f32c88199d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared\Network">
+      <UniqueIdentifier>{b018ea59-70de-4efb-a193-efe3c3592adf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared\Math">
+      <UniqueIdentifier>{eadd025b-ac6d-4127-b195-ef2e544c4e6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared\WebOS">
+      <UniqueIdentifier>{7ec7cbc2-5c93-498c-86d3-fe4a4b7b76a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared\android">
+      <UniqueIdentifier>{bc93a414-83e8-4c02-9069-82731bfb9caf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared\android\v2_src">
+      <UniqueIdentifier>{38a0aab6-e122-4c3b-a0a5-63be5c5e03a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared\android\v2_src\java">
+      <UniqueIdentifier>{ecc48c2b-0172-4405-a941-f90fd1e258c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared\android\v2_src\cpp">
+      <UniqueIdentifier>{9d1a97a6-e6ac-46fa-837e-c494668d6e7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared\FileSystem">
+      <UniqueIdentifier>{d955df18-51dc-494f-8476-5b363b7cdb7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared\OSX">
+      <UniqueIdentifier>{9bc0d619-8b92-4cc4-87bb-4282b693ab91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared\OSX\app">
+      <UniqueIdentifier>{36f1a52b-4cb2-48b9-8622-343e4dc373e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared\Gamepad">
+      <UniqueIdentifier>{0029ab70-c3c0-496b-a6c3-c6774a604348}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared\Renderer\Png">
+      <UniqueIdentifier>{9c97581b-6806-4fa7-9785-ad450cff5f31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\HuePlusPlus">
+      <UniqueIdentifier>{d6b714a0-f1e3-4b4a-a309-098238e6c6cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\HuePlusPlus\H">
+      <UniqueIdentifier>{19c93918-88b3-48a7-ac2c-a37d7f1510a8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\source\App.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\SlideManager.cpp">
+      <Filter>source\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\GUI\IntroMenu.cpp">
+      <Filter>source\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\BaseApp.cpp">
+      <Filter>shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\PlatformPrecomp.cpp">
+      <Filter>shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\PlatformSetup.cpp">
+      <Filter>shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\win\MemMgr.cpp">
+      <Filter>shared\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\win\WinUtils.cpp">
+      <Filter>shared\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\util\CRandom.cpp">
+      <Filter>shared\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\util\GLESUtils.cpp">
+      <Filter>shared\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\util\MathUtils.cpp">
+      <Filter>shared\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\util\MiscUtils.cpp">
+      <Filter>shared\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\util\PrimeSearch.cpp">
+      <Filter>shared\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\util\RenderUtils.cpp">
+      <Filter>shared\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\util\ResourceUtils.cpp">
+      <Filter>shared\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\util\TextScanner.cpp">
+      <Filter>shared\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\util\Variant.cpp">
+      <Filter>shared\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\util\unzip\ioapi.c">
+      <Filter>shared\util\unzip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\util\unzip\unzip.c">
+      <Filter>shared\util\unzip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Manager\Console.cpp">
+      <Filter>shared\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Manager\GameTimer.cpp">
+      <Filter>shared\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Manager\MessageManager.cpp">
+      <Filter>shared\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Manager\ResourceManager.cpp">
+      <Filter>shared\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Manager\VariantDB.cpp">
+      <Filter>shared\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Renderer\JPGSurfaceLoader.cpp">
+      <Filter>shared\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Renderer\RenderBatcher.cpp">
+      <Filter>shared\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Renderer\RTGLESExt.cpp">
+      <Filter>shared\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Renderer\SoftSurface.cpp">
+      <Filter>shared\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Renderer\Surface.cpp">
+      <Filter>shared\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Renderer\SurfaceAnim.cpp">
+      <Filter>shared\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Renderer\linearparticle\sources\L_Defination.cpp">
+      <Filter>shared\Renderer\LinearParticle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Renderer\linearparticle\sources\L_DroppingEffect.cpp">
+      <Filter>shared\Renderer\LinearParticle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Renderer\linearparticle\sources\L_EffectEmitter.cpp">
+      <Filter>shared\Renderer\LinearParticle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Renderer\linearparticle\sources\L_EffectManager.cpp">
+      <Filter>shared\Renderer\LinearParticle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Renderer\linearparticle\sources\L_ExplosionEffect.cpp">
+      <Filter>shared\Renderer\LinearParticle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Renderer\linearparticle\sources\L_MotionController.cpp">
+      <Filter>shared\Renderer\LinearParticle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Renderer\linearparticle\sources\L_Particle.cpp">
+      <Filter>shared\Renderer\LinearParticle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Renderer\linearparticle\sources\L_ParticleEffect.cpp">
+      <Filter>shared\Renderer\LinearParticle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Renderer\linearparticle\sources\L_ParticleMem.cpp">
+      <Filter>shared\Renderer\LinearParticle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Renderer\linearparticle\sources\L_ParticleSystem.cpp">
+      <Filter>shared\Renderer\LinearParticle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Renderer\linearparticle\sources\L_ShootingEffect.cpp">
+      <Filter>shared\Renderer\LinearParticle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jcapimin.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jcapistd.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jccoefct.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jccolor.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jcdctmgr.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jchuff.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jcinit.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jcmainct.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jcmarker.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jcmaster.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jcomapi.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jcparam.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jcphuff.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jcprepct.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jcsample.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jctrans.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdapimin.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdapistd.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdatadst.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdatasrc.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdcoefct.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdcolor.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jddctmgr.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdhuff.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdinput.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdmainct.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdmarker.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdmaster.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdmerge.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdphuff.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdpostct.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdsample.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdtrans.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jerror.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jfdctflt.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jfdctfst.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jfdctint.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jidctflt.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jidctfst.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jidctint.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jidctred.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jmemmgr.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jmemnobs.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jquant1.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jquant2.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jutils.c">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\GUI\RTFont.cpp">
+      <Filter>shared\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\Component.cpp">
+      <Filter>shared\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\Entity.cpp">
+      <Filter>shared\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\EntityUtils.cpp">
+      <Filter>shared\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\ArcadeInputComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\Button2DComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\CustomInputComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\DPadComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\EmitVirtualKeyComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\FilterInputComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\FocusInputComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\FocusRenderComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\FocusUpdateComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\HTTPComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\InputTextRenderComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\InterpolateComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\LogDisplayComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\OverlayRenderComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\ProgressBarComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\RectRenderComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\RenderScissorComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\ScrollBarRenderComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\ScrollComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\SelectButtonWithCustomInputComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\SliderComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\TapSequenceDetectComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\TemplateComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\TextBoxRenderComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\TextRenderComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\TouchDragComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\TouchHandlerComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\TouchStripComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\TrailRenderComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\TyperComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\UnderlineRenderComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\ClanLib-2.0\Sources\Core\Math\angle.cpp">
+      <Filter>shared\ClanLib\Core\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\ClanLib-2.0\Sources\Core\Math\mat3.cpp">
+      <Filter>shared\ClanLib\Core\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\ClanLib-2.0\Sources\Core\Math\mat4.cpp">
+      <Filter>shared\ClanLib\Core\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\ClanLib-2.0\Sources\Core\Math\rect.cpp">
+      <Filter>shared\ClanLib\Core\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\ClanLib-2.0\Sources\Core\Math\vec2.cpp">
+      <Filter>shared\ClanLib\Core\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\ClanLib-2.0\Sources\Core\Math\vec3.cpp">
+      <Filter>shared\ClanLib\Core\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\ClanLib-2.0\Sources\Core\Math\vec4.cpp">
+      <Filter>shared\ClanLib\Core\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Audio\AudioManager.cpp">
+      <Filter>shared\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Audio\AudioManagerAndroid.cpp">
+      <Filter>shared\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Audio\AudioManagerAudiere.cpp">
+      <Filter>shared\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Audio\AudioManagerFMOD.cpp">
+      <Filter>shared\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Audio\AudioManagerSDL.cpp">
+      <Filter>shared\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Network\NetHTTP.cpp">
+      <Filter>shared\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Network\NetSocket.cpp">
+      <Filter>shared\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Network\NetUtils.cpp">
+      <Filter>shared\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Math\rtPlane.cpp">
+      <Filter>shared\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Math\rtRect.cpp">
+      <Filter>shared\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Math\WeightRand.cpp">
+      <Filter>shared\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\WebOS\SDLMain.cpp">
+      <Filter>shared\WebOS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\WebOS\WebOSUtils.cpp">
+      <Filter>shared\WebOS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\android\AndroidUtils.cpp">
+      <Filter>shared\android</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\android\v2_src\cpp\AndroidApp.cpp">
+      <Filter>shared\android\v2_src\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\FileSystem\FileManager.cpp">
+      <Filter>shared\FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\FileSystem\FileSystem.cpp">
+      <Filter>shared\FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\FileSystem\FileSystemZip.cpp">
+      <Filter>shared\FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\FileSystem\StreamingInstance.cpp">
+      <Filter>shared\FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\FileSystem\StreamingInstanceFile.cpp">
+      <Filter>shared\FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\FileSystem\StreamingInstanceZip.cpp">
+      <Filter>shared\FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Gamepad\Gamepad.cpp">
+      <Filter>shared\Gamepad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Gamepad\GamepadDirectX.cpp">
+      <Filter>shared\Gamepad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Gamepad\GamepadiCade.cpp">
+      <Filter>shared\Gamepad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Gamepad\GamepadManager.cpp">
+      <Filter>shared\Gamepad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Gamepad\GamepadMoga.cpp">
+      <Filter>shared\Gamepad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Gamepad\GamepadProvider.cpp">
+      <Filter>shared\Gamepad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Gamepad\GamepadProviderDirectX.cpp">
+      <Filter>shared\Gamepad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Gamepad\GamepadProvideriCade.cpp">
+      <Filter>shared\Gamepad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Gamepad\GamepadProviderMoga.cpp">
+      <Filter>shared\Gamepad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\win\app\main.cpp">
+      <Filter>shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Audio\AudioManagerFMODStudio.cpp">
+      <Filter>shared\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Gamepad\GamepadProviderXInput.cpp">
+      <Filter>shared\Gamepad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Gamepad\GamepadXInput.cpp">
+      <Filter>shared\Gamepad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\NowPlayingManager.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\png.c">
+      <Filter>shared\Renderer\Png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngerror.c">
+      <Filter>shared\Renderer\Png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pnggccrd.c">
+      <Filter>shared\Renderer\Png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngget.c">
+      <Filter>shared\Renderer\Png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngmem.c">
+      <Filter>shared\Renderer\Png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngpread.c">
+      <Filter>shared\Renderer\Png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngread.c">
+      <Filter>shared\Renderer\Png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngrio.c">
+      <Filter>shared\Renderer\Png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngrtran.c">
+      <Filter>shared\Renderer\Png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngrutil.c">
+      <Filter>shared\Renderer\Png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngset.c">
+      <Filter>shared\Renderer\Png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngtrans.c">
+      <Filter>shared\Renderer\Png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngvcrd.c">
+      <Filter>shared\Renderer\Png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngwio.c">
+      <Filter>shared\Renderer\Png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngwrite.c">
+      <Filter>shared\Renderer\Png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngwtran.c">
+      <Filter>shared\Renderer\Png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngwutil.c">
+      <Filter>shared\Renderer\Png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\RestManager.cpp">
+      <Filter>source\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\RestClient.cpp">
+      <Filter>source\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\Action.cpp">
+      <Filter>source\HuePlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\APICache.cpp">
+      <Filter>source\HuePlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\BaseDevice.cpp">
+      <Filter>source\HuePlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\BaseHttpHandler.cpp">
+      <Filter>source\HuePlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\Bridge.cpp">
+      <Filter>source\HuePlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\BridgeConfig.cpp">
+      <Filter>source\HuePlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\CLIPSensors.cpp">
+      <Filter>source\HuePlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\ColorUnits.cpp">
+      <Filter>source\HuePlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\ExtendedColorHueStrategy.cpp">
+      <Filter>source\HuePlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\ExtendedColorTemperatureStrategy.cpp">
+      <Filter>source\HuePlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\Group.cpp">
+      <Filter>source\HuePlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\HueCommandAPI.cpp">
+      <Filter>source\HuePlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\HueDeviceTypes.cpp">
+      <Filter>source\HuePlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\HueException.cpp">
+      <Filter>source\HuePlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\Light.cpp">
+      <Filter>source\HuePlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\ModelPictures.cpp">
+      <Filter>source\HuePlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\NewDeviceList.cpp">
+      <Filter>source\HuePlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\Rule.cpp">
+      <Filter>source\HuePlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\Scene.cpp">
+      <Filter>source\HuePlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\Schedule.cpp">
+      <Filter>source\HuePlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\Sensor.cpp">
+      <Filter>source\HuePlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\SimpleBrightnessStrategy.cpp">
+      <Filter>source\HuePlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\SimpleColorHueStrategy.cpp">
+      <Filter>source\HuePlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\SimpleColorTemperatureStrategy.cpp">
+      <Filter>source\HuePlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\StateTransaction.cpp">
+      <Filter>source\HuePlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\TimePattern.cpp">
+      <Filter>source\HuePlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\UPnP.cpp">
+      <Filter>source\HuePlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\Utils.cpp">
+      <Filter>source\HuePlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\WinHttpHandler.cpp">
+      <Filter>source\HuePlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hueplusplus\src\ZLLSensors.cpp">
+      <Filter>source\HuePlusPlus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Script.cpp">
+      <Filter>source\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\FoobarManager.cpp">
+      <Filter>source\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\util\cJSON.c">
+      <Filter>shared\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\util\cJSON_Utils.c">
+      <Filter>shared\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\TouchDragMoveComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\VariableManager.cpp">
+      <Filter>source\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\ScrollToZoomComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Manager\HueManager.cpp">
+      <Filter>source\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Manager\libVLC_RTSP.cpp">
+      <Filter>source\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\LibVlcStreamComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\SpotifyManager.cpp">
+      <Filter>source\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Entity\TouchDragMarkupComponent.cpp">
+      <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\App.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\SlideManager.h">
+      <Filter>source\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\GUI\IntroMenu.h">
+      <Filter>source\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\BaseApp.h">
+      <Filter>shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\platformenums.h">
+      <Filter>shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\PlatformPrecomp.h">
+      <Filter>shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\PlatformSetup.h">
+      <Filter>shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\win\MemMgr.h">
+      <Filter>shared\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\win\PlatformSetupWin.h">
+      <Filter>shared\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\win\WinUtils.h">
+      <Filter>shared\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\util\CRandom.h">
+      <Filter>shared\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\win\powerVR\OGLES\Include\GLES\egl.h">
+      <Filter>shared\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\EntityUtils.h">
+      <Filter>shared\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\win\powerVR\OGLES\Include\GLES\gl.h">
+      <Filter>shared\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\util\GLESUtils.h">
+      <Filter>shared\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\util\MathUtils.h">
+      <Filter>shared\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\util\MiscUtils.h">
+      <Filter>shared\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\util\PrimeSearch.h">
+      <Filter>shared\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\util\RenderUtils.h">
+      <Filter>shared\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\util\ResourceUtils.h">
+      <Filter>shared\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\util\RTFileFormat.h">
+      <Filter>shared\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\util\TextScanner.h">
+      <Filter>shared\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\util\Variant.h">
+      <Filter>shared\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\util\unzip\crypt.h">
+      <Filter>shared\util\unzip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\util\unzip\ioapi.h">
+      <Filter>shared\util\unzip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\util\unzip\unzip.h">
+      <Filter>shared\util\unzip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\iOS\iOSUtils.h">
+      <Filter>shared\iOS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\iOS\PlatformSetupIOS.h">
+      <Filter>shared\iOS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\iOS\app\EAGLView.h">
+      <Filter>shared\iOS\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\iOS\app\MyAppDelegate.h">
+      <Filter>shared\iOS\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\iOS\app\MyViewController.h">
+      <Filter>shared\iOS\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Manager\Console.h">
+      <Filter>shared\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Manager\GameTimer.h">
+      <Filter>shared\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Manager\MessageManager.h">
+      <Filter>shared\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Manager\ResourceManager.h">
+      <Filter>shared\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Manager\VariantDB.h">
+      <Filter>shared\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Renderer\bitmap.h">
+      <Filter>shared\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Renderer\JPGSurfaceLoader.h">
+      <Filter>shared\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Renderer\RenderBatcher.h">
+      <Filter>shared\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Renderer\RTGLESExt.h">
+      <Filter>shared\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Renderer\SoftSurface.h">
+      <Filter>shared\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Renderer\Surface.h">
+      <Filter>shared\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Renderer\SurfaceAnim.h">
+      <Filter>shared\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Renderer\linearparticle\sources\L_Defination.h">
+      <Filter>shared\Renderer\LinearParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Renderer\linearparticle\sources\L_DroppingEffect.h">
+      <Filter>shared\Renderer\LinearParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Renderer\linearparticle\sources\L_EffectEmitter.h">
+      <Filter>shared\Renderer\LinearParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Renderer\linearparticle\sources\L_EffectManager.h">
+      <Filter>shared\Renderer\LinearParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Renderer\linearparticle\sources\L_ExplosionEffect.h">
+      <Filter>shared\Renderer\LinearParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Renderer\linearparticle\sources\L_MotionController.h">
+      <Filter>shared\Renderer\LinearParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Renderer\linearparticle\sources\L_Particle.h">
+      <Filter>shared\Renderer\LinearParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Renderer\linearparticle\sources\L_ParticleEffect.h">
+      <Filter>shared\Renderer\LinearParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Renderer\linearparticle\sources\L_ParticleMem.h">
+      <Filter>shared\Renderer\LinearParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Renderer\linearparticle\sources\L_ParticleSystem.h">
+      <Filter>shared\Renderer\LinearParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Renderer\linearparticle\sources\L_ShootingEffect.h">
+      <Filter>shared\Renderer\LinearParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Renderer\LinearParticle.h">
+      <Filter>shared\Renderer\LinearParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\cderror.h">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\cdjpeg.h">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jchuff.h">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jconfig.h">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdct.h">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jdhuff.h">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jerror.h">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jinclude.h">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jmemsys.h">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jmorecfg.h">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jpegint.h">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jpeglib.h">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jversion.h">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\transupp.h">
+      <Filter>shared\Renderer\LibJPeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\GUI\RTFont.h">
+      <Filter>shared\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\GUI\RTFontFileFormat.h">
+      <Filter>shared\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\Component.h">
+      <Filter>shared\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\Entity.h">
+      <Filter>shared\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\ArcadeInputComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\Button2DComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\CustomInputComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\DPadComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\EmitVirtualKeyComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\FilterInputComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\FocusInputComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\FocusRenderComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\FocusUpdateComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\HTTPComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\InputTextRenderComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\InterpolateComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\LogDisplayComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\OverlayRenderComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\ProgressBarComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\RectRenderComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\RenderScissorComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\ScrollBarRenderComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\ScrollComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\SelectButtonWithCustomInputComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\SliderComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\TapSequenceDetectComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\TextBoxRenderComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\TextRenderComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\TouchDragComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\TouchHandlerComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\TouchStripComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\TrailRenderComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\TyperComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\UnderlineRenderComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Audio\AudioManager.h">
+      <Filter>shared\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Audio\AudioManagerAndroid.h">
+      <Filter>shared\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Audio\AudioManagerDenshion.h">
+      <Filter>shared\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Audio\AudioManagerOS.h">
+      <Filter>shared\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Audio\AudioManagerSDL.h">
+      <Filter>shared\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Audio\CocosDenshion\CDAudioManager.h">
+      <Filter>shared\Audio\Denshion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Audio\CocosDenshion\CDConfig.h">
+      <Filter>shared\Audio\Denshion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Audio\CocosDenshion\CDOpenALSupport.h">
+      <Filter>shared\Audio\Denshion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Audio\CocosDenshion\CocosDenshion.h">
+      <Filter>shared\Audio\Denshion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Audio\CocosDenshion\SimpleAudioEngine.h">
+      <Filter>shared\Audio\Denshion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Network\NetHTTP.h">
+      <Filter>shared\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Network\NetSocket.h">
+      <Filter>shared\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Network\NetUtils.h">
+      <Filter>shared\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Math\rtPlane.h">
+      <Filter>shared\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Math\rtRect.h">
+      <Filter>shared\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Math\WeightRand.h">
+      <Filter>shared\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\WebOS\PlatformSetupWebOS.h">
+      <Filter>shared\WebOS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\WebOS\SDLMain.h">
+      <Filter>shared\WebOS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\WebOS\WebOSUtils.h">
+      <Filter>shared\WebOS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\android\AndroidUtils.h">
+      <Filter>shared\android</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\android\PlatformSetupAndroid.h">
+      <Filter>shared\android</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\FileSystem\FileManager.h">
+      <Filter>shared\FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\FileSystem\FileSystem.h">
+      <Filter>shared\FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\FileSystem\FileSystemZip.h">
+      <Filter>shared\FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\FileSystem\StreamingInstance.h">
+      <Filter>shared\FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\FileSystem\StreamingInstanceFile.h">
+      <Filter>shared\FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\FileSystem\StreamingInstanceZip.h">
+      <Filter>shared\FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\OSX\OSXUtils.h">
+      <Filter>shared\OSX</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\OSX\PlatformSetupOSX.h">
+      <Filter>shared\OSX</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\OSX\app\MainController.h">
+      <Filter>shared\OSX\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\OSX\app\MyApplication.h">
+      <Filter>shared\OSX\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\OSX\app\MyOpenGLView.h">
+      <Filter>shared\OSX\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Gamepad\Gamepad.h">
+      <Filter>shared\Gamepad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Gamepad\Gamepad60Beat.h">
+      <Filter>shared\Gamepad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Gamepad\GamepadDirectX.h">
+      <Filter>shared\Gamepad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Gamepad\GamepadiCade.h">
+      <Filter>shared\Gamepad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Gamepad\GamepadManager.h">
+      <Filter>shared\Gamepad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Gamepad\GamepadMoga.h">
+      <Filter>shared\Gamepad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Gamepad\GamepadProvider.h">
+      <Filter>shared\Gamepad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Gamepad\GamepadProvider60Beat.h">
+      <Filter>shared\Gamepad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Gamepad\GamepadProvider60BeatNative.h">
+      <Filter>shared\Gamepad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Gamepad\GamepadProviderDirectX.h">
+      <Filter>shared\Gamepad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Gamepad\GamepadProvideriCade.h">
+      <Filter>shared\Gamepad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Gamepad\GamepadProviderMoga.h">
+      <Filter>shared\Gamepad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\win\app\main.h">
+      <Filter>shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Audio\AudioManagerFMODStudio.h">
+      <Filter>shared\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Gamepad\GamepadProviderXInput.h">
+      <Filter>shared\Gamepad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Gamepad\GamepadXInput.h">
+      <Filter>shared\Gamepad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\NowPlayingManager.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\png.h">
+      <Filter>shared\Renderer\Png</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngconf.h">
+      <Filter>shared\Renderer\Png</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\RestManager.h">
+      <Filter>source\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\RestClient.h">
+      <Filter>source\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Script.h">
+      <Filter>source\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\Action.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\APICache.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\BaseDevice.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\BaseHttpHandler.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\Bridge.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\BridgeConfig.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\BrightnessStrategy.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\CLIPSensors.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\ColorHueStrategy.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\ColorTemperatureStrategy.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\Condition.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\ColorUnits.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\ExtendedColorHueStrategy.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\ExtendedColorTemperatureStrategy.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\Group.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\HueCommandAPI.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\HueDeviceTypes.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\HueException.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\IHttpHandler.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\LibConfig.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\Light.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\ModelPictures.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\NewDeviceList.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\ResourceList.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\Rule.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\Scene.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\Schedule.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\Sensor.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\SensorList.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\SimpleBrightnessStrategy.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\SimpleColorHueStrategy.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\SimpleColorTemperatureStrategy.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\StateTransaction.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\TimePattern.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\UPnP.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\Utils.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\WinHttpHandler.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\ZLLSensors.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hueplusplus\include\hueplusplus\HueExceptionMacro.h">
+      <Filter>source\HuePlusPlus\H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\FoobarManager.h">
+      <Filter>source\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\TouchDragMoveComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\VariableManager.h">
+      <Filter>source\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\ScrollToZoomComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Manager\HueManager.h">
+      <Filter>source\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Manager\libVLC_RTSP.h">
+      <Filter>source\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\LibVlcStreamComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\SpotifyManager.h">
+      <Filter>source\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Entity\TouchDragMarkupComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\shared\iOS\iOSUtils.mm">
+      <Filter>shared\iOS</Filter>
+    </None>
+    <None Include="..\..\shared\iOS\app\EAGLView.mm">
+      <Filter>shared\iOS\app</Filter>
+    </None>
+    <None Include="..\..\shared\iOS\app\main.mm">
+      <Filter>shared\iOS\app</Filter>
+    </None>
+    <None Include="..\..\shared\iOS\app\MyAppDelegate.mm">
+      <Filter>shared\iOS\app</Filter>
+    </None>
+    <None Include="..\..\shared\iOS\app\MyViewController.mm">
+      <Filter>shared\iOS\app</Filter>
+    </None>
+    <None Include="..\..\shared\Audio\AudioManagerDenshion.mm">
+      <Filter>shared\Audio</Filter>
+    </None>
+    <None Include="..\..\shared\Audio\CocosDenshion\CDAudioManager.m">
+      <Filter>shared\Audio\Denshion</Filter>
+    </None>
+    <None Include="..\..\shared\Audio\CocosDenshion\CDOpenALSupport.m">
+      <Filter>shared\Audio\Denshion</Filter>
+    </None>
+    <None Include="..\..\shared\Audio\CocosDenshion\CocosDenshion.m">
+      <Filter>shared\Audio\Denshion</Filter>
+    </None>
+    <None Include="..\..\shared\Audio\CocosDenshion\LICENSE.cocosdenshion">
+      <Filter>shared\Audio\Denshion</Filter>
+    </None>
+    <None Include="..\..\shared\Audio\CocosDenshion\SimpleAudioEngine.m">
+      <Filter>shared\Audio\Denshion</Filter>
+    </None>
+    <None Include="..\..\shared\android\v2_src\java\BillingReceiver.java">
+      <Filter>shared\android\v2_src\java</Filter>
+    </None>
+    <None Include="..\..\shared\android\v2_src\java\BillingService.java">
+      <Filter>shared\android\v2_src\java</Filter>
+    </None>
+    <None Include="..\..\shared\android\v2_src\java\Consts.java">
+      <Filter>shared\android\v2_src\java</Filter>
+    </None>
+    <None Include="..\..\shared\android\v2_src\java\PurchaseObserver.java">
+      <Filter>shared\android\v2_src\java</Filter>
+    </None>
+    <None Include="..\..\shared\android\v2_src\java\ResponseHandler.java">
+      <Filter>shared\android\v2_src\java</Filter>
+    </None>
+    <None Include="..\..\shared\android\v2_src\java\Security.java">
+      <Filter>shared\android\v2_src\java</Filter>
+    </None>
+    <None Include="..\..\shared\android\v2_src\java\SharedActivity.java">
+      <Filter>shared\android\v2_src\java</Filter>
+    </None>
+    <None Include="..\..\shared\android\v2_src\java\SharedMultiTouchInput.java">
+      <Filter>shared\android\v2_src\java</Filter>
+    </None>
+    <None Include="..\..\shared\OSX\OSXUtils.mm">
+      <Filter>shared\OSX</Filter>
+    </None>
+    <None Include="..\..\shared\OSX\app\main.m">
+      <Filter>shared\OSX\app</Filter>
+    </None>
+    <None Include="..\..\shared\OSX\app\MainController.mm">
+      <Filter>shared\OSX\app</Filter>
+    </None>
+    <None Include="..\..\shared\OSX\app\MyApplication.m">
+      <Filter>shared\OSX\app</Filter>
+    </None>
+    <None Include="..\..\shared\OSX\app\MyOpenGLView.mm">
+      <Filter>shared\OSX\app</Filter>
+    </None>
+    <None Include="..\..\shared\Gamepad\Gamepad60Beat.mm">
+      <Filter>shared\Gamepad</Filter>
+    </None>
+    <None Include="..\..\shared\Gamepad\GamepadProvider60Beat.mm">
+      <Filter>shared\Gamepad</Filter>
+    </None>
+    <None Include="..\..\shared\Gamepad\GamepadProvider60BeatNative.mm">
+      <Filter>shared\Gamepad</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\license.txt" />
+    <Text Include="..\..\Programmer Readme.txt" />
+    <Text Include="..\Project Readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\shared\Entity\TemplateComponent.h">
+      <Filter>shared\Entity\Component</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\shared\Audio\AudioManagerAudiere.h">
+      <Filter>shared\Audio</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\shared\Audio\AudioManagerFMOD.h">
+      <Filter>shared\Audio</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\shared\Audio\AudioManagerOS.mm">
+      <Filter>shared\Audio</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>
