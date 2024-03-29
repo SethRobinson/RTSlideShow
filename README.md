@@ -24,6 +24,16 @@ Mostly undocumented features:
 * Can pause/resume audio playing on foobar or spotify (that's playing in a browser on same machine) (using foobar requires beefweb component)
 
 
+Latest Changes in release V1.10 (March 29th 2024)
+
+* bmp, rttex and wav filetypes are now also supported
+* Can drag and drop a file (or files) into the app while it's running
+* Video and audio files now have playback/vol/progress controls
+* No longer auto-scales images to fit the screen, I should probably have that as an option though
+* BUGFIX: Resizing the window/toggling fullscreen no longer messes up the markup overlays
+* BUGFIX: Can correctly load local audio/video files with umlauts/etc in the name
+
+
 ## Download latest version here:  https://www.rtsoft.com/files/RTSlideShow_Win64.zip (230 MB) (.exe signed by Robinson Technologies)
 
 # How to use it
