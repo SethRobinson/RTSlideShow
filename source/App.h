@@ -27,6 +27,8 @@ class App: public BaseApp
 {
 public:
 	
+	virtual void OnMessage(Message &message);
+
 	void EarlyInit();
 
 	App();

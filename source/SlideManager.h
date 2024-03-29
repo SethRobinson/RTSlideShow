@@ -17,6 +17,7 @@ public:
 	virtual ~SlideManager();
 
 	bool IsThingWeCanShow(string fName);
+	bool IsThingThatPlaysAudioOnly(string fName);
 
 	bool Init(Entity* pParent, string dirName);
 	Entity * ShowSlide(int slideNum, bool bDoTransitions = true);
@@ -26,13 +27,13 @@ public:
 	void ModPos(CL_Vec2f vMod);
 	void PlaySlideSFX();
 	void PreviousSlide();
-
+	Entity* CreateMediaFromFileName(string fileName, string entName, CL_Vec2f vPos, bool bAddBasePath);
 
 private:
 
 	bool IsImageFile(string fileExtension);
 	bool IsMediaFile(string fileExtension);
-
+	bool IsAudioFile(string fileExtension);
 	void GetRidOfActiveSlide(bool bBackwards);
 
 	Entity *m_pParentEnt;

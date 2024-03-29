@@ -9,7 +9,7 @@
 #include "Entity/LibVlcStreamComponent.h"
 #include "Entity/TouchDragMarkupComponent.h"
 
-SlideManager g_slideManager;
+
 CL_Vec2f g_lastMousePos;
 
 CL_Vec2f g_lastPointerClickPos[C_MAX_TOUCHES_AT_ONCE];

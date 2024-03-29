@@ -39,6 +39,18 @@ bool SlideManager::IsImageFile(string fileExtension)
 {
 	if (fileExtension == "png") return true;
 	if (fileExtension == "jpg") return true;
+	if (fileExtension == "bmp") return true;
+	if (fileExtension == "rttex") return true;
+	return false;
+}
+
+bool SlideManager::IsAudioFile(string fileExtension)
+{
+	if (fileExtension == "wav") return true;
+	if (fileExtension == "mid") return true;
+	if (fileExtension == "ogg") return true;
+	if (fileExtension == "mp3") return true;
+
 	return false;
 }
 
@@ -55,7 +67,9 @@ bool SlideManager::IsMediaFile(string fileExtension)
 	if (fileExtension == "mp4") return true;
 	if (fileExtension == "wmv") return true;
 	if (fileExtension == "ogg") return true;
-	
+	if (fileExtension == "wav") return true;
+	if (fileExtension == "mid") return true;
+
 	return false;
 }
 
@@ -70,6 +84,13 @@ bool SlideManager::IsThingWeCanShow(string fName)
 	if (IsMediaFile(fileExtension)) return true;
 	
 	return false;
+}
+
+bool SlideManager::IsThingThatPlaysAudioOnly(string fName)
+{
+	string lowerCase = ToLowerCaseString(fName);
+	string fileExtension = GetFileExtension(lowerCase);
+	return IsAudioFile(fileExtension);
 }
 
 bool SlideManager::Init(Entity *pParent, string dirName)
@@ -177,61 +198,143 @@ void OnInputToSlide(VariantList* pVList)
 	{
 		string stampName = pCallingEnt->GetName();
 		LogMsg("Stamping %s", stampName.c_str());
-		
-		if (stampName.find("slide") == string::npos)
-		{
-			LogMsg("Can't stamp, not a slide");
-			return;
-		}
+
 		StringReplace("_stamped", "", stampName);
 
-		StringReplace("slide", "", stampName);
 		//create a slide with the # we can get
-		Entity *pSlideEnt = g_slideManager.ShowSlide(atoi(stampName.c_str()), false);
+		Entity* pSlideEnt = g_slideManager.CreateMediaFromFileName(pCallingEnt->GetVar("fileName")->GetString(), stampName, GetPos2DEntity(pCallingEnt), false);
 
-		pSlideEnt->SetName( pSlideEnt->GetName() + "_stamped" );
-		if (pSlideEnt)
+		if (!pSlideEnt)
 		{
-			CL_Vec2f vScale = GetScale2DEntity(pCallingEnt);
+			LogMsg("Error creating stamp of %s", stampName.c_str());
+			return;
+		}
 
-			SetPos2DEntity(pSlideEnt, GetPos2DEntity(pCallingEnt));
-			//SetScale2DEntity(pSlideEnt, vScale);
-			pSlideEnt->GetParent()->MoveEntityToTopByAddress(pCallingEnt);
-			ZoomToScaleEntity(pSlideEnt, vScale, 100,INTERPOLATE_SMOOTHSTEP, 1);
+		pSlideEnt->SetName(pSlideEnt->GetName() + "_stamped");
+
+		CL_Vec2f vScale = GetScale2DEntity(pCallingEnt);
+
+		SetPos2DEntity(pSlideEnt, GetPos2DEntity(pCallingEnt));
+		//SetScale2DEntity(pSlideEnt, vScale);
+		pSlideEnt->GetParent()->MoveEntityToTopByAddress(pCallingEnt);
+		ZoomToScaleEntity(pSlideEnt, vScale, 100, INTERPOLATE_SMOOTHSTEP, 1);
+
+		//get access to the LibVlcStreamComponent if it exists
+		LibVlcStreamComponent* pLibVlcStreamComp = (LibVlcStreamComponent*)pSlideEnt->GetComponentByName("LibVlcStream");
 		
-			//get access to the LibVlcStreamComponent if it exists
-			LibVlcStreamComponent* pLibVlcStreamComp = (LibVlcStreamComponent*)pSlideEnt->GetComponentByName("LibVlcStream");
-			if (pLibVlcStreamComp)
+		if (pLibVlcStreamComp)
+		{
+			//set looping to be the same as it's set in the original
+			LibVlcStreamComponent* pLibVlcStreamComp2 = (LibVlcStreamComponent*)pCallingEnt->GetComponentByName("LibVlcStream");
+			if (pLibVlcStreamComp2)
 			{
-				//set looping to be the same as it's set in the original
-				LibVlcStreamComponent* pLibVlcStreamComp2 = (LibVlcStreamComponent*)pCallingEnt->GetComponentByName("LibVlcStream");
-				if (pLibVlcStreamComp2)
-				{
-					pLibVlcStreamComp->GetVar("looping")->Set(pLibVlcStreamComp2->GetVar("looping")->GetUINT32());
+				pLibVlcStreamComp->GetVar("looping")->Set(pLibVlcStreamComp2->GetVar("looping")->GetUINT32());
 
-					//also set the volume to be the same
-					pLibVlcStreamComp->SetVolume(pLibVlcStreamComp2->GetVolume());
-					pLibVlcStreamComp->SetMute(pLibVlcStreamComp2->GetMute());
+				//also set the volume to be the same
+				pLibVlcStreamComp->SetVolume(pLibVlcStreamComp2->GetVolume());
+				pLibVlcStreamComp->SetMutedVolume(pLibVlcStreamComp2->GetMutedVolume());
+				pLibVlcStreamComp->SetMute(pLibVlcStreamComp2->GetMute());
 
-					//also set the playback position to be the same
-					//pLibVlcStreamComp->GetLibVlcRTSP()->SetPlaybackPosition(pLibVlcStreamComp2->GetLibVlcRTSP()->GetPlaybackPosition());
-					//pLibVlcStreamComp->GetLibVlcRTSP()->SetPause(pLibVlcStreamComp2->GetLibVlcRTSP()->GetPause());
+				//also set the playback position to be the same
+				//pLibVlcStreamComp->GetLibVlcRTSP()->SetPlaybackPosition(pLibVlcStreamComp2->GetLibVlcRTSP()->GetPlaybackPosition());
+				//pLibVlcStreamComp->GetLibVlcRTSP()->SetPause(pLibVlcStreamComp2->GetLibVlcRTSP()->GetPause());
 
-					//Call it virtually in 10 ms with MessageManager
-					VariantList vList(uint32(pLibVlcStreamComp2->GetLibVlcRTSP()->GetPause()));
-					GetMessageManager()->CallComponentFunction(pLibVlcStreamComp, 50, "SetPause", &vList);
-	
-					VariantList vList2(pLibVlcStreamComp2->GetLibVlcRTSP()->GetPlaybackPosition());
-					GetMessageManager()->CallComponentFunction(pLibVlcStreamComp, 50, "SetPlaybackPosition", &vList2);
+				//Call it virtually in 10 ms with MessageManager
+				VariantList vList(uint32(pLibVlcStreamComp2->GetLibVlcRTSP()->GetPause()));
+				GetMessageManager()->CallComponentFunction(pLibVlcStreamComp, 50, "SetPause", &vList);
 
-				}
+				VariantList vList2(pLibVlcStreamComp2->GetLibVlcRTSP()->GetPlaybackPosition());
+				GetMessageManager()->CallComponentFunction(pLibVlcStreamComp, 50, "SetPlaybackPosition", &vList2);
+
 			}
 		}
-	}
+		else
+		{
+			//it's a pic I guess
+		}
 
+	}
 
 }
 
+Entity* SlideManager::CreateMediaFromFileName(string fileName, string entName, CL_Vec2f vPos, bool bAddBasePath)
+{
+
+	string mediaFileExtension = ToLowerCaseString(GetFileExtension(fileName));
+	Entity* pEnt = NULL;
+
+	if (!FileExists(fileName))
+	{
+		LogMsg("Can't find %s", fileName.c_str());
+		return NULL;
+	}
+
+	if (IsImageFile(mediaFileExtension))
+	{
+		pEnt = CreateOverlayEntity(m_pParentEnt, entName,fileName,vPos.x,vPos.y, bAddBasePath);
+		SetAlignmentEntity(pEnt, ALIGNMENT_CENTER);
+		auto vSize = GetSize2DEntity(pEnt);
+
+		//EntitySetScaleBySize(pEnt, GetScreenSize(), true, vSize.x < vSize.y);
+		
+		SetTouchPaddingEntity(pEnt, CL_Rectf(0, 0, 0, 0));
+		EntityComponent* pDragComp = pEnt->AddComponent(new TouchDragComponent);
+		pDragComp->GetVar("limitedToThisFingerID")->Set(uint32(0)); //only allow left mouse button
+		EntityComponent* pDragMoveComp = pEnt->AddComponent(new TouchDragMoveComponent);
+		EntityComponent* pMouseWheelZoom = pEnt->AddComponent(new ScrollToZoomComponent);
+
+		//EntitySetScaleBySize(pSubEnt, GetScreenSize(), true, vSize.x < vSize.y);
+	}
+	else
+	{
+		//well, it must be a movie or audio file then
+
+		string title = "";
+
+		if (IsThingThatPlaysAudioOnly(fileName))
+		{
+			title = GetFileNameFromString(fileName);
+		}
+		
+		pEnt = AddNewStream(entName, fileName, 333, m_pParentEnt, false, title)->GetParent();
+		pEnt->SetName(entName);
+		SetAlignmentEntity(pEnt, ALIGNMENT_CENTER);
+		SetPos2DEntity(pEnt, CL_Vec2f((float)GetScreenSizeX() / 2, (float)GetScreenSizeY() / 2));
+
+		//turn video looping on by default.  First, get a handle to the LibVlcStreamComponent
+		LibVlcStreamComponent* pLibVlcStreamComp = (LibVlcStreamComponent*)pEnt->GetComponentByName("LibVlcStream");
+		pLibVlcStreamComp->GetVar("looping")->Set(uint32(1));
+
+	}
+
+	//remember the filename for later, used for "stamping"
+	pEnt->GetVar("fileName")->Set(fileName);
+
+	Entity* pSubEnt = m_pParentEnt->AddEntity(new Entity("MarkupEntity" + toString(entName)));
+
+	EntityComponent* pDragComp2 = pSubEnt->AddComponent(new TouchDragComponent);
+	pDragComp2->GetVar("limitedToThisFingerID")->Set(uint32(1)); //only allow right mouse button
+
+	SetAlignmentEntity(pSubEnt, GetAlignmentEntity(pEnt));
+	SetPos2DEntity(pSubEnt, GetSize2DEntity(pEnt));
+	SetScale2DEntity(pSubEnt, CL_Vec2f(1, 1));
+	SetTouchPaddingEntity(pSubEnt, CL_Rectf(0, 0, 0, 0));
+	EntityComponent* pDragMarkupComp2 = pSubEnt->AddComponent(new TouchDragMarkupComponent);
+	pDragMarkupComp2->GetVar("entityToFollow")->Set(pEnt);
+	
+	//listen in for special key commands while window is being moved around
+	ScrollToZoomComponent* pScrollZoomComp = (ScrollToZoomComponent*)pEnt->GetComponentByName("ScrollToZoom");
+	pScrollZoomComp->m_sig_input_while_mousedown.connect(&OnInputToSlide);
+
+	//oh, do we want it to show the coordinates on the TouchDragMoveComponent and ScrollToZoomComponent?  We'll check and change the "showCoords" var on each component now
+
+	EntityComponent* pTouchDragMoveOnBaseEnt = pEnt->GetComponentByName("TouchDragMove");
+
+	pScrollZoomComp->GetVar("showCoords")->Set(uint32(GetApp()->m_showCoords));
+	pTouchDragMoveOnBaseEnt->GetVar("showCoords")->Set(uint32(GetApp()->m_showCoords));
+
+	return pEnt;
+}
 Entity* SlideManager::ShowSlide(int slideNum, bool bDoTransitions)
 {
 	bool bBackwards = false;
@@ -248,60 +351,13 @@ Entity* SlideManager::ShowSlide(int slideNum, bool bDoTransitions)
 		}
 	}
 	
-	Entity *pEnt;
-	string mediaFileExtension = ToLowerCaseString(GetFileExtension(m_files[slideNum]));
 	string entName = "slide" + toString(slideNum);
 
-	if (IsImageFile(mediaFileExtension))
-	{
-		pEnt = CreateOverlayEntity(m_pParentEnt, entName, m_slideDir + m_files[slideNum], (float)GetScreenSizeX() / 2, (float)GetScreenSizeY() / 2);
-		SetAlignmentEntity(pEnt, ALIGNMENT_CENTER);
-		auto vSize = GetSize2DEntity(pEnt);
-		EntitySetScaleBySize(pEnt, GetScreenSize(), true, vSize.x < vSize.y);
-		SetTouchPaddingEntity(pEnt, CL_Rectf(0, 0, 0, 0));
-		EntityComponent* pDragComp = pEnt->AddComponent(new TouchDragComponent);
-		pDragComp->GetVar("limitedToThisFingerID")->Set(uint32(0)); //only allow left mouse button
-		EntityComponent* pDragMoveComp = pEnt->AddComponent(new TouchDragMoveComponent);
-		EntityComponent* pMouseWheelZoom = pEnt->AddComponent(new ScrollToZoomComponent);
-		
-		//EntitySetScaleBySize(pSubEnt, GetScreenSize(), true, vSize.x < vSize.y);
-	}
-	else
-	{
-		//well, it must be a movie then
-		pEnt = AddNewStream(entName, m_slideDir + m_files[slideNum], 333, m_pParentEnt, bDoTransitions)->GetParent();
-		pEnt->SetName(entName);
-		SetAlignmentEntity(pEnt, ALIGNMENT_CENTER);
-		SetPos2DEntity(pEnt, CL_Vec2f((float)GetScreenSizeX() / 2, (float)GetScreenSizeY() / 2));
+	string mediaFileName = m_slideDir + m_files[slideNum];
 
-		//turn video looping on by default.  First, get a handle to the LibVlcStreamComponent
-		LibVlcStreamComponent* pLibVlcStreamComp = (LibVlcStreamComponent*)pEnt->GetComponentByName("LibVlcStream");
-		pLibVlcStreamComp->GetVar("looping")->Set(uint32(1));
-	}
+	CL_Vec2f vPos = GetScreenSize() / 2;
 
-
-	Entity* pSubEnt = m_pParentEnt->AddEntity(new Entity("MarkupEntity" + toString(slideNum)));
-
-	EntityComponent* pDragComp2 = pSubEnt->AddComponent(new TouchDragComponent);
-	pDragComp2->GetVar("limitedToThisFingerID")->Set(uint32(1)); //only allow right mouse button
-
-	SetAlignmentEntity(pSubEnt, GetAlignmentEntity(pEnt));
-	SetPos2DEntity(pSubEnt, GetSize2DEntity(pEnt));
-	SetScale2DEntity(pSubEnt, CL_Vec2f(1, 1));
-	SetTouchPaddingEntity(pSubEnt, CL_Rectf(0, 0, 0, 0));
-	EntityComponent* pDragMarkupComp2 = pSubEnt->AddComponent(new TouchDragMarkupComponent);
-	pDragMarkupComp2->GetVar("entityToFollow")->Set(pEnt);
-
-	//listen in for special key commands while window is being moved around
-	ScrollToZoomComponent *pScrollZoomComp = (ScrollToZoomComponent*)pEnt->GetComponentByName("ScrollToZoom");
-	pScrollZoomComp->m_sig_input_while_mousedown.connect( &OnInputToSlide);
-
-	//oh, do we want it to show the coordinates on the TouchDragMoveComponent and ScrollToZoomComponent?  We'll check and change the "showCoords" var on each component now
-	
-	EntityComponent* pTouchDragMoveOnBaseEnt = pEnt->GetComponentByName("TouchDragMove");
-
-	pScrollZoomComp->GetVar("showCoords")->Set(uint32(GetApp()->m_showCoords));
-	pTouchDragMoveOnBaseEnt->GetVar("showCoords")->Set(uint32(GetApp()->m_showCoords));
+	Entity* pEnt = CreateMediaFromFileName(mediaFileName, entName, vPos, true);
 
 	
 #ifdef _DEBUG
@@ -330,7 +386,6 @@ Entity* SlideManager::ShowSlide(int slideNum, bool bDoTransitions)
 		m_slideTimer = GetTick() + m_timeBetweenSlidesMS;
 	}
 	
-
 	return pEnt;
 }
 

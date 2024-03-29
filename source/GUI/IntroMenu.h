@@ -6,6 +6,5 @@ Entity * IntroMenuCreate(Entity *pParentEnt);
 extern CL_Vec2f g_lastMousePos;
 
 class SlideManager;
-
 extern SlideManager g_slideManager;
 #endif // IntroMenu_h__

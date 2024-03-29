@@ -12,11 +12,14 @@
 #include "NowPlayingManager.h"
 #include "Entity/LibVlcStreamComponent.h"
 #include "Script.h"
+#include "SlideManager.h"
 
 #ifdef RT_MOGA_ENABLED
 #include "Gamepad/GamepadProviderMoga.h"
 #endif
  
+SlideManager g_slideManager;
+
 MessageManager g_messageManager;
 MessageManager * GetMessageManager() {return &g_messageManager;}
 
@@ -90,6 +93,31 @@ App * GetApp()
 	return g_pApp;
 }
 
+void App::OnMessage(Message &message)
+{
+
+	if (message.GetType() == MESSAGE_TYPE_FILE_DROPPED)
+	{
+		LogMsg("File dropped: %s at %s", message.GetVariantList().Get(0).GetString().c_str(),
+			PrintVector2(message.GetVariantList().Get(1).GetVector2()).c_str());
+	
+		//open the media file if it's a media type we recognize
+		string file = message.GetVariantList().Get(0).GetString();
+		
+		if (g_slideManager.IsThingWeCanShow(file))
+		{
+			g_slideManager.CreateMediaFromFileName(file, "DroppedMedia", message.GetVariantList().Get(1).GetVector2(), false);
+		}
+		else
+		{
+			LogMsg("Don't know how to handle filetype of %s", file.c_str());
+		}
+		
+
+	
+	}
+	BaseApp::OnMessage(message);
+}
 void App::EarlyInit()
 {
 	auto parms = GetBaseApp()->GetCommandLineParms();
@@ -257,7 +285,7 @@ bool App::Init()
 	pTemp->PreallocateControllersEvenIfMissing(true); 
 	GetGamepadManager()->AddProvider(pTemp); //use XInput joysticks
 
-//do another scan for directx devices
+	//do another scan for directx devices
 	GamepadProviderDirectX* pTempDirectX = new GamepadProviderDirectX;
 	pTempDirectX->SetIgnoreXInputCapableDevices(true);
 	GetGamepadManager()->AddProvider(pTempDirectX); //use directx joysticks
@@ -446,12 +474,12 @@ Variant * App::GetVar( const string &keyName )
 
 std::string App::GetVersionString()
 {
-	return "V1.0";
+	return "V1.10";
 }
 
 float App::GetVersion()
 {
-	return 1.0f;
+	return 1.1f;
 }
 
 int App::GetBuild()
