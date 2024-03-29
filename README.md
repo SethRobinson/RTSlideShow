@@ -90,7 +90,7 @@ Anyway, I've sort of done the minimum amount of work needed to share this little
 # Things I should add, probably
 
 * Add a way to change markup pen color
-* Allow dragging and dropping images/videos from explorer into the app
+* ~~Allow dragging and dropping images/videos from explorer into the app~~
 
 # License
 
