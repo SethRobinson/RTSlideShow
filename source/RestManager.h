@@ -31,6 +31,9 @@ public:
 	int m_hostPort = 8095;
 
 	list<RestClient*> m_clients;
+
+	int m_idCounter = 0;
+
 protected:
 
 };

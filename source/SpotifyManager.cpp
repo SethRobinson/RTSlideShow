@@ -20,11 +20,11 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
 
     //std::cout << "Window Title: " << title << ", Class Name: " << className << std::endl;
     // Assume LogMsg is some logging function you have
-   // LogMsg("Window Title: %s, Class Name: %s", title, className);
+    // LogMsg("Window Title: %s, Class Name: %s", title, className);
 
     if (IsInStringCaseInsensitive(title, "Google Chrome"))
     {
-        if (IsInStringCaseInsensitive(title, "Spotify") || (IsInStringCaseInsensitive(title, "•")) 
+        if (IsInStringCaseInsensitive(title, "Spotify") || (IsInStringCaseInsensitive(title, "E")) 
             || (IsInStringCaseInsensitive(title, "?")))  //on windows 10, the dot becomes a ?, regional settings issue?
         {
             //LogMsg("Found %s", title);
@@ -39,7 +39,7 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
 
 void extractSongAndArtist(const std::string& title, std::string& song, std::string& artist)
 {
-    std::size_t pos = title.find(" • ");
+    std::size_t pos = title.find(" E");
     if (pos == std::string::npos)
     {
         pos = title.find(" ? ");
@@ -52,7 +52,7 @@ void extractSongAndArtist(const std::string& title, std::string& song, std::stri
     }
     else
     {
-        // Handle the case where neither " • " nor " ? " are found.
+        // Handle the case where neither " E" nor " ? " are found.
         // Here, we are being error-tolerant and assuming the whole title is the song name.
         song = title;
         artist = "Unknown Artist";
@@ -156,11 +156,18 @@ void SetSpotifyPauseVariant(VariantList* pVList)
 
     GetApp()->m_spotifyManager.GetActiveSong(songName, artist, isSpotifyWindowActive, isPlaying, spotifyBrowserWindowHWND);
 
+    /*
     if (!isSpotifyWindowActive)
     {
         return;
     }
-  
+    */
+
+    //isPlaying = true; //hack because the window thing is unreliable
+    GetApp()->m_spotifyManager.Pause();
+
+    return;
+
     if (isPlaying)
     {
        // LogMsg("Spotify is active, song: %s by %s", songName.c_str(), artist.c_str());
@@ -193,10 +200,10 @@ void SpotifyManager::SetPause(bool bPause, int delayMS)
 
    GetActiveSong(songName, artist, isSpotifyWindowActive, isPlaying, spotifyBrowserWindowHWND);
 
-   if (!isSpotifyWindowActive)
+  /* if (!isSpotifyWindowActive)
    {
        return;
-   }
+   }*/
    VariantList vList;
    vList.Get(0).Set((int32)bPause);
    GetMessageManager()->CallStaticFunction(SetSpotifyPauseVariant, delayMS, &vList);

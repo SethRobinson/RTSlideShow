@@ -46,13 +46,17 @@ void RestClient::UpdateInput()
 		//add a null at the end of the vector string
 		s.push_back(0);
 		//LogMsg("Got %d of data. %s", s.size(), s.data());
-		m_bRequestDisconnection = true;
+		//m_bRequestDisconnection = true;
 
 		//I now need to convert s into a normal string.
 		string command = s.data();
 		
 		LaunchScript(command);
+
+		
 	}
+
+	m_client.GetBuffer().clear();
 
 }
 

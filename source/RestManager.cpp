@@ -22,7 +22,7 @@ void RestManager::UpdateWaitingForConnection()
 		RestClient* pRestClient = new RestClient;
 		//init it
 		m_clients.push_back(pRestClient);
-		pRestClient->Init(this, AcceptSocket, 0); //let it know where we are, and what ID it is
+		pRestClient->Init(this, AcceptSocket, m_idCounter++); //let it know where we are, and what ID it is
 
 		LogMsg("NEW CONNECTION: %d connected.", m_clients.size());
 	}

@@ -305,7 +305,7 @@ bool App::Init()
 		MessageBox(NULL, "Can't init rest manager.  Port already in use?", "Error", MB_OK);
 		return false;
 	}
-
+	 
 	if (!GetApp()->m_hueBridgeIP.empty())
 	{
 		if (!m_hueManager.Init(GetApp()->m_hueBridgeIP, GetApp()->m_hueUserName))
@@ -335,6 +335,9 @@ void App::ReadConfigFile()
 	//char buff[buffSize];
 	TextScanner ts;
 
+	//set m_clockPos to 0,0
+	m_clockPos = CL_Vec2f(0.0f, 0.0f);
+
 	if (ts.LoadFile(m_configFile))
 	{
 		m_autoSlideTimeBetweenMS = StringToInt(ts.GetParmString("autoSlideTimeBetweenMS", 1));
@@ -347,6 +350,25 @@ void App::ReadConfigFile()
 		m_slide_sfx_vol = StringToFloat(ts.GetParmString("slideSFXVol", 1));
 
 		m_bShowClock = StringToInt(ts.GetParmString("showClock", 1));
+		
+		//let's also set m_clockPos with "setClockPos" parm, if it exists
+		string clockPos = ts.GetParmString("setClockPos", 1);
+		if (clockPos != "")
+		{
+			vector<string> coords = StringTokenize(clockPos, ",");
+			if (coords.size() == 2)
+			{
+				m_clockPos.x = StringToFloat(coords[0]);
+				m_clockPos.y = StringToFloat(coords[1]);
+			}
+			else
+			{
+				LogMsg("Error in config.txt, setClockPos should be like: setClockPos=100,200");
+			}
+		}
+
+
+		
 		m_showCoords = StringToInt(ts.GetParmString("showCoords", 1));
 		m_disableNowPlaying = StringToInt(ts.GetParmString("disableNowPlaying", 1));
 
@@ -421,11 +443,16 @@ void App::Draw()
 	
 	if (GetApp()->m_bShowClock)
 	{
-		//LogMsg("Showing clock");
-		string time = GetTimeAsString();
-		CL_Vec2f vDrawPos = CL_Vec2f(GetScreenSizeXf() / 2, GetScreenSizeYf() - 100);
-		GetFont(FONT_LARGE)->DrawAlignedBackground(vDrawPos.x, vDrawPos.y, time, ALIGNMENT_DOWN_CENTER, 1.0f, backgroundColor);
-		GetFont(FONT_LARGE)->DrawAligned(vDrawPos.x, vDrawPos.y, time, ALIGNMENT_DOWN_CENTER);
+        //LogMsg("Showing clock");
+        string time = GetTimeAsString();
+        CL_Vec2f vDrawPos;
+        if (m_clockPos.x != 0.0f || m_clockPos.y != 0.0f) {
+            vDrawPos = m_clockPos;
+        } else {
+            vDrawPos = CL_Vec2f(GetScreenSizeXf() / 2, GetScreenSizeYf() - 100);
+        }
+        GetFont(FONT_LARGE)->DrawAlignedBackground(vDrawPos.x, vDrawPos.y, time, ALIGNMENT_DOWN_CENTER, 1.0f, backgroundColor);
+        GetFont(FONT_LARGE)->DrawAligned(vDrawPos.x, vDrawPos.y, time, ALIGNMENT_DOWN_CENTER);
 	}
 	
 	if (m_showEndMessage != "")
@@ -474,12 +501,12 @@ Variant * App::GetVar( const string &keyName )
 
 std::string App::GetVersionString()
 {
-	return "V1.10";
+	return "V1.11";
 }
 
 float App::GetVersion()
 {
-	return 1.1f;
+	return 1.11f;
 }
 
 int App::GetBuild()

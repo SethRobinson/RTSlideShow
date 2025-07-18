@@ -15,12 +15,37 @@ bool is_not_digit(char c)
 	return !isdigit(c);
 }
 
-bool numeric_string_compare(const std::string& s1, const std::string& s2)
-{
-	// handle empty strings...
 
-	return StringToFloat(s1) < StringToFloat(s2);
+bool numeric_string_compare(const std::string& s1, const std::string& s2) {
+	const char* p1 = s1.c_str();
+	const char* p2 = s2.c_str();
 
+	while (*p1 && *p2) {
+		if (isdigit(*p1) && isdigit(*p2)) {
+			// Extract the numbers
+			long num1 = 0, num2 = 0;
+			while (*p1 && isdigit(*p1)) {
+				num1 = num1 * 10 + (*p1 - '0');
+				p1++;
+			}
+			while (*p2 && isdigit(*p2)) {
+				num2 = num2 * 10 + (*p2 - '0');
+				p2++;
+			}
+			if (num1 != num2) {
+				return num1 < num2;
+			}
+		}
+		else {
+			// Compare characters
+			if (*p1 != *p2) {
+				return *p1 < *p2;
+			}
+			p1++;
+			p2++;
+		}
+	}
+	return s1.length() < s2.length();
 }
 
 SlideManager::SlideManager()
@@ -262,6 +287,7 @@ Entity* SlideManager::CreateMediaFromFileName(string fileName, string entName, C
 
 	string mediaFileExtension = ToLowerCaseString(GetFileExtension(fileName));
 	Entity* pEnt = NULL;
+	LibVlcStreamComponent* pLibVlcStreamComp = NULL;
 
 	if (!FileExists(fileName))
 	{
@@ -283,7 +309,13 @@ Entity* SlideManager::CreateMediaFromFileName(string fileName, string entName, C
 		EntityComponent* pDragMoveComp = pEnt->AddComponent(new TouchDragMoveComponent);
 		EntityComponent* pMouseWheelZoom = pEnt->AddComponent(new ScrollToZoomComponent);
 
-		//EntitySetScaleBySize(pSubEnt, GetScreenSize(), true, vSize.x < vSize.y);
+		//if vSize is larger than the screen, scale the entity
+		if (vSize.x > GetScreenSizeX() || vSize.y > GetScreenSizeY())
+		{
+			EntitySetScaleBySize(pEnt, GetScreenSize(), true, vSize.x < vSize.y);
+		}
+			 
+
 	}
 	else
 	{
@@ -302,7 +334,7 @@ Entity* SlideManager::CreateMediaFromFileName(string fileName, string entName, C
 		SetPos2DEntity(pEnt, CL_Vec2f((float)GetScreenSizeX() / 2, (float)GetScreenSizeY() / 2));
 
 		//turn video looping on by default.  First, get a handle to the LibVlcStreamComponent
-		LibVlcStreamComponent* pLibVlcStreamComp = (LibVlcStreamComponent*)pEnt->GetComponentByName("LibVlcStream");
+		pLibVlcStreamComp = (LibVlcStreamComponent*)pEnt->GetComponentByName("LibVlcStream");
 		pLibVlcStreamComp->GetVar("looping")->Set(uint32(1));
 
 	}
@@ -333,6 +365,10 @@ Entity* SlideManager::CreateMediaFromFileName(string fileName, string entName, C
 	pScrollZoomComp->GetVar("showCoords")->Set(uint32(GetApp()->m_showCoords));
 	pTouchDragMoveOnBaseEnt->GetVar("showCoords")->Set(uint32(GetApp()->m_showCoords));
 
+	if (pLibVlcStreamComp)
+	{
+		pLibVlcStreamComp->SetControlsTransparency(0);
+	}
 	return pEnt;
 }
 Entity* SlideManager::ShowSlide(int slideNum, bool bDoTransitions)
@@ -358,7 +394,14 @@ Entity* SlideManager::ShowSlide(int slideNum, bool bDoTransitions)
 	CL_Vec2f vPos = GetScreenSize() / 2;
 
 	Entity* pEnt = CreateMediaFromFileName(mediaFileName, entName, vPos, true);
-
+	if (!pEnt)
+	{
+		//show message that we couldn't find the file
+		pEnt = CreateTextLabelEntity(m_pParentEnt, "slide" + toString(slideNum), 0, 100, "Couldn't find " + mediaFileName);
+		//kill it in 2 seconds
+		FadeOutAndKillEntity(pEnt, true, 100, 2000);
+		return NULL;
+	}
 	
 #ifdef _DEBUG
 	m_pParentEnt->PrintTreeAsText();

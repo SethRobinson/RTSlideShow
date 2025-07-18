@@ -57,6 +57,8 @@ public:
 	int m_autoSlideTimeBetweenMS = 0; //overwritten by config.txt
 	string m_nowPlayingTextFile; //blank for none, otherwise it reads the now playing simple .txt file that foobar rights to show the current song
 	float m_slide_sfx_vol = 1.0f;
+	
+	CL_Vec2f m_clockPos = CL_Vec2f(0.0f, 0.0f); //where to show the clock, if enabled
 
 	bool m_bShowClock = false;
 	bool m_showCoords = true;

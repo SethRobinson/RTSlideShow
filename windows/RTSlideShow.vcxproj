@@ -514,10 +514,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pnggccrd.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
     <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngget.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
@@ -551,10 +547,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngtrans.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngvcrd.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -1117,6 +1109,8 @@
   <ItemGroup>
     <Text Include="..\..\license.txt" />
     <Text Include="..\..\Programmer Readme.txt" />
+    <Text Include="..\bin\config.txt" />
+    <Text Include="..\bin\config_test.txt" />
     <Text Include="..\Project Readme.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
