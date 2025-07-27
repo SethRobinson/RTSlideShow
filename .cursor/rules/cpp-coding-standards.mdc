@@ -1,0 +1,42 @@
+---
+globs: "*.cpp,*.h"
+---
+
+# C++ Coding Standards for RTSlideShow
+
+## Naming Conventions
+- **Classes**: PascalCase (e.g., `SlideManager`, `RestClient`)
+- **Methods**: PascalCase (e.g., `NextSlide()`, `GetID()`)
+- **Variables**: camelCase with prefix notation:
+  - `m_` for member variables (e.g., `m_activeSlide`, `m_pParentEnt`)
+  - `g_` for globals (e.g., `g_pApp`, `g_audioManager`)
+  - `p` prefix for pointers (e.g., `pEntity`, `m_pRestManager`)
+  - `b` prefix for booleans (e.g., `bDoTransitions`, `m_bRequestDisconnection`)
+  - `v` prefix for vectors/points (e.g., `vPos`, `vMod`)
+- **Constants**: ALL_CAPS with underscores (e.g., `C_FORCE_BIG_SCREEN_SIZE`)
+
+## Proton SDK Patterns
+- Use `Entity*` pointers for UI components and game objects
+- Include `PlatformPrecomp.h` as first include in .cpp files
+- Use `LogMsg()` for debugging output instead of cout/printf
+- Use Proton's `CL_Vec2f` for 2D coordinates, not custom structs
+- Use `GetApp()` to access the global application instance
+- Use `GetMessageManager()->CallStaticFunction()` for delayed execution
+
+## Memory Management
+- Use smart pointers or RAII where possible
+- Always null-check pointers before use, especially for entities
+- Use `assert()` for debug-time validation of assumptions
+- Clean up resources in destructors
+
+## File Organization
+- Headers go in the same directory as implementation
+- Include guards use `#ifndef ClassName_h__` format
+- Forward declarations in headers when possible to reduce dependencies
+- Keep platform-specific code in `#ifdef` blocks
+
+## Error Handling
+- Use `MessageBox()` for critical user-facing errors on Windows
+- Log errors with `LogMsg()` for debugging
+- Return boolean success/failure for initialization methods
+- Use exceptions sparingly - prefer return codes for expected failures

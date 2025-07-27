@@ -1,0 +1,60 @@
+---
+description: "Build system, deployment, and release process"
+---
+
+# Build System & Deployment
+
+## Visual Studio Project Structure
+- Main project: [windows/RTSlideShow.vcxproj](mdc:windows/RTSlideShow.vcxproj)
+- Solution file: [windows/RTSlideShow.sln](mdc:windows/RTSlideShow.sln)
+- Supports x64 Debug GL and Release GL configurations
+- Uses Visual Studio 2022 toolset (v143)
+- Windows 10 SDK target
+
+## Build Dependencies
+
+### Required Libraries
+- **Proton SDK**: Must be placed as parent directory (proton/RTSlideShow)
+- **libVLC SDK**: Win64 binaries required for video playback
+- **DirectX**: For gamepad input (can be disabled if not available)
+- **hueplusplus**: Included in repository with potential modifications
+
+### Build Configurations
+- **Debug GL**: Development build with debugging symbols
+- **Release GL**: Optimized production build
+- Both configurations target x64 platform only
+
+## Deployment Scripts
+Located in [script/](mdc:script/) directory:
+
+### Release Process
+- [BuildReleaseZip.bat](mdc:script/BuildReleaseZip.bat) - Creates distribution package
+- [MakeWindowsStandAloneZip.bat](mdc:script/MakeWindowsStandAloneZip.bat) - Standalone version
+- [UploadReleaseZipToRTsoft.bat](mdc:script/UploadReleaseZipToRTsoft.bat) - Upload to distribution server
+
+### Source Distribution
+- [BuildSourcePackage.bat](mdc:script/BuildSourcePackage.bat) - Creates source code package
+
+## Runtime Requirements
+- Windows 10 or later
+- libVLC runtime libraries
+- DirectX for gamepad support (optional)
+- .NET Framework for some components
+
+## Installation Process
+1. Extract ZIP package to desired location
+2. Navigate to SlideShow folder
+3. Run `RunTutorialSlideShow.bat` for introduction
+4. Place media files in `slides/` directory
+5. Run `RTSlideShow.exe` to start
+
+## Configuration Files
+- `config.txt` - Main application settings
+- `save.dat` - Persistent application state
+- Custom config files can be specified via command line
+
+## Security Considerations
+- Port 8095 is opened for remote control
+- Script execution is sandboxed to .txt files only
+- Path traversal attacks prevented (../ and ..\ stripped)
+- No external data collection or transmission

@@ -1,0 +1,76 @@
+---
+description: "Debugging techniques, logging, and troubleshooting common issues"
+---
+
+# Debugging & Troubleshooting Guide
+
+## Logging System
+- Use `LogMsg()` instead of printf/cout for consistent logging
+- Debug builds show FPS counter via `GetBaseApp()->SetFPSVisible(true)`
+- All major operations are logged for troubleshooting
+
+## Common Debug Patterns
+
+### Entity Validation
+```cpp
+assert(m_id != 0);  // Validate IDs are properly set
+// Always null-check entities before use
+if (!pEntity) return false;
+```
+
+### Memory Management
+- Check for proper cleanup in destructors
+- Validate pointer assignments in Init() methods
+- Use entity hierarchy cleanup for automatic resource management
+
+### Manager Initialization
+- Each manager (Hue, Spotify, Foobar, Rest) has Init() method returning bool
+- Failed initialization shows MessageBox error on Windows
+- Non-critical failures (like Hue) log error but continue execution
+
+## Error Handling Locations
+
+### Network/REST Issues
+- [RestManager.cpp](mdc:source/RestManager.cpp) - Port 8095 binding failures
+- [FoobarManager.cpp](mdc:source/FoobarManager.cpp) - localhost:8880 connection issues
+- Hue manager - Bridge connection and authentication problems
+
+### Media Loading Problems
+- [SlideManager.cpp](mdc:source/SlideManager.cpp) - File format support issues
+- libVLC initialization failures
+- Missing media files in slides/ directory
+
+### Audio System Issues
+- Platform-specific audio manager selection in [App.cpp](mdc:source/App.cpp)
+- GamepadProvider initialization for DirectX/XInput
+- Sound effect preloading failures
+
+## Debug Build Features
+- FPS display enabled
+- More verbose logging
+- Assert statements active for validation
+- Memory debugging capabilities
+
+## Production Troubleshooting
+
+### Common User Issues
+1. **Blank screen**: No media files in slides/ directory
+2. **Port conflicts**: Another application using port 8095
+3. **Missing audio**: Audio manager initialization failure
+4. **Gamepad not working**: DirectX/XInput driver issues
+
+### Configuration Problems
+- Check config.txt for malformed settings
+- Verify Hue Bridge IP and username if using lighting
+- Validate media file paths and permissions
+
+### Remote Control Issues
+- Firewall blocking port 8095
+- Network connectivity between remote device and PC
+- Script file permissions or missing .txt extension
+
+## Performance Debugging
+- Monitor entity creation/destruction for memory leaks
+- Check slide transition timing for smooth playback
+- Validate video decoding performance with large files
+- Profile script execution time for complex automation

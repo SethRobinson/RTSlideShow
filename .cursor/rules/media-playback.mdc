@@ -1,0 +1,59 @@
+---
+description: "Media playback, slideshow management, and supported formats"
+---
+
+# Media Playback & Slideshow System
+
+## Core Slideshow Logic
+- [SlideManager.cpp](mdc:source/SlideManager.cpp) handles all slide operations
+- Supports images, videos, and audio-only files
+- Files loaded from `slides/` directory, ordered by filename
+- Virtual 1080p canvas for consistent positioning across resolutions
+
+## Supported Media Formats
+
+### Images
+- Common formats: jpg, png, gif, bmp
+- RTTex format (custom texture format)
+- Auto-scaling disabled by default (configurable)
+
+### Videos
+- Any format supported by libVLC (mp4, avi, mov, etc.)
+- Full playback controls (play/pause, volume, seeking)
+- Can display multiple videos simultaneously
+- Space bar for pause/unpause, M for mute, -/= for volume
+
+### Audio
+- wav, mp3, and other common audio formats
+- Audio-only files display minimal UI
+- Volume and playback controls available
+
+## Media Controls & Interaction
+
+### Mouse Controls
+- **Left drag**: Move and position media
+- **Mouse wheel**: Zoom in/out while dragging
+- **Right click**: Draw/markup on media
+- **S key**: Stamp copy at current position/size
+- **DEL key**: Delete selected media
+- **C key**: Clear markup on selected media
+
+### Navigation
+- **Arrow keys**: Previous/next slide
+- **Shift + Arrow keys**: Navigate without removing previous slide
+- **Gamepad**: Supported for navigation
+- **[ and ]**: Change pen size for markup
+
+## Multi-Media Support
+- Display multiple images/videos simultaneously
+- Each media item can be independently:
+  - Positioned and scaled
+  - Marked up with drawings
+  - Controlled (for videos)
+- Copy/paste functionality with S key stamping
+
+## Entity System Integration
+- Each media item is a Proton SDK Entity
+- Created via `CreateMediaFromFileName()` in [SlideManager.cpp](mdc:source/SlideManager.cpp)
+- Managed through entity hierarchy under parent entity
+- Automatic cleanup when transitioning slides

@@ -1,0 +1,50 @@
+---
+description: "External system integrations: Spotify, Foobar2000, Hue lights, and remote control"
+---
+
+# External System Integrations
+
+## Spotify Integration
+- [SpotifyManager.cpp](mdc:source/SpotifyManager.cpp) controls Spotify running in Chrome browser
+- Uses Windows API to find Chrome window with Spotify title
+- Sends keyboard commands (spacebar) for play/pause control
+- Extracts song/artist info from Chrome window title
+- Handles Unicode characters and regional differences in separators
+
+## Foobar2000 Integration  
+- [FoobarManager.cpp](mdc:source/FoobarManager.cpp) controls Foobar2000 via REST API
+- Requires beefweb component installed in Foobar2000
+- HTTP requests to localhost:8880 for control commands
+- Can pause/resume, get track info, control volume
+- More reliable than window automation approach
+
+## Now Playing Display
+- [NowPlayingManager.cpp](mdc:source/NowPlayingManager.cpp) manages track display
+- Supports both Spotify (via window title) and Foobar (via REST API)
+- Can read from text files for custom integrations
+- Displays current track info on screen during presentations
+
+## Philips Hue Lighting Control
+- Uses included [hueplusplus](mdc:hueplusplus/) library for Hue Bridge communication
+- [HueManager](mdc:source/App.h) (referenced in App.h) manages light control
+- Script commands can change light colors during presentations
+- Supports partial name matching for light identification
+- RGB color control with format "255,0,0" (red, green, blue)
+
+## Remote Control System
+- Arduino devices can send HTTP requests to port 8095
+- [M5StickButtonArduinoCode/](mdc:M5StickButtonArduinoCode/) contains example Arduino code
+- REST server in [RestManager.cpp](mdc:source/RestManager.cpp) handles incoming requests
+- Security: Script names are sanitized, limited to .txt files
+
+## Configuration
+- Settings stored in `config.txt` file
+- Hue Bridge IP and username configured here
+- Various timing and display options
+- Command line support: `-fullscreen` flag, custom config files
+
+## Audio Management
+- Platform-specific audio managers for different systems
+- Windows uses AudioManagerAudiere by default
+- Preloads common sound effects (click.wav, etc.)
+- Integrated with Proton SDK's audio system

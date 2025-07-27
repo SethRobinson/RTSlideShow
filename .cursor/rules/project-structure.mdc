@@ -1,0 +1,54 @@
+---
+alwaysApply: true
+---
+
+# RTSlideShow Project Structure Guide
+
+RTSlideShow is a C++ Windows slideshow/presentation application built with the Proton SDK framework.
+
+## Main Entry Points
+- [App.cpp](mdc:source/App.cpp) - Main application class and initialization
+- [App.h](mdc:source/App.h) - Core application header with manager declarations
+
+## Core Components
+
+### Slide Management
+- [SlideManager.cpp](mdc:source/SlideManager.cpp) - Core slideshow logic, handles image/video loading, transitions
+- [SlideManager.h](mdc:source/SlideManager.h) - Main slideshow controller interface
+
+### Scripting System
+- [Script.cpp](mdc:source/Script.cpp) - Command processor for automation scripts (hue lights, audio control, etc.)
+- [Script.h](mdc:source/Script.h) - Scripting system interface
+
+### GUI Components
+- [source/GUI/IntroMenu.cpp](mdc:source/GUI/IntroMenu.cpp) - Main menu and UI components
+
+### Media Integration Managers
+- [SpotifyManager.cpp](mdc:source/SpotifyManager.cpp) - Controls Spotify playback via Chrome window automation
+- [FoobarManager.cpp](mdc:source/FoobarManager.cpp) - Controls Foobar2000 audio player via REST API
+- [NowPlayingManager.cpp](mdc:source/NowPlayingManager.cpp) - Displays current playing track info
+
+### Remote Control & REST API
+- [RestManager.cpp](mdc:source/RestManager.cpp) - HTTP server for remote control (port 8095)
+- [RestClient.cpp](mdc:source/RestClient.cpp) - Handles individual client connections and script execution
+
+### Variable System
+- [VariableManager.cpp](mdc:source/VariableManager.cpp) - Template/variable replacement system for scripts
+
+## Build System
+- [windows/RTSlideShow.vcxproj](mdc:windows/RTSlideShow.vcxproj) - Visual Studio project file
+- [windows/RTSlideShow.sln](mdc:windows/RTSlideShow.sln) - Visual Studio solution
+
+## Dependencies
+- **Proton SDK**: Cross-platform game/app framework (provides Entity system, audio, input handling)
+- **libVLC**: Video playback capabilities  
+- **hueplusplus**: Philips Hue lighting control (included in [hueplusplus/](mdc:hueplusplus/))
+- **Audiere**: Audio management on Windows
+
+## Key Features
+- Multi-format media support (images, videos, audio)
+- Real-time drawing/markup on slides
+- Hue lighting integration
+- Remote control via scripts and REST API
+- Gamepad/keyboard navigation
+- Live media controls and volume adjustment

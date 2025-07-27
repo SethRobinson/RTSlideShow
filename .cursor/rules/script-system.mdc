@@ -1,0 +1,54 @@
+---
+description: "RTSlideShow scripting system and automation"
+---
+
+# RTSlideShow Scripting System Guide
+
+The scripting system allows automation of presentations through text-based command files.
+
+## Script Execution
+- Scripts are executed via [Script.cpp](mdc:source/Script.cpp) `Run()` method
+- Remote execution through REST API on port 8095 via [RestClient.cpp](mdc:source/RestClient.cpp)
+- Local execution through `LaunchScript()` function calls
+
+## Script Command Format
+Commands follow the pattern: `command|param1|value1|param2|value2`
+
+### Available Commands
+
+#### Audio Control
+```
+play_sfx|delayMS|0|filename|audio/keypad_hit.wav
+set_foobar_pause|delayMS|0|paused|1
+```
+
+#### Hue Lighting
+```
+set_hue_light_rgb|delayMS|0|name|Hue play 1|rgb|255,0,0|allow_partial|1
+```
+
+#### Script Chaining
+```
+run_script|delayMS|0|scriptname|ID1_ButtonB.txt
+```
+
+## Variable System
+- Variables are processed by [VariableManager.cpp](mdc:source/VariableManager.cpp)
+- Use `${variable_name}` syntax in script commands
+- Variables are replaced before command execution
+
+## Remote Control Integration
+- Arduino devices (like M5Stick) can trigger scripts via WiFi
+- Example code in [M5StickButtonArduinoCode/](mdc:M5StickButtonArduinoCode/)
+- Scripts named like `ID0_ButtonA.txt`, `ID1_ButtonA.txt` for different device/button combinations
+- Keyboard shortcuts: Press '1' or '2' to test `ID0_ButtonA.txt` and `ID1_ButtonA.txt`
+
+## Script Storage
+- Scripts are stored as `.txt` files
+- Script names are sanitized (../ and ..\ stripped for security)
+- Always have `.txt` extension appended automatically
+
+## Integration Points
+- [App.cpp](mdc:source/App.cpp) initializes the REST server for remote script execution
+- [RestManager.cpp](mdc:source/RestManager.cpp) manages the HTTP server on port 8095
+- All managers (Spotify, Foobar, Hue) expose script-callable functions
