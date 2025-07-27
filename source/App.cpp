@@ -337,6 +337,7 @@ void App::ReadConfigFile()
 
 	//set m_clockPos to 0,0
 	m_clockPos = CL_Vec2f(0.0f, 0.0f);
+	m_songPos = CL_Vec2f(0.0f, 0.0f);  // Initialize song position to 0,0
 
 	if (ts.LoadFile(m_configFile))
 	{
@@ -367,6 +368,21 @@ void App::ReadConfigFile()
 			}
 		}
 
+		// Set song position if specified in config
+		string songPos = ts.GetParmString("setSongPos", 1);
+		if (songPos != "")
+		{
+			vector<string> coords = StringTokenize(songPos, ",");
+			if (coords.size() == 2)
+			{
+				m_songPos.x = StringToFloat(coords[0]);
+				m_songPos.y = StringToFloat(coords[1]);
+			}
+			else
+			{
+				LogMsg("Error in config.txt, setSongPos should be like: setSongPos=100,200");
+			}
+		}
 
 		
 		m_showCoords = StringToInt(ts.GetParmString("showCoords", 1));

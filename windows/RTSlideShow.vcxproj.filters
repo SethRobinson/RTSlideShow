@@ -601,16 +601,10 @@
     <ClCompile Include="..\..\shared\Gamepad\GamepadXInput.cpp">
       <Filter>shared\Gamepad</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\NowPlayingManager.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\png.c">
       <Filter>shared\Renderer\Png</Filter>
     </ClCompile>
     <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngerror.c">
-      <Filter>shared\Renderer\Png</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pnggccrd.c">
       <Filter>shared\Renderer\Png</Filter>
     </ClCompile>
     <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngget.c">
@@ -638,9 +632,6 @@
       <Filter>shared\Renderer\Png</Filter>
     </ClCompile>
     <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngtrans.c">
-      <Filter>shared\Renderer\Png</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngvcrd.c">
       <Filter>shared\Renderer\Png</Filter>
     </ClCompile>
     <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\pngwio.c">
@@ -775,9 +766,6 @@
     <ClCompile Include="..\..\shared\Manager\HueManager.cpp">
       <Filter>source\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\shared\Manager\libVLC_RTSP.cpp">
-      <Filter>source\Managers</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\shared\Entity\LibVlcStreamComponent.cpp">
       <Filter>shared\Entity\Component</Filter>
     </ClCompile>
@@ -786,6 +774,12 @@
     </ClCompile>
     <ClCompile Include="..\..\shared\Entity\TouchDragMarkupComponent.cpp">
       <Filter>shared\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Manager\libVLC_RTSP.cpp">
+      <Filter>shared\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\NowPlayingManager.cpp">
+      <Filter>source\Managers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1242,9 +1236,6 @@
     <ClInclude Include="..\..\shared\Gamepad\GamepadXInput.h">
       <Filter>shared\Gamepad</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\NowPlayingManager.h">
-      <Filter>source</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\shared\Irrlicht\source\Irrlicht\libpng\png.h">
       <Filter>shared\Renderer\Png</Filter>
     </ClInclude>
@@ -1392,9 +1383,6 @@
     <ClInclude Include="..\..\shared\Manager\HueManager.h">
       <Filter>source\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\shared\Manager\libVLC_RTSP.h">
-      <Filter>source\Managers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\shared\Entity\LibVlcStreamComponent.h">
       <Filter>shared\Entity\Component</Filter>
     </ClInclude>
@@ -1403,6 +1391,12 @@
     </ClInclude>
     <ClInclude Include="..\..\shared\Entity\TouchDragMarkupComponent.h">
       <Filter>shared\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Manager\libVLC_RTSP.h">
+      <Filter>shared\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\NowPlayingManager.h">
+      <Filter>source\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1492,6 +1486,12 @@
     <Text Include="..\..\license.txt" />
     <Text Include="..\..\Programmer Readme.txt" />
     <Text Include="..\Project Readme.txt" />
+    <Text Include="..\bin\config.txt">
+      <Filter>source</Filter>
+    </Text>
+    <Text Include="..\bin\config_test.txt">
+      <Filter>source</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\shared\Entity\TemplateComponent.h">

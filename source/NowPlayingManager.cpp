@@ -74,8 +74,16 @@ bool NowPlayingManager::SetNewSong(string songName, string artist)
 
 	//kill the old one
 	KillActiveSong();
+	CL_Vec2f vDrawPos;
+	if (GetApp()->m_songPos.x != 0.0f || GetApp()->m_songPos.y != 0.0f) {
+		vDrawPos = GetApp()->m_songPos;
+	}
+	else {
+		// Use the default position you had before
+		vDrawPos = CL_Vec2f(GetScreenSizeXf() / 2, GetScreenSizeYf() - 50); // Example default
+	}
 
-	auto pEnt = CreateTextLabelEntity(pParent, "Song", GetScreenSizeXf()/2, GetScreenSizeYf()-64, song);
+	auto pEnt = CreateTextLabelEntity(pParent, "Song", vDrawPos.x, vDrawPos.y, song);
 	SetupTextEntity(pEnt, FONT_LARGE);
 	TextRenderComponent* pTextComp = (TextRenderComponent*)pEnt->GetComponentByName("TextRender");
 	pTextComp->GetVar("backgroundColor")->Set(MAKE_RGBA(0, 0, 0, 150));
@@ -150,7 +158,6 @@ void NowPlayingManager::UpdateFoobar()
 bool NowPlayingManager::UpdateSpotifyWebWindow()
 {
 
-	
 	bool isSpotifyWindowActive;
 	bool isPlaying;
 	string songName, artist;
@@ -195,7 +202,6 @@ bool NowPlayingManager::UpdateSpotifyWebWindow()
 void NowPlayingManager::Update()
 {
 
-	
 //	if (GetApp()->m_nowPlayingTextFile.empty()) return; //don't care
 
 	if (m_updateTimer < GetTick())

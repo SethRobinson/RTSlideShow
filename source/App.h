@@ -59,7 +59,7 @@ public:
 	float m_slide_sfx_vol = 1.0f;
 	
 	CL_Vec2f m_clockPos = CL_Vec2f(0.0f, 0.0f); //where to show the clock, if enabled
-
+	CL_Vec2f m_songPos = CL_Vec2f(0.0f, 0.0f);
 	bool m_bShowClock = false;
 	bool m_showCoords = true;
 	bool m_disableNowPlaying = false;
