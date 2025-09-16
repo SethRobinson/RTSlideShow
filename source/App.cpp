@@ -329,6 +329,28 @@ void App::Kill()
 }
 
 
+void App::ToggleBGMusicMode()
+{
+	m_bBGMusicModeOn = !m_bBGMusicModeOn;
+}
+
+bool App::GetBGMusicMode()
+{
+	return m_bBGMusicModeOn;
+}
+
+bool App::GetBGMusicIsPlaying()
+{
+	if (!m_bBGMusicModeOn) return false; //it can't be playing 
+
+	return m_bBGMusicIsPlaying;
+}
+
+void App::SetBGMusicIsPlaying(bool bNew)
+{
+	m_bBGMusicIsPlaying = bNew;
+}
+
 void App::ReadConfigFile()
 {
 	const int buffSize = 256;

@@ -36,6 +36,11 @@ public:
 	
 	virtual bool Init();
 	virtual void Kill();
+	void ToggleBGMusicMode();
+	bool GetBGMusicMode();
+	bool GetBGMusicIsPlaying();
+	void SetBGMusicIsPlaying(bool bNew);
+
 	virtual void Draw();
 	virtual void OnScreenSizeChange();
 	virtual void Update();
@@ -78,7 +83,9 @@ public:
 	string m_hueUserName;
 	string m_hueBridgeIP;
 
+
 private:
+
 
 	void ReadConfigFile();
 	void UpdateVariables();
@@ -86,7 +93,9 @@ private:
 	bool m_bDidPostInit;
 	VariantDB m_varDB; //holds all data we want to save/load
 	int m_special;
-	
+	bool m_bBGMusicIsPlaying = true;
+	bool m_bBGMusicModeOn = true; //if false, we don't want to play BG music at all right now
+
 };
 
 

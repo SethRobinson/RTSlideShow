@@ -10,16 +10,78 @@
 #include "Entity/TouchDragMoveComponent.h"
 #include "Entity/ScrollToZoomComponent.h"
 #include "Entity/LibVlcStreamComponent.h"
+#include "WindowsFunctions.h"
 
 int StringAndVarToInt(string in)
 {
-
 	return atoi(GetApp()->m_varMan.ReplaceVars(in).c_str());
 }
+
 
 float StringAndVarToFloat(string in)
 {
 	return (float)atof(GetApp()->m_varMan.ReplaceVars(in).c_str());
+}
+
+void StopMusicAndPlayBGIfNeeded(VariantList* pVList)
+{
+	
+	if (GetAudioManager()->IsPlayingMusic())
+	{
+		StopMusic(pVList);
+
+		if (!GetApp()->GetBGMusicIsPlaying() && GetApp()->GetBGMusicMode())
+		{
+			//stop this
+			GetApp()->m_foobarManager.SetPause(false, 0);
+			GetApp()->m_spotifyManager.SetPause(false, 0);
+			GetApp()->SetBGMusicIsPlaying(true);
+		}
+	}
+
+}
+
+
+void ToggleMusic(VariantList* pVList)
+{
+
+	if (GetAudioManager()->IsPlayingMusic())
+	{
+		StopMusic(pVList);
+
+		if (!GetApp()->GetBGMusicIsPlaying() && GetApp()->GetBGMusicMode())
+		{
+			//stop this
+			GetApp()->m_foobarManager.SetPause(false, 0);
+			GetApp()->m_spotifyManager.SetPause(false, 0);
+			GetApp()->SetBGMusicIsPlaying(true);
+		}
+	}
+	else
+	{
+
+		if (GetApp()->GetBGMusicMode())
+		{
+
+			if (!GetApp()->GetBGMusicIsPlaying())
+			{
+				//play bg music
+				GetApp()->m_foobarManager.SetPause(false, 0);
+				GetApp()->m_spotifyManager.SetPause(false, 0);
+				GetApp()->SetBGMusicIsPlaying(true);
+			}
+			else
+			{
+				//stop the bg music!
+				GetApp()->m_foobarManager.SetPause(true, 0);
+				GetApp()->m_spotifyManager.SetPause(true, 0);
+				GetApp()->SetBGMusicIsPlaying(false);
+			}
+		}
+
+	}
+
+
 }
 
 Script::Script()
@@ -149,6 +211,13 @@ string Script::LocateFile(string pathAndFile)
 	return pathAndFile;
 }
 
+string Script::ReplaceLocalVariables(string in)
+{
+
+	StringReplace( "%parm1%", m_parm1, in);
+	return in;
+}
+
 void Script::Run()
 {
 	for (int i = 0; i < m_scanner.GetLineCount(); i++)
@@ -177,6 +246,89 @@ void Script::Run()
 			GetMessageManager()->CallStaticFunction(PlaySound, timeMS, &vList);
 		}
 
+		if (words[0] == "set_system_volume")
+		{
+
+			string parm = ReplaceLocalVariables(words[1]);
+			int volume = StringAndVarToInt(parm);
+			
+			LogMsg("Setting system volume to %d", volume);
+			
+			SetWindowsSystemVolume(volume); //this function should take between 0 and 100 and set the volume in
+			//a way that makes sense (50 is half volume, etc)
+
+			
+			/*VariantList vList;
+			vList.Get(0).Set(sfx);
+			GetMessageManager()->CallStaticFunction(PlaySound, timeMS, &vList);*/
+		}
+
+		if (words[0] == "play_music")
+		{
+			int timeMS = StringAndVarToInt(words[2]);
+			string sfx = GetApp()->m_varMan.ReplaceVars(words[4]);
+
+			VariantList vList;
+			vList.Get(0).Set(sfx);
+		
+			if (GetApp()->GetBGMusicIsPlaying())
+			{
+				//stop this
+				GetApp()->m_foobarManager.SetPause(true, 0);
+				GetApp()->m_spotifyManager.SetPause(true, 0);
+				GetApp()->SetBGMusicIsPlaying(false);
+			}
+
+
+			GetMessageManager()->CallStaticFunction(PlayMusic, timeMS, &vList);
+		
+		}
+
+		if (words[0] == "stop_music")
+		{
+			int timeMS = StringAndVarToInt(words[2]);
+			VariantList vList;
+			GetMessageManager()->CallStaticFunction(StopMusicAndPlayBGIfNeeded, timeMS, &vList);
+		}
+		if (words[0] == "toggle_music")
+		{
+			int timeMS = StringAndVarToInt(words[2]);
+			VariantList vList;
+			GetMessageManager()->CallStaticFunction(ToggleMusic, timeMS, &vList);
+		}
+
+		if (words[0] == "toggle_bg_music_mode")
+		{
+			if (GetApp()->GetBGMusicMode())
+			{
+				LogMsg("Turning off BG music mode");
+				if (GetApp()->GetBGMusicIsPlaying())
+				{
+					//stop this
+					GetApp()->m_foobarManager.SetPause(true, 0);
+					GetApp()->m_spotifyManager.SetPause(true, 0);
+					GetApp()->SetBGMusicIsPlaying(false);
+				}
+				GetApp()->ToggleBGMusicMode();
+			}
+			else
+			{
+				LogMsg("Turning on BG music mode");
+				GetApp()->ToggleBGMusicMode();
+				//play bg music
+				GetApp()->m_foobarManager.SetPause(false, 0);
+				GetApp()->m_spotifyManager.SetPause(false, 0);
+				GetApp()->SetBGMusicIsPlaying(true);
+
+				//oh, if normal music was playing, kill that
+				if (GetAudioManager()->IsPlayingMusic())
+				{
+					StopMusic(NULL);
+				}
+
+			}
+		}
+
 		//process something like "set_hue_light_rgb|delayMS|0|name|Hue play 1|rgb|255,0,0|allow_partial|1"
 		if (words[0] == "set_hue_light_rgb")
 		{
@@ -200,10 +352,46 @@ void Script::Run()
 			//get the spotify active song and info
 			int timeMS = StringAndVarToInt(words[2]);
 			bool bPaused = StringToBool(words[4]);
+
+			if (bPaused)
+			{
+				//we are pausing, so if bg music mode is on, turn it off
+				if (GetApp()->GetBGMusicIsPlaying())
+				{
+					GetApp()->SetBGMusicIsPlaying(false);
+					GetApp()->m_foobarManager.SetPause(bPaused, timeMS);
+					GetApp()->m_spotifyManager.SetPause(bPaused, timeMS);
+				}
+			}
+			else
+			{
+
+				if (!GetApp()->GetBGMusicMode())
+				{
+					//if bg music mode is off, don't unpause
+					LogMsg("Not unpausing foobar because BG music mode is off");
+					
+				}
+				else
+				{
+					//we are unpausing, so if bg music mode is off, turn it on
+					if (!GetApp()->GetBGMusicIsPlaying())
+					{
+						GetApp()->SetBGMusicIsPlaying(true);
+
+						GetApp()->m_foobarManager.SetPause(bPaused, timeMS);
+						GetApp()->m_spotifyManager.SetPause(bPaused, timeMS);
+
+					}
+				}
+
+				
+			}
 			
-			GetApp()->m_foobarManager.SetPause(bPaused, timeMS);
-			GetApp()->m_spotifyManager.SetPause(bPaused, timeMS);
+			
 		}
+
+
 
 		if (words[0] == "run_script")
 		{
@@ -618,6 +806,7 @@ void Script::Run()
 			}
 		}
 
+
 		//process kill|name|single_screen|delayMS|0|fadeMS|0|
 		if (words[0] == "kill_image" || words[0] == "kill")
 		{
@@ -644,12 +833,17 @@ void Script::Run()
 	}
 }
 
+void Script::SetParms(string parm1)
+{
+	m_parm1 = parm1;
+}
+
 void LaunchScriptVariant(VariantList* pVList)
 {
 	LaunchScript(pVList->Get(0).GetString());
 }
 
-void LaunchScript(string command)
+void LaunchScript(string command, string parm1)
 {
 
 	//for safetly, let's not allow any ../ in the command
@@ -679,10 +873,11 @@ void LaunchScript(string command)
 	LogMsg("Running script %s%s%s", path.c_str(), command.c_str(), extension.c_str());
 
 #ifdef _DEBUG
-	ShowTextMessageSimple("Running script " + command, 1000);
+	ShowTextMessageSimple("Running script " + command+" "+parm1, 1000);
 #endif
 
 	Script script;
+	script.SetParms(parm1);
 	if (script.Load(path + command + ".txt"))
 	{
 		script.Run();

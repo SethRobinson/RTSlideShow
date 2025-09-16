@@ -781,6 +781,9 @@
     <ClCompile Include="..\source\NowPlayingManager.cpp">
       <Filter>source\Managers</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\WindowsFunctions.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\App.h">

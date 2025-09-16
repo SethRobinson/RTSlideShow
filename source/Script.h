@@ -19,12 +19,12 @@ public:
 
 	bool Load(string fname);
 	void Run();
-
+	void SetParms(string parm1);
 	string LocateFile(string pathAndFile);
-
+	string ReplaceLocalVariables(string in);
 protected:
 	TextScanner m_scanner;
-
+	string m_parm1;
 };
 void LaunchScriptVariant(VariantList* pVList);
-void LaunchScript(string command);
+void LaunchScript(string command, string parm1 = "");

@@ -45,15 +45,29 @@ void RestClient::UpdateInput()
 	{
 		//add a null at the end of the vector string
 		s.push_back(0);
-		//LogMsg("Got %d of data. %s", s.size(), s.data());
-		//m_bRequestDisconnection = true;
-
-		//I now need to convert s into a normal string.
-		string command = s.data();
 		
-		LaunchScript(command);
-
+		//Convert buffer to string
+		string allCommands = s.data();
 		
+		//Split by newline to handle multiple commands
+		vector<string> commands = StringTokenize(allCommands, "\n");
+		
+		//Process each command separately
+		for (const string& command : commands)
+		{
+			if (!command.empty())
+			{
+				//Sometimes we'll get something like ID2_Volume|47| so let's separate them into words
+				vector<string> words = StringTokenize(command, "|");
+				
+				string parm1 = "";
+				if (words.size() > 1)
+				{
+					parm1 = words[1];
+				}
+				LaunchScript(words[0], parm1);
+			}
+		}
 	}
 
 	m_client.GetBuffer().clear();
