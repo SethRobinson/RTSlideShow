@@ -23,6 +23,15 @@ float StringAndVarToFloat(string in)
 	return (float)atof(GetApp()->m_varMan.ReplaceVars(in).c_str());
 }
 
+void PlayMusicOnceWithResume(VariantList* pVList)
+{
+	string fName = pVList->Get(0).GetString();
+	LogMsg("PlayMusicOnceWithResume: starting playback of %s", fName.c_str());
+	GetAudioManager()->Play(fName, false, true);
+	GetApp()->m_bWaitingForMusicOnceToFinish = true;
+	LogMsg("PlayMusicOnceWithResume: m_bWaitingForMusicOnceToFinish = true, IsPlayingMusic: %d", (int)GetAudioManager()->IsPlayingMusic());
+}
+
 void StopMusicAndPlayBGIfNeeded(VariantList* pVList)
 {
 	
@@ -268,12 +277,14 @@ void Script::Run()
 			int timeMS = StringAndVarToInt(words[2]);
 			string sfx = GetApp()->m_varMan.ReplaceVars(words[4]);
 
+			LogMsg("play_music: %s (delay %d ms, BGMusicPlaying: %d)", sfx.c_str(), timeMS, (int)GetApp()->GetBGMusicIsPlaying());
+
 			VariantList vList;
 			vList.Get(0).Set(sfx);
 		
 			if (GetApp()->GetBGMusicIsPlaying())
 			{
-				//stop this
+				LogMsg("play_music: pausing BG music");
 				GetApp()->m_foobarManager.SetPause(true, 0);
 				GetApp()->m_spotifyManager.SetPause(true, 0);
 				GetApp()->SetBGMusicIsPlaying(false);
@@ -282,6 +293,27 @@ void Script::Run()
 
 			GetMessageManager()->CallStaticFunction(PlayMusic, timeMS, &vList);
 		
+		}
+
+		if (words[0] == "play_music_once")
+		{
+			int timeMS = StringAndVarToInt(words[2]);
+			string sfx = GetApp()->m_varMan.ReplaceVars(words[4]);
+
+			LogMsg("play_music_once: %s (delay %d ms, BGMusicPlaying: %d)", sfx.c_str(), timeMS, (int)GetApp()->GetBGMusicIsPlaying());
+
+			VariantList vList;
+			vList.Get(0).Set(sfx);
+
+			if (GetApp()->GetBGMusicIsPlaying())
+			{
+				LogMsg("play_music_once: pausing BG music");
+				GetApp()->m_foobarManager.SetPause(true, 0);
+				GetApp()->m_spotifyManager.SetPause(true, 0);
+				GetApp()->SetBGMusicIsPlaying(false);
+			}
+
+			GetMessageManager()->CallStaticFunction(PlayMusicOnceWithResume, timeMS, &vList);
 		}
 		 
 		if (words[0] == "next_song")

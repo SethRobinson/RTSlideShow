@@ -78,6 +78,7 @@ public:
 	uint32 m_slideSpeedMS = 1000 * 60;
 
 	bool m_bWindowedMode = true;
+	bool m_bWaitingForMusicOnceToFinish = false;
 	VariableManager m_varMan;
 
 	string m_hueUserName;

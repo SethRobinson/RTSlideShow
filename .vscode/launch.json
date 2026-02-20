@@ -1,0 +1,24 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "RTSlideShow (Debug)",
+      "type": "lldb",
+      "request": "launch",
+      "program": "${workspaceFolder}/bin/RTSlideShow_Debug GL_x64.exe",
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "Build",
+      "stopOnEntry": false
+    },
+    {
+      "name": "RTSlideShow (Run Only)",
+      "type": "lldb",
+      "request": "launch",
+      "program": "${workspaceFolder}/bin/RTSlideShow_Debug GL_x64.exe",
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": false
+    }
+  ]
+}

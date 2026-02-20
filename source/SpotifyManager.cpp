@@ -24,7 +24,7 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
 
     if (IsInStringCaseInsensitive(title, "Google Chrome"))
     {
-        if (IsInStringCaseInsensitive(title, "Spotify") || (IsInStringCaseInsensitive(title, "ÅE")) 
+        if (IsInStringCaseInsensitive(title, "Spotify") || (IsInStringCaseInsensitive(title, "ÔøΩE")) 
             || (IsInStringCaseInsensitive(title, "?")))  //on windows 10, the dot becomes a ?, regional settings issue?
         {
             //LogMsg("Found %s", title);
@@ -39,7 +39,7 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
 
 void extractSongAndArtist(const std::string& title, std::string& song, std::string& artist)
 {
-    std::size_t pos = title.find(" ÅE");
+    std::size_t pos = title.find(" ÔøΩE");
     if (pos == std::string::npos)
     {
         pos = title.find(" ? ");
@@ -52,7 +52,7 @@ void extractSongAndArtist(const std::string& title, std::string& song, std::stri
     }
     else
     {
-        // Handle the case where neither " ÅE" nor " ? " are found.
+        // Handle the case where neither " ÔøΩE" nor " ? " are found.
         // Here, we are being error-tolerant and assuming the whole title is the song name.
         song = title;
         artist = "Unknown Artist";
