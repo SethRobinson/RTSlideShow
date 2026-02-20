@@ -283,6 +283,24 @@ void Script::Run()
 			GetMessageManager()->CallStaticFunction(PlayMusic, timeMS, &vList);
 		
 		}
+		 
+		if (words[0] == "next_song")
+		{
+			//GetApp()->m_foobarManager.NextSong();
+			if (GetApp()->GetBGMusicIsPlaying())
+			{
+				GetApp()->m_spotifyManager.NextSong();
+			}
+		}
+
+		if (words[0] == "previous_song")
+		{
+			//GetApp()->m_foobarManager.NextSong();
+			if (GetApp()->GetBGMusicIsPlaying())
+			{
+				GetApp()->m_spotifyManager.PreviousSong();
+			}
+		}
 
 		if (words[0] == "stop_music")
 		{
@@ -299,7 +317,17 @@ void Script::Run()
 
 		if (words[0] == "toggle_bg_music_mode")
 		{
-			if (GetApp()->GetBGMusicMode())
+			GetApp()->ToggleBGMusicMode();
+
+			GetApp()->m_foobarManager.SetPause(false, 0);
+			GetApp()->m_spotifyManager.SetPause(false, 0);
+			GetApp()->SetBGMusicIsPlaying(true);
+
+
+//			GetApp()->SetBGMusicIsPlaying(false);
+
+			/*
+			if (!GetApp()->GetBGMusicMode())
 			{
 				LogMsg("Turning off BG music mode");
 				if (GetApp()->GetBGMusicIsPlaying())
@@ -327,6 +355,7 @@ void Script::Run()
 				}
 
 			}
+			*/
 		}
 
 		//process something like "set_hue_light_rgb|delayMS|0|name|Hue play 1|rgb|255,0,0|allow_partial|1"

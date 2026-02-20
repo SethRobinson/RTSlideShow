@@ -88,6 +88,34 @@ void SpotifyManager::Pause()
     SendInput(2, input, sizeof(INPUT));
 }
 
+void SpotifyManager::NextSong()
+{
+    INPUT input[2] = {};
+    // Key down
+    input[0].type = INPUT_KEYBOARD;
+    input[0].ki.wVk = VK_MEDIA_NEXT_TRACK;
+    // Key up
+    input[1].type = INPUT_KEYBOARD;
+    input[1].ki.wVk = VK_MEDIA_NEXT_TRACK;
+    input[1].ki.dwFlags = KEYEVENTF_KEYUP;
+    // Send the input events
+    SendInput(2, input, sizeof(INPUT));
+}
+
+void SpotifyManager::PreviousSong()
+{
+    INPUT input[2] = {};
+    // Key down
+    input[0].type = INPUT_KEYBOARD;
+    input[0].ki.wVk = VK_MEDIA_PREV_TRACK;
+    // Key up
+    input[1].type = INPUT_KEYBOARD;
+    input[1].ki.wVk = VK_MEDIA_PREV_TRACK;
+    input[1].ki.dwFlags = KEYEVENTF_KEYUP;
+    // Send the input events
+    SendInput(2, input, sizeof(INPUT));
+}
+
 void SpotifyManager::GetActiveSong(string &songPlayingOut, string &artistPlayingOut, bool &windowFoundOut, bool &isPlayingOut, HWND &spotifyBrowserWindowHWNDOut)
 {
    

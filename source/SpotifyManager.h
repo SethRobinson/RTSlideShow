@@ -18,6 +18,10 @@ public:
 	void TogglePlayback(HWND hwnd);
 	void Pause();
 
+	void NextSong();
+
+	void PreviousSong();
+
 	void GetActiveSong(string& songPlayingOut, string& artistPlayingOut, bool& windowFoundOut, bool& isPlayingOut, HWND & spotifyBrowserWindowHWNDOut);
 	void SetPause(bool bPause, int delayMS);
 
