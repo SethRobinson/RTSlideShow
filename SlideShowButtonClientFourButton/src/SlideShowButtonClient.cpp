@@ -41,18 +41,23 @@ enum ButtonState {
 
 ButtonState stateA = IDLE;
 uint32_t buttonPressTimeA;
+uint32_t lastStateChangeTimeA = 0;
 
 ButtonState stateB = IDLE;
 uint32_t buttonPressTimeB;
+uint32_t lastStateChangeTimeB = 0;
 
 ButtonState stateC = IDLE;
 uint32_t buttonPressTimeC;
+uint32_t lastStateChangeTimeC = 0;
 
 ButtonState stateD = IDLE;
 uint32_t buttonPressTimeD;
+uint32_t lastStateChangeTimeD = 0;
 
 ButtonState stateE = IDLE;
 uint32_t buttonPressTimeE;
+uint32_t lastStateChangeTimeE = 0;
 
 // Global persistent WiFiClient
 WiFiClient client;
@@ -250,27 +255,34 @@ void KeepAliveChecker() {
     }
 }
 
-void handleButton(ButtonState& state, uint32_t& pressTime, bool isPressed, const String& buttonName) {
+void handleButton(ButtonState& state, uint32_t& pressTime, uint32_t& lastStateChangeTime, bool isPressed, const String& buttonName) {
+    // Debounce: ignore reads within 50ms of last state transition
+    if (millis() - lastStateChangeTime < 50) return;
+
     switch (state) {
         case IDLE:
             if (isPressed) {
                 state = PRESSED;
                 pressTime = millis();
+                lastStateChangeTime = millis();
             }
             break;
         case PRESSED:
             if ((millis() - pressTime) > 1000) {
                 SendMessage(deviceID, "_Button" + buttonName + "_Long");
                 state = LONG_PRESSED;
+                lastStateChangeTime = millis();
             } else if (!isPressed) {
                 // Released before long press duration
                 SendMessage(deviceID, "_Button" + buttonName);
                 state = IDLE;
+                lastStateChangeTime = millis();
             }
             break;
         case LONG_PRESSED:
             if (!isPressed) {
                 state = IDLE;
+                lastStateChangeTime = millis();
             }
             break;
     }
@@ -280,19 +292,19 @@ void loop() {
     M5.update(); // Update button states
 
     if (FIRST_BUTTON_PIN >= 0) {
-        handleButton(stateA, buttonPressTimeA, digitalRead(FIRST_BUTTON_PIN) == LOW, "A");
+        handleButton(stateA, buttonPressTimeA, lastStateChangeTimeA, digitalRead(FIRST_BUTTON_PIN) == LOW, "A");
     }
     if (SECOND_BUTTON_PIN >= 0) {
-        handleButton(stateB, buttonPressTimeB, digitalRead(SECOND_BUTTON_PIN) == LOW, "B");
+        handleButton(stateB, buttonPressTimeB, lastStateChangeTimeB, digitalRead(SECOND_BUTTON_PIN) == LOW, "B");
     }
     if (THIRD_BUTTON_PIN >= 0) {
-        handleButton(stateC, buttonPressTimeC, digitalRead(THIRD_BUTTON_PIN) == LOW, "C");
+        handleButton(stateC, buttonPressTimeC, lastStateChangeTimeC, digitalRead(THIRD_BUTTON_PIN) == LOW, "C");
     }
     if (FOURTH_BUTTON_PIN >= 0) {
-        handleButton(stateD, buttonPressTimeD, digitalRead(FOURTH_BUTTON_PIN) == LOW, "D");
+        handleButton(stateD, buttonPressTimeD, lastStateChangeTimeD, digitalRead(FOURTH_BUTTON_PIN) == LOW, "D");
     }
     if (FIFTH_BUTTON_PIN >= 0) {
-        handleButton(stateE, buttonPressTimeE, digitalRead(FIFTH_BUTTON_PIN) == LOW, "E");
+        handleButton(stateE, buttonPressTimeE, lastStateChangeTimeE, digitalRead(FIFTH_BUTTON_PIN) == LOW, "E");
     }
     
     // --- Run KeepAliveChecker every 10 minutes ---

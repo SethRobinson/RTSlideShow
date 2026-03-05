@@ -26,6 +26,7 @@ bool bUseSleepMode = false;          // Optionally enable sleep mode
 unsigned long ExternalButtonFlashingLightTime = 10 * 1000;
 unsigned long ExternalButtonTimePerFlash = 300;
 int secondButtonLastState = HIGH;
+unsigned long secondButtonLastChangeTime = 0;
 
 // KeepAlive variables
 unsigned long lastKeepAliveCheck = 0;
@@ -351,10 +352,13 @@ void loop() {
 
     // --- Second external button (SECOND_BUTTON_PIN) ---
     buttonState = digitalRead(SECOND_BUTTON_PIN);
-    if (secondButtonLastState == HIGH && buttonState == LOW) {
-        SendMessage(deviceID, "_ButtonG32");
+    if (buttonState != secondButtonLastState && (millis() - secondButtonLastChangeTime) >= 50) {
+        secondButtonLastChangeTime = millis();
+        if (secondButtonLastState == HIGH && buttonState == LOW) {
+            SendMessage(deviceID, "_ButtonG32");
+        }
+        secondButtonLastState = buttonState;
     }
-    secondButtonLastState = buttonState;
 
     // --- Run KeepAliveChecker every 10 minutes ---
     if (millis() - lastKeepAliveCheck >= KEEP_ALIVE_INTERVAL) {
