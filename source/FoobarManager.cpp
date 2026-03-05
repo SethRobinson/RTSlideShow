@@ -2,8 +2,13 @@
 #include "FoobarManager.h"
 #include "Entity/HTTPComponent.h"
 #include "Entity/EntityUtils.h"
-#include "util/cJSON.h" 
+#include "util/cJSON.h"
 #include "App.h"
+
+#ifdef WIN32
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#endif
 
 void OnDownloadError(VariantList* pVList)
 {
@@ -84,15 +89,55 @@ void OnGotStatus(VariantList* pVList)
 
 FoobarManager::FoobarManager()
 {
-	
+
 }
 
 FoobarManager::~FoobarManager()
 {
 }
 
+void FoobarManager::CheckIfAvailable()
+{
+#ifdef WIN32
+	SOCKET sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if (sock == INVALID_SOCKET)
+	{
+		LogMsg("FoobarManager: Could not create socket for availability check");
+		m_bAvailable = false;
+		return;
+	}
+
+	// Set a short timeout (2 seconds) so we don't block forever
+	DWORD timeout = 2000;
+	setsockopt(sock, SOL_SOCKET, SO_SNDTIMEO, (const char*)&timeout, sizeof(timeout));
+
+	struct sockaddr_in server;
+	server.sin_family = AF_INET;
+	server.sin_port = htons((u_short)port);
+	inet_pton(AF_INET, url.c_str(), &server.sin_addr);
+
+	int result = connect(sock, (struct sockaddr*)&server, sizeof(server));
+	closesocket(sock);
+
+	if (result == 0)
+	{
+		LogMsg("FoobarManager: Foobar beefweb plugin detected on %s:%d", url.c_str(), port);
+		m_bAvailable = true;
+	}
+	else
+	{
+		LogMsg("FoobarManager: Foobar not available on %s:%d - disabling Foobar control", url.c_str(), port);
+		m_bAvailable = false;
+	}
+#else
+	m_bAvailable = false;
+#endif
+}
+
 void FoobarManager::Play(int delayMS)
 {
+	if (!m_bAvailable) return;
+
 	Entity* pEntity = new Entity("FoobarCommand");
 
 	Entity* pParent = GetEntityRoot()->GetEntityByName("GUI");
@@ -117,6 +162,8 @@ void FoobarManager::Play(int delayMS)
 
 void FoobarManager::UpdateStatusAndDoSomething(int delayMS, string action)
 {
+	if (!m_bAvailable) return;
+
 	Entity* pEntity = new Entity("FoobarStatusUpdate");
 	
 	Entity* pParent = GetEntityRoot()->GetEntityByName("GUI");
@@ -141,6 +188,7 @@ void FoobarManager::UpdateStatusAndDoSomething(int delayMS, string action)
 
 void FoobarManager::SetPause(bool bPause, int delayMS)
 {
+	if (!m_bAvailable) return;
 
 	if (bPause == false)
 	{

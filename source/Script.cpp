@@ -274,6 +274,12 @@ void Script::Run()
 
 		if (words[0] == "play_music")
 		{
+			if (GetApp()->m_bWaitingForMusicOnceToFinish)
+			{
+				LogMsg("play_music: ignoring because play_music_once is in progress");
+				continue;
+			}
+
 			int timeMS = StringAndVarToInt(words[2]);
 			string sfx = GetApp()->m_varMan.ReplaceVars(words[4]);
 
@@ -297,6 +303,12 @@ void Script::Run()
 
 		if (words[0] == "play_music_once")
 		{
+			if (GetApp()->m_bWaitingForMusicOnceToFinish)
+			{
+				LogMsg("play_music_once: ignoring because another play_music_once is already in progress");
+				continue;
+			}
+
 			int timeMS = StringAndVarToInt(words[2]);
 			string sfx = GetApp()->m_varMan.ReplaceVars(words[4]);
 

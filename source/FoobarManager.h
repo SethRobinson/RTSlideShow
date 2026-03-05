@@ -19,6 +19,9 @@ public:
 	FoobarManager();
 	virtual ~FoobarManager();
 
+	void CheckIfAvailable();
+	bool IsAvailable() { return m_bAvailable; }
+
 	void Play(int delayMS);
 
 	void UpdateStatusAndDoSomething(int delayMS, string auction);
@@ -29,6 +32,6 @@ protected:
 
 	string url = "127.0.0.1";
 	uint32 port = 8880;
-
+	bool m_bAvailable = false;
 
 };

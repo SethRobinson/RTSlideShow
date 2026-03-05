@@ -275,6 +275,8 @@ bool App::Init()
 
 	ReadConfigFile();
 
+	m_foobarManager.CheckIfAvailable();
+
 	//preload audio
 	GetAudioManager()->Preload("audio/click.wav");
 
