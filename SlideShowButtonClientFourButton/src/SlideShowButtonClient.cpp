@@ -112,6 +112,7 @@ void ConnectToWifi(bool bForceDisconnect) {
           delay(500);
           M5.Lcd.print(".");
       }
+      WiFi.setSleep(false); // Disable WiFi power save for low latency
       M5.Lcd.print("IP: ");
       M5.Lcd.println(WiFi.localIP());
   }
@@ -152,7 +153,8 @@ void ConnectToWifi(bool bForceDisconnect) {
   }
   
   // Try connecting to the primary host, or fall back if needed.
- 
+  client.setNoDelay(true); // Disable Nagle's algorithm for low latency
+
   SendMessage(deviceID, "_Dummy");
 
   M5.Lcd.println("Host found.");

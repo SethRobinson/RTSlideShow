@@ -217,6 +217,7 @@ void ConnectToWifi(bool bForceDisconnect) {
             attempts++;
         }
         if (WiFi.status() == WL_CONNECTED) {
+            WiFi.setSleep(false); // Disable WiFi power save for low latency
             Serial.println("\nConnected!");
             Serial.print("IP: ");
             Serial.println(WiFi.localIP());
@@ -260,6 +261,7 @@ void ConnectToWifi(bool bForceDisconnect) {
         }
         
         Serial.println("Connected to host!");
+        client.setNoDelay(true); // Disable Nagle's algorithm for low latency
         SendMessage(deviceID, "_Dummy");
     }
 }

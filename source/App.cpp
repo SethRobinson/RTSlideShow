@@ -448,15 +448,16 @@ void App::Update()
 		g_nowPlayingManager.Update();
 	}
 
-	if (m_bWaitingForMusicOnceToFinish)
+	if (m_bWaitingForMusicOnceToFinish && m_bMusicOncePlaybackStarted)
 	{
 		bool bStillPlaying = GetAudioManager()->IsPlayingMusic();
 		if (!bStillPlaying)
 		{
-			LogMsg("play_music_once: finished playing, resuming BG music (BGMusicMode: %d)", (int)GetBGMusicMode());
+			LogMsg("play_music_once: finished playing (BGMusicWasPlaying: %d, BGMusicMode: %d)", (int)m_bBGMusicWasPlayingBeforeMusicOnce, (int)GetBGMusicMode());
 			m_bWaitingForMusicOnceToFinish = false;
+			m_bMusicOncePlaybackStarted = false;
 
-			if (GetBGMusicMode())
+			if (m_bBGMusicWasPlayingBeforeMusicOnce && GetBGMusicMode())
 			{
 				m_foobarManager.SetPause(false, 0);
 				m_spotifyManager.SetPause(false, 0);

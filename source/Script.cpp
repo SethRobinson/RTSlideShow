@@ -28,23 +28,23 @@ void PlayMusicOnceWithResume(VariantList* pVList)
 	string fName = pVList->Get(0).GetString();
 	LogMsg("PlayMusicOnceWithResume: starting playback of %s", fName.c_str());
 	GetAudioManager()->Play(fName, false, true);
-	GetApp()->m_bWaitingForMusicOnceToFinish = true;
-	LogMsg("PlayMusicOnceWithResume: m_bWaitingForMusicOnceToFinish = true, IsPlayingMusic: %d", (int)GetAudioManager()->IsPlayingMusic());
+	GetApp()->m_bMusicOncePlaybackStarted = true;
+	LogMsg("PlayMusicOnceWithResume: IsPlayingMusic: %d", (int)GetAudioManager()->IsPlayingMusic());
 }
 
 void StopMusicAndPlayBGIfNeeded(VariantList* pVList)
 {
-	
+
 	if (GetAudioManager()->IsPlayingMusic())
 	{
 		StopMusic(pVList);
 
-		if (!GetApp()->GetBGMusicIsPlaying() && GetApp()->GetBGMusicMode())
+		if (!GetApp()->GetBGMusicIsPlaying() && GetApp()->GetBGMusicMode() && GetApp()->m_bBGMusicWasPlayingBeforePlayMusic)
 		{
-			//stop this
 			GetApp()->m_foobarManager.SetPause(false, 0);
 			GetApp()->m_spotifyManager.SetPause(false, 0);
 			GetApp()->SetBGMusicIsPlaying(true);
+			LogMsg("StopMusicAndPlayBGIfNeeded: resumed BG music (was playing before)");
 		}
 	}
 
@@ -58,11 +58,11 @@ void ToggleMusic(VariantList* pVList)
 	{
 		StopMusic(pVList);
 
-		if (!GetApp()->GetBGMusicIsPlaying() && GetApp()->GetBGMusicMode())
+		if (!GetApp()->GetBGMusicIsPlaying() && GetApp()->GetBGMusicMode() && GetApp()->m_bBGMusicWasPlayingBeforePlayMusic)
 		{
-			//stop this
 			GetApp()->m_foobarManager.SetPause(false, 0);
 			GetApp()->m_spotifyManager.SetPause(false, 0);
+			LogMsg("ToggleMusic: resumed BG music (was playing before)");
 			GetApp()->SetBGMusicIsPlaying(true);
 		}
 	}
@@ -78,6 +78,8 @@ void ToggleMusic(VariantList* pVList)
 				GetApp()->m_foobarManager.SetPause(false, 0);
 				GetApp()->m_spotifyManager.SetPause(false, 0);
 				GetApp()->SetBGMusicIsPlaying(true);
+				LogMsg("We think we started playing BG music, with GetApp()->GetBGMusicMode() true");
+
 			}
 			else
 			{
@@ -85,6 +87,9 @@ void ToggleMusic(VariantList* pVList)
 				GetApp()->m_foobarManager.SetPause(true, 0);
 				GetApp()->m_spotifyManager.SetPause(true, 0);
 				GetApp()->SetBGMusicIsPlaying(false);
+
+				LogMsg("We stopped the BG music that was playing.  GetApp()->GetBGMusicMode() = true ");
+
 			}
 		}
 
@@ -287,7 +292,9 @@ void Script::Run()
 
 			VariantList vList;
 			vList.Get(0).Set(sfx);
-		
+
+			GetApp()->m_bBGMusicWasPlayingBeforePlayMusic = GetApp()->GetBGMusicIsPlaying();
+
 			if (GetApp()->GetBGMusicIsPlaying())
 			{
 				LogMsg("play_music: pausing BG music");
@@ -316,6 +323,10 @@ void Script::Run()
 
 			VariantList vList;
 			vList.Get(0).Set(sfx);
+
+			GetApp()->m_bBGMusicWasPlayingBeforeMusicOnce = GetApp()->GetBGMusicIsPlaying();
+			GetApp()->m_bWaitingForMusicOnceToFinish = true;
+			GetApp()->m_bMusicOncePlaybackStarted = false;
 
 			if (GetApp()->GetBGMusicIsPlaying())
 			{

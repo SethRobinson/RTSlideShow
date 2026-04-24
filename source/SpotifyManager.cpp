@@ -18,19 +18,19 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
     GetWindowText(hwnd, title, sizeof(title));
     GetClassName(hwnd, className, sizeof(className));
 
-    //std::cout << "Window Title: " << title << ", Class Name: " << className << std::endl;
-    // Assume LogMsg is some logging function you have
-    // LogMsg("Window Title: %s, Class Name: %s", title, className);
-
-    if (IsInStringCaseInsensitive(title, "Google Chrome"))
+    if (IsInStringCaseInsensitive(title, "Google Chrome") || IsInStringCaseInsensitive(title, "Brave"))
     {
-        if (IsInStringCaseInsensitive(title, "Spotify") || (IsInStringCaseInsensitive(title, "�E")) 
+        if (IsInStringCaseInsensitive(title, "Spotify") || (IsInStringCaseInsensitive(title, "�E"))
             || (IsInStringCaseInsensitive(title, "?")))  //on windows 10, the dot becomes a ?, regional settings issue?
         {
-            //LogMsg("Found %s", title);
+            LogMsg("Spotify: Found browser+Spotify window: %s", title);
             HWND* pHwnd = reinterpret_cast<HWND*>(lParam);
             *pHwnd = hwnd;
             return FALSE; // Stop enumeration
+        }
+        else
+        {
+            LogMsg("Spotify: Browser window skipped (no Spotify match): %s", title);
         }
     }
 
@@ -118,14 +118,41 @@ void SpotifyManager::PreviousSong()
 
 void SpotifyManager::GetActiveSong(string &songPlayingOut, string &artistPlayingOut, bool &windowFoundOut, bool &isPlayingOut, HWND &spotifyBrowserWindowHWNDOut)
 {
-   
+    // If we have a cached handle, verify it's still valid
+    if (m_chromeSpotifyWindow != NULL)
+    {
+        if (!IsWindow(m_chromeSpotifyWindow))
+        {
+            LogMsg("Spotify: Cached window handle is no longer valid, will re-enumerate");
+            m_chromeSpotifyWindow = NULL;
+            m_bCheckedForChromeWindow = false;
+        }
+        else
+        {
+            char checkTitle[256];
+            GetWindowText(m_chromeSpotifyWindow, checkTitle, sizeof(checkTitle));
+            if (strlen(checkTitle) == 0)
+            {
+                LogMsg("Spotify: Cached window title is empty, will re-enumerate");
+                m_chromeSpotifyWindow = NULL;
+                m_bCheckedForChromeWindow = false;
+            }
+        }
+    }
+
     if (m_chromeSpotifyWindow == NULL && m_bCheckedForChromeWindow == false)
     {
         m_bCheckedForChromeWindow = true;
+       // LogMsg("Spotify: Enumerating windows to find browser+Spotify...");
         EnumWindows(EnumWindowsProc, reinterpret_cast<LPARAM>(&m_chromeSpotifyWindow));
-    }
-    spotifyBrowserWindowHWNDOut = NULL;
 
+        if (m_chromeSpotifyWindow == NULL)
+        {
+          //  LogMsg("Spotify: No browser+Spotify window found after enumeration");
+        }
+    }
+
+    spotifyBrowserWindowHWNDOut = NULL;
     windowFoundOut = false;
     isPlayingOut = false;
     artistPlayingOut = "";
@@ -135,38 +162,38 @@ void SpotifyManager::GetActiveSong(string &songPlayingOut, string &artistPlaying
     {
         spotifyBrowserWindowHWNDOut = m_chromeSpotifyWindow;
 
-        // Now you can send key press messages to this window
         char title[256];
         GetWindowText(m_chromeSpotifyWindow, title, sizeof(title));
         string sTitle(title);
 
-        //LogMsg("Found a window: %s", sTitle.c_str());
+        //LogMsg("Spotify: Window title: %s", sTitle.c_str());
 
         windowFoundOut = true;
 
         if (IsInStringCaseInsensitive(sTitle, "Spotify - Web Player"))
         {
-            //found spotify, but it's not playing anything
+         //   LogMsg("Spotify: Not playing - idle Web Player page");
             return;
         }
 
         if (IsInStringCaseInsensitive(sTitle, "Spotify Playlist"))
         {
-            //found spotify, but it's not playing anything
+         //   LogMsg("Spotify: Not playing - Spotify Playlist page");
             return;
         }
         if (IsInStringCaseInsensitive(sTitle, "playlist by"))
         {
-            //found spotify, but it's not playing anything
+         //   LogMsg("Spotify: Not playing - playlist by page");
             return;
         }
-
 
         isPlayingOut = true;
 
         StringReplace(" - Google Chrome", "", sTitle);
+        StringReplace(" - Brave", "", sTitle);
 
         extractSongAndArtist(sTitle, songPlayingOut, artistPlayingOut);
+       // LogMsg("Spotify: Playing - Song: %s, Artist: %s", songPlayingOut.c_str(), artistPlayingOut.c_str());
         return;
     }
 
@@ -193,7 +220,7 @@ void SetSpotifyPauseVariant(VariantList* pVList)
 
     //isPlaying = true; //hack because the window thing is unreliable
     GetApp()->m_spotifyManager.Pause();
-
+    LogMsg("Toggling spotify music in SetSpotifyPauseVariant");
     return;
 
     if (isPlaying)
@@ -232,6 +259,9 @@ void SpotifyManager::SetPause(bool bPause, int delayMS)
    {
        return;
    }*/
+
+   LogMsg("Scheduling to call SetSpotifyPauseVariant in %d ms", delayMS);
+
    VariantList vList;
    vList.Get(0).Set((int32)bPause);
    GetMessageManager()->CallStaticFunction(SetSpotifyPauseVariant, delayMS, &vList);

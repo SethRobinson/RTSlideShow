@@ -79,6 +79,9 @@ public:
 
 	bool m_bWindowedMode = true;
 	bool m_bWaitingForMusicOnceToFinish = false;
+	bool m_bMusicOncePlaybackStarted = false;
+	bool m_bBGMusicWasPlayingBeforeMusicOnce = false;
+	bool m_bBGMusicWasPlayingBeforePlayMusic = false;
 	VariableManager m_varMan;
 
 	string m_hueUserName;
