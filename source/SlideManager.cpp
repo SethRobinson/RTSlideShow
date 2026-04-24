@@ -309,6 +309,7 @@ Entity* SlideManager::CreateMediaFromFileName(string fileName, string entName, C
 		pDragComp->GetVar("limitedToThisFingerID")->Set(uint32(0)); //only allow left mouse button
 		EntityComponent* pDragMoveComp = pEnt->AddComponent(new TouchDragMoveComponent);
 		EntityComponent* pMouseWheelZoom = pEnt->AddComponent(new ScrollToZoomComponent);
+		pMouseWheelZoom->GetVar("zoomTowardCursor")->Set(uint32(1)); //Photoshop-style zoom toward cursor
 
 		//if vSize is larger than the screen, scale the entity
 		if (vSize.x > GetScreenSizeX() || vSize.y > GetScreenSizeY())
