@@ -49,6 +49,28 @@ void PlayMusicOnceWithResume(VariantList* pVList)
 	LogMsg("PlayMusicOnceWithResume: IsPlayingMusic: %d", (int)GetAudioManager()->IsPlayingMusic());
 }
 
+//Helper for the "set_stream_pause" script command.  Routed through MessageManager
+//so the script can specify a delayMS, which is useful at startup: libVLC's
+//SetPause is a no-op until the player has actually started playing, so we want to
+//wait a few hundred ms after add_stream before pausing.  Calls OnSetPause on the
+//component so restart_on_play behavior is honored on later unpause clicks.
+void SetStreamPauseHelper(VariantList* pVList)
+{
+	string name = pVList->Get(0).GetString();
+	bool bPaused = pVList->Get(1).GetUINT32() != 0;
+
+	LibVlcStreamComponent* pVlcComp = GetStreamEntityByName(name);
+	if (!pVlcComp)
+	{
+		LogMsg("set_stream_pause: can't find stream %s", name.c_str());
+		return;
+	}
+
+	VariantList vList;
+	vList.Get(0).Set(uint32(bPaused ? 1 : 0));
+	pVlcComp->OnSetPause(&vList);
+}
+
 void StopMusicAndPlayBGIfNeeded(VariantList* pVList)
 {
 
@@ -562,7 +584,7 @@ void Script::Run()
 			GetApp()->m_varMan.SetVar(varName, varValue);
 		}
 
-		//process "add_stream|name|stream1|source|%stream1_source%|"
+		//process "add_stream|name|stream1|source|%stream1_source%|cache_ms|333|"
 		if (words[0] == "add_stream")
 		{
 			//add the stream
@@ -570,7 +592,21 @@ void Script::Run()
 			string source = GetApp()->m_varMan.ReplaceVars(words[4]);
 			int cacheMS = StringAndVarToInt(words[6]);
 			Entity* pGUIEnt = GetBaseApp()->GetEntityRoot()->GetEntityByName("GUI");
-			AddNewStream(name, source, cacheMS, pGUIEnt);
+
+			//For local audio files, derive a friendly title from the filename so the
+			//widget shows e.g. "Bad Girls Club" instead of being unlabeled.  Skip URLs
+			//(rtsp://, http://, webcam:) so the existing video-stream callers don't
+			//start showing ugly URL fragments as labels - those scripts already manage
+			//their own titles via add_text.
+			string title = "";
+			string ext = ToLowerCaseString(GetFileExtension(source));
+			bool bIsLocalFile = source.find("://") == string::npos && source.find("webcam:") != 0;
+			if (bIsLocalFile && (ext == "mp3" || ext == "wav" || ext == "ogg" || ext == "mid"))
+			{
+				title = GetFileNameWithoutExtension(source);
+			}
+
+			AddNewStream(name, source, cacheMS, pGUIEnt, true, title);
 		}
 
 		//process set_stream_vol|name|stream1|value (0 to 1)|%stream_vol%|
@@ -579,6 +615,23 @@ void Script::Run()
 			string name = GetApp()->m_varMan.ReplaceVars(words[2]);
 			float vol = StringAndVarToFloat(words[4]);
 			SetStreamVolumeByName(name, vol);
+		}
+
+		//process "set_stream_pause|delayMS|0|name|drama|paused|1|"
+		//Pauses (or unpauses) a libVLC stream entity created by add_stream (or by
+		//slide auto-creation).  delayMS is useful at startup: libVLC's SetPause is a
+		//no-op if the player isn't yet in the "playing" state, so pair add_stream
+		//with a few-hundred-ms delayed pause to make the widget appear paused.
+		if (words[0] == "set_stream_pause")
+		{
+			int delayMS = StringAndVarToInt(words[2]);
+			string name = GetApp()->m_varMan.ReplaceVars(words[4]);
+			bool bPaused = StringToBool(words[6]);
+
+			VariantList vList;
+			vList.Get(0).Set(name);
+			vList.Get(1).Set(uint32(bPaused ? 1 : 0));
+			GetMessageManager()->CallStaticFunction(SetStreamPauseHelper, delayMS, &vList);
 		}
 
 		//process set_scale|delayMS|100|name|stream1|scale_x|1.5|scale_y|1.5|durationMS|1000|
@@ -593,7 +646,11 @@ void Script::Run()
 			Entity* pEnt = GetEntityRoot()->GetEntityByName(name);
 			if (pEnt)
 			{
-				//SetScale2DEntity(pEnt, CL_Vec2f(scaleX, scaleY));
+				//InterpolateComponent silently no-ops when duration_ms is 0, AND a direct snap
+				//can be clobbered by other in-flight scale2d interpolators (e.g. the slide-in
+				//transition). A 1ms interpolation wins the per-frame last-write-wins battle
+				//and snaps to target on the very next frame.
+				if (durationMS <= 0) durationMS = 1;
 				ScaleEntity(pEnt, GetScale2DEntity(pEnt), CL_Vec2f(scaleX, scaleY), durationMS, delayMS);
 			}
 			else
@@ -614,11 +671,11 @@ void Script::Run()
 			Entity* pEnt = GetEntityRoot()->GetEntityByName(name);
 			if (pEnt)
 			{
-				// pEnt->RemoveComponentByName("ic_scale");
 				CL_Vec2f vDestSize = CL_Vec2f((float)targetX, (float)targetY);
 				CL_Vec2f vFinalScale = EntityGetScaleBySizeAndAspectMode(pEnt, vDestSize, ASPECT_HEIGHT_CONTROLS_WIDTH);
+				//See set_scale comment: 0ms gets clamped to 1ms so it actually fires.
+				if (durationMS <= 0) durationMS = 1;
 				ScaleEntity(pEnt, GetScale2DEntity(pEnt), vFinalScale, durationMS, delayMS);
-
 			}
 			else
 			{
@@ -648,6 +705,11 @@ void Script::Run()
 					y = (int)GetPos2DEntity(pEnt).y;
 				}
 
+				//InterpolateComponent silently no-ops when duration_ms is 0, AND a direct snap
+				//can be clobbered by other in-flight pos2d interpolators (e.g. the slide-in
+				//transition still ticking on this entity). A 1ms interpolation wins the
+				//per-frame last-write-wins battle and snaps to target on the very next frame.
+				if (durationMS <= 0) durationMS = 1;
 				ZoomToPositionEntity(pEnt, CL_Vec2f((float)x, (float)y), durationMS, INTERPOLATE_SMOOTHSTEP, delayMS);
 			}
 			else
@@ -666,9 +728,9 @@ void Script::Run()
 			Entity* pEnt = GetEntityRoot()->GetEntityByName(name);
 			if (pEnt)
 			{
-				//SetPos2DEntity(pEnt, CL_Vec2f(x, y));
-				//MoveEntity(pEnt, GetPos2DEntity(pEnt), CL_Vec2f(x, y), durationMS, delayMS);
-				//move the entity
+				//See set_pos comment: 0ms gets clamped to 1ms so it actually fires and wins
+				//against any other pos2d interpolators that may still be in flight.
+				if (durationMS <= 0) durationMS = 1;
 				ZoomToPositionOffsetEntity(pEnt, CL_Vec2f((float)x, (float)y), durationMS, INTERPOLATE_SMOOTHSTEP, delayMS);
 			}
 			else
