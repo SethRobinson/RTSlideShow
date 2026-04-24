@@ -12,6 +12,23 @@
 #include "Entity/LibVlcStreamComponent.h"
 #include "WindowsFunctions.h"
 
+//Tracks active per-frame "keep_on_top" hooks so we can disconnect on enabled|0.
+//Entry is removed automatically (via sig_onRemoved) when the entity dies.
+static std::map<Entity*, boost::signals2::connection> g_keepOnTopConnections;
+
+static void KeepOnTopTick(Entity* pEnt, VariantList* /*pVList*/)
+{
+	if (pEnt && pEnt->GetParent())
+	{
+		pEnt->GetParent()->MoveEntityToTopByAddress(pEnt);
+	}
+}
+
+static void KeepOnTopOnRemoved(Entity* pEnt)
+{
+	g_keepOnTopConnections.erase(pEnt);
+}
+
 int StringAndVarToInt(string in)
 {
 	return atoi(GetApp()->m_varMan.ReplaceVars(in).c_str());
@@ -914,6 +931,130 @@ void Script::Run()
 				LogMsg("Can't find %s (kill_image)", name.c_str());
 			}
 		}
+
+		//process keep|name|slide0|new_name|drama|
+		//Renames an entity (and its companion MarkupEntity) so the slide auto-cleanup
+		//can't find it by the old "slideN" name and it survives slide changes.
+		//To remove it later, use kill|name|<new_name>|delayMS|0|fadeMS|0|
+		if (words[0] == "keep")
+		{
+			string name = GetApp()->m_varMan.ReplaceVars(words[2]);
+			string newName = words.size() > 4 ? GetApp()->m_varMan.ReplaceVars(words[4]) : "";
+			Entity* pEnt = GetEntityRoot()->GetEntityByName(name);
+			if (!pEnt)
+			{
+				LogMsg("Can't find %s (keep)", name.c_str());
+			}
+			else if (newName.empty())
+			{
+				LogMsg("keep: no new_name supplied for %s, nothing renamed", name.c_str());
+			}
+			else
+			{
+				//also rename the companion MarkupEntity sibling, if present
+				if (pEnt->GetParent())
+				{
+					Entity* pMarkup = pEnt->GetParent()->GetEntityByName("MarkupEntity" + name);
+					if (pMarkup)
+					{
+						pMarkup->SetName("MarkupEntity" + newName);
+					}
+				}
+				pEnt->SetName(newName);
+				LogMsg("keep: renamed %s -> %s (will not auto-delete on slide change)", name.c_str(), newName.c_str());
+			}
+		}
+
+		//process set_controls_locked|name|slide0|locked|1|
+		//For audio/video stream entities, stops the play/volume controls from
+		//fading out after 2 seconds of no input. locked=0 reverts to default fade behavior.
+		if (words[0] == "set_controls_locked")
+		{
+			string name = GetApp()->m_varMan.ReplaceVars(words[2]);
+			bool bLocked = StringToBool(words[4]);
+			Entity* pEnt = GetEntityRoot()->GetEntityByName(name);
+			if (pEnt)
+			{
+				LibVlcStreamComponent* pVlc = (LibVlcStreamComponent*)pEnt->GetComponentByName("LibVlcStream");
+				if (pVlc)
+				{
+					pVlc->SetControlsAlwaysVisible(bLocked);
+				}
+				else
+				{
+					LogMsg("%s has no LibVlcStream component (set_controls_locked)", name.c_str());
+				}
+			}
+			else
+			{
+				LogMsg("Can't find %s (set_controls_locked)", name.c_str());
+			}
+		}
+
+		//process set_restart_on_play|name|slide0|enabled|1|
+		//For audio/video stream entities, makes the play button (and script-driven
+		//set_pause-style toggles) seek back to position 0 every time playback resumes
+		//from a paused state, instead of continuing where it was paused.
+		//enabled=0 reverts to default continue-from-pause behavior.
+		if (words[0] == "set_restart_on_play")
+		{
+			string name = GetApp()->m_varMan.ReplaceVars(words[2]);
+			bool bEnabled = StringToBool(words[4]);
+			Entity* pEnt = GetEntityRoot()->GetEntityByName(name);
+			if (pEnt)
+			{
+				LibVlcStreamComponent* pVlc = (LibVlcStreamComponent*)pEnt->GetComponentByName("LibVlcStream");
+				if (pVlc)
+				{
+					pVlc->SetRestartOnPlay(bEnabled);
+				}
+				else
+				{
+					LogMsg("%s has no LibVlcStream component (set_restart_on_play)", name.c_str());
+				}
+			}
+			else
+			{
+				LogMsg("Can't find %s (set_restart_on_play)", name.c_str());
+			}
+		}
+
+		//process keep_on_top|name|drama|enabled|1|
+		//Hooks the entity's per-frame OnUpdate signal; each frame it re-inserts itself
+		//at the end of its parent's child list so it always draws on top of siblings.
+		//Handler disconnects automatically when the entity dies (sig_onRemoved).
+		//enabled|0 detaches the hook (entity returns to normal z-order behavior).
+		if (words[0] == "keep_on_top")
+		{
+			string name = GetApp()->m_varMan.ReplaceVars(words[2]);
+			bool bEnabled = StringToBool(words[4]);
+			Entity* pEnt = GetEntityRoot()->GetEntityByName(name);
+			if (!pEnt)
+			{
+				LogMsg("Can't find %s (keep_on_top)", name.c_str());
+			}
+			else
+			{
+				auto it = g_keepOnTopConnections.find(pEnt);
+				if (it != g_keepOnTopConnections.end())
+				{
+					it->second.disconnect();
+					g_keepOnTopConnections.erase(it);
+				}
+				if (bEnabled)
+				{
+					boost::signals2::connection conn = pEnt->GetFunction("OnUpdate")->sig_function.connect(
+						99, boost::bind(&KeepOnTopTick, pEnt, _1));
+					g_keepOnTopConnections[pEnt] = conn;
+					pEnt->sig_onRemoved.connect(boost::bind(&KeepOnTopOnRemoved, _1));
+					LogMsg("keep_on_top: pinned %s to top of its parent each frame", name.c_str());
+				}
+				else
+				{
+					LogMsg("keep_on_top: released %s from per-frame top pinning", name.c_str());
+				}
+			}
+		}
 	}
 }
 
@@ -924,6 +1065,15 @@ void Script::SetParms(string parm1)
 
 void LaunchScriptVariant(VariantList* pVList)
 {
+	//Get(1) optionally carries an entity name to restore into the %active% var
+	//just-in-time before the script runs. This protects against fast nav
+	//overwriting %active% between when the script was queued and when it actually fires.
+	string activeOverride = pVList->Get(1).GetString();
+	if (!activeOverride.empty())
+	{
+		GetApp()->m_varMan.SetVar("active", activeOverride);
+	}
+
 	LaunchScript(pVList->Get(0).GetString());
 }
 

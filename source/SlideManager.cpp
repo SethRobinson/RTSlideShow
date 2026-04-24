@@ -9,6 +9,7 @@
 #include "Entity/LibVlcStreamComponent.h"
 #include "Entity/TouchDragMarkupComponent.h"
 #include "GUI/IntroMenu.h"
+#include "Script.h"
 
 bool is_not_digit(char c)
 {
@@ -403,6 +404,33 @@ Entity* SlideManager::ShowSlide(int slideNum, bool bDoTransitions)
 		return NULL;
 	}
 	
+	//if a companion .txt script exists alongside the media file (same base name), queue it.
+	//We delay-launch by m_slideSpeedMS so the script runs AFTER the SlideScreen transition
+	//completes (otherwise SlideScreen's pos2d interpolation back to the original center
+	//would clobber any set_pos the script tries to apply).
+	//
+	//We pass entName as the second variant so LaunchScriptVariant restores %active% to
+	//this exact entity right before running, making the script immune to fast navigation
+	//that would otherwise overwrite the global %active% var between queueing and firing.
+	{
+		string slideFile = m_files[slideNum];
+		size_t dotPos = slideFile.find_last_of('.');
+		if (dotPos != string::npos)
+		{
+			string baseName = slideFile.substr(0, dotPos);
+			string companionPath = m_slideDir + baseName + ".txt";
+			if (FileExists(companionPath))
+			{
+				GetApp()->m_varMan.SetVar("active", entName);
+				VariantList vList;
+				vList.Get(0).Set(baseName);
+				vList.Get(1).Set(entName);
+				int scriptDelayMS = bDoTransitions ? (int)m_slideSpeedMS : 0;
+				GetMessageManager()->CallStaticFunction(LaunchScriptVariant, scriptDelayMS, &vList);
+			}
+		}
+	}
+
 #ifdef _DEBUG
 	m_pParentEnt->PrintTreeAsText();
 #endif

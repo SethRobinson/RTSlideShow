@@ -8,6 +8,7 @@
 #include "Script.h"
 #include "Entity/LibVlcStreamComponent.h"
 #include "Entity/TouchDragMarkupComponent.h"
+#include "Entity/LogDisplayComponent.h"
 
 
 CL_Vec2f g_lastMousePos;
@@ -250,6 +251,11 @@ void AppInput(VariantList* pVList)
 		{
 			//toggle fps display
 			GetBaseApp()->SetFPSVisible(!GetBaseApp()->GetFPSVisible());
+		}
+
+		if (key == '`')
+		{
+			ToggleDinkStyleConsole(GetEntityRoot()->GetEntityByName("GUI"));
 		}
 
 		
