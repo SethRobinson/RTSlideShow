@@ -585,6 +585,10 @@ void Script::Run()
 		}
 
 		//process "add_stream|name|stream1|source|%stream1_source%|cache_ms|333|"
+		//Optional trailing param: |auto_play|0| - if set to 0, the stream is
+		//loaded but never starts playing (libvlc_media_player_play is skipped),
+		//so no audio is produced until the user presses the play button or a
+		//set_stream_pause|paused|0 is issued.  Default is 1 (auto-plays).
 		if (words[0] == "add_stream")
 		{
 			//add the stream
@@ -606,7 +610,20 @@ void Script::Run()
 				title = GetFileNameWithoutExtension(source);
 			}
 
-			AddNewStream(name, source, cacheMS, pGUIEnt, true, title);
+			VLC_ExtraSettings settings;
+			//Look for the optional |auto_play|N| pair anywhere in the trailing args
+			//(rather than relying on a fixed index) so future callers can mix and
+			//match with cropRect or other settings without ordering pitfalls.
+			for (size_t i = 7; i + 1 < words.size(); i++)
+			{
+				if (words[i] == "auto_play")
+				{
+					settings.startPaused = !StringToBool(words[i + 1]);
+					break;
+				}
+			}
+
+			AddNewStream(name, source, cacheMS, pGUIEnt, true, title, settings);
 		}
 
 		//process set_stream_vol|name|stream1|value (0 to 1)|%stream_vol%|
