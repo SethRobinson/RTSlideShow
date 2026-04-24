@@ -5,6 +5,7 @@
 #include "Entity/EntityUtils.h"//create the classes that our globally library expects to exist somewhere.
 #include "Renderer/SoftSurface.h"
 #include "Entity/ArcadeInputComponent.h" 
+#include "Entity/OverlayRenderComponent.h"
 #include "Gamepad/GamepadManager.h"
 #include "Gamepad/GamepadProvideriCade.h"
 #include "GUI/IntroMenu.h"
@@ -307,6 +308,17 @@ bool App::Init()
 		MessageBox(NULL, "Can't init rest manager.  Port already in use?", "Error", MB_OK);
 		return false;
 	}
+
+	//When the GL context is destroyed and recreated (e.g. on every window resize), Proton
+	//unloads all surfaces and reloads them via m_sig_loadSurfaces.  For surfaces that were
+	//"InitBlankSurface + FillColor" (like the audio widget's dark grey panel background),
+	//the reload re-creates the texture but leaves it transparent, dropping our fill.  Hook
+	//the reload signal to refill any LibVlcStream panels that lost their background color.
+	//
+	//IMPORTANT: connect at a LATER group than the Surface class (which uses group 1) so we
+	//run AFTER every Surface has had its texture re-created.  Otherwise our FillColor would
+	//try to upload pixels to a texture that hasn't been re-allocated yet (silent no-op).
+	GetBaseApp()->m_sig_loadSurfaces.connect(100, boost::bind(&App::OnLoadSurfaces, this));
 	 
 	if (!GetApp()->m_hueBridgeIP.empty())
 	{
@@ -527,9 +539,80 @@ void App::Draw()
 	g_globalBatcher.Flush();
 }
 
+void App::RefillAudioPanelsRecursive(Entity *pEnt)
+{
+	if (!pEnt) return;
+
+	//If this entity has both a LibVlcStream component and an OverlayRender component, the
+	//OverlayRender's SurfaceAnim is the audio/video panel.  When it's a blank surface (no
+	//file backing) it's an audio panel - refill it with the same dark grey color used in
+	//LibVlcStreamComponent::Init so it doesn't go transparent after a GL recreate.  Skip
+	//surfaces loaded from a file (e.g. static image mode) - those will reload themselves.
+	//For live video the LibVLC frame writes overwrite the surface anyway.
+	EntityComponent *pVlc = pEnt->GetComponentByName("LibVlcStream");
+	if (pVlc)
+	{
+		OverlayRenderComponent *pOverlay = (OverlayRenderComponent*)pEnt->GetComponentByName("OverlayRender");
+		if (pOverlay)
+		{
+			SurfaceAnim *pSurf = pOverlay->GetSurfaceAnim();
+			if (pSurf && pSurf->GetTextureLoaded().empty() && pSurf->IsLoaded())
+			{
+				pSurf->FillColor(glColorBytes(40, 40, 50, 240));
+			}
+		}
+	}
+
+	EntityList *pChildren = pEnt->GetChildren();
+	if (pChildren)
+	{
+		for (EntityListItor it = pChildren->begin(); it != pChildren->end(); ++it)
+		{
+			RefillAudioPanelsRecursive(*it);
+		}
+	}
+}
+
+void App::OnLoadSurfaces()
+{
+	RefillAudioPanelsRecursive(GetEntityRoot());
+}
+
 void App::OnScreenSizeChange()
 {
 	BaseApp::OnScreenSizeChange();
+
+	//Keep the virtual ("fake") screen the same shape as the real window so images don't stretch
+	//when the user maximizes or shift-drags to a non-16:9 size.  We hold the height fixed at
+	//our reference (1080) and grow/shrink the width to match the actual window aspect ratio.
+	//Result: no letterbox bars, and pictures keep their correct proportions at any window shape.
+	const int referenceFakeY = 1080;
+	int realW = GetPrimaryGLX();
+	int realH = GetPrimaryGLY();
+	if (realW <= 0 || realH <= 0) return;
+
+	int desiredFakeY = referenceFakeY;
+	int desiredFakeX = (referenceFakeY * realW) / realH;
+	if (desiredFakeX < 1) desiredFakeX = 1;
+
+	int oldFakeX = GetFakePrimaryScreenSizeX();
+	int oldFakeY = GetFakePrimaryScreenSizeY();
+
+	if (desiredFakeX == oldFakeX && desiredFakeY == oldFakeY)
+	{
+		return; //already correct, nothing to do (also prevents recursion since SetupFakePrimaryScreenSize re-enters here)
+	}
+
+	SetupFakePrimaryScreenSize(desiredFakeX, desiredFakeY);
+
+	//Now reposition any existing slides proportionally so they stay centered (or wherever the
+	//user last dragged them, relatively) instead of suddenly appearing offset to one side.
+	if (oldFakeX > 0 && oldFakeY > 0)
+	{
+		g_slideManager.OnVirtualScreenResized(
+			CL_Vec2f((float)oldFakeX, (float)oldFakeY),
+			CL_Vec2f((float)desiredFakeX, (float)desiredFakeY));
+	}
 }
 
 void App::GetServerInfo( string &server, uint32 &port )

@@ -553,3 +553,27 @@ void SlideManager::PreviousSlide()
 	ShowSlide(m_activeSlide-1);
 }
 
+void SlideManager::OnVirtualScreenResized(CL_Vec2f vOldSize, CL_Vec2f vNewSize)
+{
+	if (!m_pParentEnt) return;
+	if (vOldSize.x <= 0 || vOldSize.y <= 0) return;
+	if (vOldSize.x == vNewSize.x && vOldSize.y == vNewSize.y) return;
+
+	CL_Vec2f vScale(vNewSize.x / vOldSize.x, vNewSize.y / vOldSize.y);
+
+	//Rescale every immediate child's position so anything that was centered (or in any
+	//particular relative location) stays in that same relative spot under the new
+	//virtual screen dimensions.  This covers slide entities, their markup siblings,
+	//and any progress-bar overlays.
+	EntityList* pChildren = m_pParentEnt->GetChildren();
+	for (EntityListItor it = pChildren->begin(); it != pChildren->end(); ++it)
+	{
+		Entity* pChild = *it;
+		if (!pChild) continue;
+		CL_Vec2f vPos = GetPos2DEntity(pChild);
+		vPos.x *= vScale.x;
+		vPos.y *= vScale.y;
+		SetPos2DEntity(pChild, vPos);
+	}
+}
+

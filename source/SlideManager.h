@@ -29,6 +29,10 @@ public:
 	void PreviousSlide();
 	Entity* CreateMediaFromFileName(string fileName, string entName, CL_Vec2f vPos, bool bAddBasePath);
 
+	//Reposition all current slide/markup entities proportionally so they stay in the same
+	//relative spot when the virtual screen size changes (e.g. user maximizes the window).
+	void OnVirtualScreenResized(CL_Vec2f vOldSize, CL_Vec2f vNewSize);
+
 private:
 
 	bool IsImageFile(string fileExtension);

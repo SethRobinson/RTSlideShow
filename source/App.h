@@ -93,6 +93,8 @@ private:
 
 	void ReadConfigFile();
 	void UpdateVariables();
+	void OnLoadSurfaces();
+	void RefillAudioPanelsRecursive(Entity *pEnt);
 
 	bool m_bDidPostInit;
 	VariantDB m_varDB; //holds all data we want to save/load
