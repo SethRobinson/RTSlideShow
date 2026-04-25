@@ -2,7 +2,55 @@
 #include "NowPlayingManager.h"
 #include "App.h"
 #include "util/TextScanner.h"
+#include "util/utf8.h"
 #include "Entity/EntityUtils.h"
+#include "GUI/FreeTypeManager.h"
+#include "Renderer/SurfaceAnim.h"
+
+static const float C_NOW_PLAYING_FONT_PIXEL_HEIGHT = 38.0f;
+static const float C_NOW_PLAYING_MIN_FONT_PIXEL_HEIGHT = 24.0f;
+static const float C_NOW_PLAYING_PADDING_X = 18.0f;
+static const float C_NOW_PLAYING_PADDING_Y = 10.0f;
+static const float C_NOW_PLAYING_ICON_VISIBLE_CENTER = 59.0f;
+static const float C_NOW_PLAYING_ICON_GAP = 32.0f;
+static const float C_NOW_PLAYING_SCREEN_EDGE_PADDING = 20.0f;
+
+static string LocateNowPlayingAsset(string pathAndFile)
+{
+	if (FileExists(GetApp()->m_slideDir + "/" + pathAndFile))
+	{
+		return GetApp()->m_slideDir + "/" + pathAndFile;
+	}
+
+	return pathAndFile;
+}
+
+static wstring UTF8ToWideString(const string& text)
+{
+	vector<unsigned short> utf16line;
+	try
+	{
+		utf8::utf8to16(text.begin(), text.end(), back_inserter(utf16line));
+	}
+	catch (...)
+	{
+		int wideCharsNeeded = MultiByteToWideChar(CP_ACP, 0, text.c_str(), (int)text.size(), NULL, 0);
+		if (wideCharsNeeded <= 0) return L"";
+
+		wstring fallback(wideCharsNeeded, 0);
+		MultiByteToWideChar(CP_ACP, 0, text.c_str(), (int)text.size(), &fallback[0], wideCharsNeeded);
+		return fallback;
+	}
+
+	wstring wideText;
+	wideText.reserve(utf16line.size());
+	for (unsigned short c : utf16line)
+	{
+		wideText += (WCHAR)c;
+	}
+
+	return wideText;
+}
 
 NowPlayingManager::NowPlayingManager()
 {
@@ -57,11 +105,11 @@ bool NowPlayingManager::SetNewSong(string songName, string artist)
 	m_song = songName;
 	m_artist = artist;
 
-	string song = "`$Now playing: `w" + m_song + " `7by`` " + m_artist;
+	string song = "Now playing: " + m_song + " by " + m_artist;
 
 	if (artist.length() < 2)
 	{
-		song = "`$Now playing: `w" + m_song;
+		song = "Now playing: " + m_song;
 	}
 	
 	Entity *pParent = GetEntityRoot()->GetEntityByName("GUI");
@@ -83,21 +131,80 @@ bool NowPlayingManager::SetNewSong(string songName, string artist)
 		vDrawPos = CL_Vec2f(GetScreenSizeXf() / 2, GetScreenSizeYf() - 50); // Example default
 	}
 
-	auto pEnt = CreateTextLabelEntity(pParent, "Song", vDrawPos.x, vDrawPos.y, song);
-	SetupTextEntity(pEnt, FONT_LARGE);
-	TextRenderComponent* pTextComp = (TextRenderComponent*)pEnt->GetComponentByName("TextRender");
-	pTextComp->GetVar("backgroundColor")->Set(MAKE_RGBA(0, 0, 0, 150));
+	FreeTypeManager freeTypeManager;
+	freeTypeManager.SetFontName(LocateNowPlayingAsset("fonts/SourceHanSerif-Medium.ttc"));
+	if (!freeTypeManager.Init())
+	{
+		return false;
+	}
 
-	SetAlignmentEntity(pEnt, ALIGNMENT_CENTER);
+	wstring wideSong = UTF8ToWideString(song);
+	if (wideSong.empty())
+	{
+		return false;
+	}
+
+	vector<unsigned short> utf16Song;
+	utf16Song.reserve(wideSong.size());
+	for (WCHAR c : wideSong)
+	{
+		utf16Song.push_back((unsigned short)c);
+	}
+
+	rtRectf textRect(0, 0, 0, 0);
+	float pixelHeight = C_NOW_PLAYING_FONT_PIXEL_HEIGHT;
+	float maxSurfaceWidth = GetScreenSizeXf() - ((C_NOW_PLAYING_ICON_VISIBLE_CENTER + C_NOW_PLAYING_ICON_GAP + C_NOW_PLAYING_SCREEN_EDGE_PADDING) * 2.0f);
+	if (maxSurfaceWidth < 320.0f) maxSurfaceWidth = GetScreenSizeXf() - (C_NOW_PLAYING_SCREEN_EDGE_PADDING * 2.0f);
+	float maxContentWidth = maxSurfaceWidth - (C_NOW_PLAYING_PADDING_X * 2.0f);
+	if (maxContentWidth < 100.0f) maxContentWidth = 100.0f;
+
+	freeTypeManager.MeasureText(&textRect, (WCHAR*)&wideSong[0], (int)wideSong.size(), pixelHeight, false);
+	if (textRect.GetWidth() > maxContentWidth)
+	{
+		pixelHeight *= maxContentWidth / textRect.GetWidth();
+		if (pixelHeight < C_NOW_PLAYING_MIN_FONT_PIXEL_HEIGHT) pixelHeight = C_NOW_PLAYING_MIN_FONT_PIXEL_HEIGHT;
+		freeTypeManager.MeasureText(&textRect, (WCHAR*)&wideSong[0], (int)wideSong.size(), pixelHeight, false);
+	}
+
+	float surfaceWidth = textRect.GetWidth() + (C_NOW_PLAYING_PADDING_X * 2.0f);
+	if (surfaceWidth > maxSurfaceWidth) surfaceWidth = maxSurfaceWidth;
+	if (surfaceWidth < 320.0f) surfaceWidth = 320.0f;
+	float contentWidth = surfaceWidth - (C_NOW_PLAYING_PADDING_X * 2.0f);
+	if (contentWidth < 100.0f) contentWidth = surfaceWidth;
+	float surfaceHeight = textRect.GetHeight() + (C_NOW_PLAYING_PADDING_Y * 2.0f);
+	if (surfaceHeight < 64.0f) surfaceHeight = 64.0f;
+
+	vector<CL_Vec2f> lineStarts;
+	lineStarts.push_back(CL_Vec2f(C_NOW_PLAYING_PADDING_X, (surfaceHeight - textRect.GetHeight()) * 0.5f));
+
+	SurfaceAnim* pTextSurface = freeTypeManager.TextToSurfaceAnim(CL_Vec2f(surfaceWidth, surfaceHeight), utf16Song, pixelHeight,
+		glColorBytes(0, 0, 0, 150), glColorBytes(255, 255, 255, 255), false, &lineStarts, 0);
+	if (!pTextSurface)
+	{
+		return false;
+	}
+	pTextSurface->SetSmoothing(true);
+
+	Entity* pEnt = pParent->AddEntity(new Entity("Song"));
+	pEnt->GetVar("pos2d")->Set(vDrawPos);
+	pEnt->GetVar("size2d")->Set(CL_Vec2f(surfaceWidth, surfaceHeight));
+
+	Entity* pTextEnt = pEnt->AddEntity(new Entity("SongText"));
+	pTextEnt->GetVar("pos2d")->Set(CL_Vec2f(-surfaceWidth / 2.0f, -surfaceHeight / 2.0f));
+	OverlayRenderComponent* pOverlayComp = (OverlayRenderComponent*)pTextEnt->AddComponent(new OverlayRenderComponent());
+	pOverlayComp->SetSurface(pTextSurface, true);
 	
-	auto pEntIcon = CreateOverlayEntity(pEnt, "IconOverlay", "interface/music_icon.png", -90, -40);
+	float iconY = -C_NOW_PLAYING_ICON_VISIBLE_CENTER;
+	auto pEntIcon = CreateOverlayEntity(pEnt, "IconOverlay", "interface/music_icon.png",
+		-surfaceWidth / 2.0f - C_NOW_PLAYING_ICON_GAP - C_NOW_PLAYING_ICON_VISIBLE_CENTER, iconY);
 	SetAlignmentEntity(pEntIcon, ALIGNMENT_CENTER);
 	BobEntity(pEntIcon, 10, 0, 1000);
 	SetSize2DEntity(pEntIcon, CL_Vec2f(0.6f, 0.16f));
 	
 	//again for other size of text
 
-	pEntIcon = CreateOverlayEntity(pEnt, "IconOverlay", "interface/music_icon.png", GetSize2DEntity(pEnt).x-35, -40);
+	pEntIcon = CreateOverlayEntity(pEnt, "IconOverlay", "interface/music_icon.png",
+		surfaceWidth / 2.0f + C_NOW_PLAYING_ICON_GAP - C_NOW_PLAYING_ICON_VISIBLE_CENTER, iconY);
 	SetAlignmentEntity(pEntIcon, ALIGNMENT_CENTER);
 	BobEntity(pEntIcon, 10, 0, 1000);
 	SetSize2DEntity(pEntIcon, CL_Vec2f(0.6f, 0.16f));

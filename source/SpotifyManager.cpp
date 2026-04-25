@@ -10,27 +10,47 @@ SpotifyManager::SpotifyManager()
 SpotifyManager::~SpotifyManager()
 {
 }
+
+static string WideStringToUTF8(const wstring& text)
+{
+    if (text.empty()) return "";
+
+    int bytesNeeded = WideCharToMultiByte(CP_UTF8, 0, text.c_str(), (int)text.size(), NULL, 0, NULL, NULL);
+    if (bytesNeeded <= 0) return "";
+
+    string result(bytesNeeded, 0);
+    WideCharToMultiByte(CP_UTF8, 0, text.c_str(), (int)text.size(), &result[0], bytesNeeded, NULL, NULL);
+    return result;
+}
+
+static string GetWindowTitleUTF8(HWND hwnd)
+{
+    int len = GetWindowTextLengthW(hwnd);
+    if (len <= 0) return "";
+
+    vector<WCHAR> title(len + 1, 0);
+    GetWindowTextW(hwnd, &title[0], (int)title.size());
+    return WideStringToUTF8(wstring(&title[0]));
+}
+
 BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
 {
-    char title[256];
-    char className[256];
-
-    GetWindowText(hwnd, title, sizeof(title));
-    GetClassName(hwnd, className, sizeof(className));
+    string title = GetWindowTitleUTF8(hwnd);
 
     if (IsInStringCaseInsensitive(title, "Google Chrome") || IsInStringCaseInsensitive(title, "Brave"))
     {
-        if (IsInStringCaseInsensitive(title, "Spotify") || (IsInStringCaseInsensitive(title, "�E"))
+        if (IsInStringCaseInsensitive(title, "Spotify") || (IsInStringCaseInsensitive(title, " • "))
+            || (IsInStringCaseInsensitive(title, " - "))
             || (IsInStringCaseInsensitive(title, "?")))  //on windows 10, the dot becomes a ?, regional settings issue?
         {
-            LogMsg("Spotify: Found browser+Spotify window: %s", title);
+            LogMsg("Spotify: Found browser+Spotify window: %s", title.c_str());
             HWND* pHwnd = reinterpret_cast<HWND*>(lParam);
             *pHwnd = hwnd;
             return FALSE; // Stop enumeration
         }
         else
         {
-            LogMsg("Spotify: Browser window skipped (no Spotify match): %s", title);
+            LogMsg("Spotify: Browser window skipped (no Spotify match): %s", title.c_str());
         }
     }
 
@@ -39,16 +59,23 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
 
 void extractSongAndArtist(const std::string& title, std::string& song, std::string& artist)
 {
-    std::size_t pos = title.find(" �E");
+    std::size_t pos = title.find(" • ");
+    size_t separatorLength = 5;
     if (pos == std::string::npos)
     {
         pos = title.find(" ? ");
+        separatorLength = 3;
+    }
+    if (pos == std::string::npos)
+    {
+        pos = title.find(" - ");
+        separatorLength = 3;
     }
 
     if (pos != std::string::npos)
     {
         song = title.substr(0, pos);
-        artist = title.substr(pos + 3);
+        artist = title.substr(pos + separatorLength);
     }
     else
     {
@@ -129,9 +156,8 @@ void SpotifyManager::GetActiveSong(string &songPlayingOut, string &artistPlaying
         }
         else
         {
-            char checkTitle[256];
-            GetWindowText(m_chromeSpotifyWindow, checkTitle, sizeof(checkTitle));
-            if (strlen(checkTitle) == 0)
+            string checkTitle = GetWindowTitleUTF8(m_chromeSpotifyWindow);
+            if (checkTitle.empty())
             {
                 LogMsg("Spotify: Cached window title is empty, will re-enumerate");
                 m_chromeSpotifyWindow = NULL;
@@ -162,9 +188,7 @@ void SpotifyManager::GetActiveSong(string &songPlayingOut, string &artistPlaying
     {
         spotifyBrowserWindowHWNDOut = m_chromeSpotifyWindow;
 
-        char title[256];
-        GetWindowText(m_chromeSpotifyWindow, title, sizeof(title));
-        string sTitle(title);
+        string sTitle = GetWindowTitleUTF8(m_chromeSpotifyWindow);
 
         //LogMsg("Spotify: Window title: %s", sTitle.c_str());
 
