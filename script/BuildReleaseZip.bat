@@ -17,6 +17,10 @@ REM Copy the executable into the dist directory
 copy "bin\RTSlideShow_Release GL_x64.exe" %APP_BUILD_DIR%\RTSlideShow.exe
 copy "bin\freetype.dll" %APP_BUILD_DIR%
 
+REM Copy the fonts directory into the dist directory so it's included in the zip
+rmdir /S /Q %APP_BUILD_DIR%\fonts
+xcopy /E /I /Y bin\fonts %APP_BUILD_DIR%\fonts
+
 echo Signing time
 call %RT_PROJECTS%\Signing\sign.bat %APP_BUILD_DIR%\RTSlideShow.exe "RTSlideShow" "https://www.rtsoft.com"
 
