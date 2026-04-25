@@ -1104,6 +1104,15 @@ void Script::Run()
 				continue;
 			}
 
+			//Reuse the loaded rtfont's color palette so backtick codes (`5, etc.)
+			//map to the same colors in freetype-rendered overlays as in regular text.
+			if (RTFont* pPaletteFont = GetBaseApp()->GetFont(FONT_LARGE))
+			{
+				freeTypeManager.SetFontStates(pPaletteFont->GetFontStates());
+			}
+			//Reserve `$ for gold (used in our scripts to highlight talk titles, etc.).
+			freeTypeManager.AddFontState('$', MAKE_RGBA(255, 215, 0, 255));
+
 			SurfaceAnim* pTextSurface = freeTypeManager.TextToSurfaceAnim(CL_Vec2f((float)width, (float)height), msg, pixelHeight,
 				bgColor, fgColor, useActualWidthForSpacing, NULL, wordWrapX);
 			if (!pTextSurface)

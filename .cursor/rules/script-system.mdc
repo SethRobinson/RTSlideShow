@@ -43,6 +43,27 @@ killed. Useful inside a slide's companion `<slidename>.txt` to make script-spawn
 overlays disappear with their slide instead of persisting across slides. Self-prunes
 if the entity is removed for any other reason (manual Delete, scripted `kill`, etc.).
 
+#### Inline Color Codes (`add_text` and `add_freetype_text`)
+The `text` field of both `add_text` and `add_freetype_text` accepts the same
+backtick color codes as `RTFont::DrawScaled`:
+
+- `` `N `` switches the active color, where `N` is one of the trigger chars defined
+  by the loaded `font_trajan_big.rtfont` palette (e.g. `` `1 ``, `` `2 ``, ...).
+- `` `` `` (double backtick) pops back to the previous color.
+- `` `$ `` is reserved by RTSlideShow for gold (255, 215, 0) and is intended for
+  highlighting things like talk titles, e.g.:
+  ```
+  add_freetype_text|name|talk1|text|`$Game Jam Postmortem`` - by Jane Doe|...
+  ```
+- The script-supplied `|fg|R,G,B,A|` color is the default and is what `` `` ``
+  pops back to. The script-supplied alpha is preserved across color switches,
+  so `|fg|255,255,255,128|` keeps overall opacity working even when colors change.
+
+Color codes are honored both during measurement (so word-wrap doesn't count them
+as visible characters) and rendering. `add_freetype_text` now also uses real
+word-wrap (breaking at the last whitespace before the wrap width) instead of the
+previous mid-word character break.
+
 ## Variable System
 - Variables are processed by [VariableManager.cpp](mdc:source/VariableManager.cpp)
 - Use `${variable_name}` syntax in script commands
