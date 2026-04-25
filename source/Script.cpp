@@ -18,6 +18,36 @@
 //Entry is removed automatically (via sig_onRemoved) when the entity dies.
 static std::map<Entity*, boost::signals2::connection> g_keepOnTopConnections;
 
+//Shared "press Delete while dragging me to remove me" handler for script-created
+//widgets (add_image / add_text / add_freetype_text / add_stream).  Mirrors the
+//behavior SlideManager::OnInputToSlide gives slideshow entities, so the user
+//experience is the same regardless of how the widget was spawned.  Wired onto
+//ScrollToZoomComponent::m_sig_input_while_mousedown, which only fires inside
+//MESSAGE_TYPE_GUI_CHAR, so we just need to look at the keycode.
+static void OnInputToScriptWidget(VariantList* pVList)
+{
+	if (pVList->Get(2).GetUINT32() != 46) return; //46 == VK_DELETE keycode
+
+	Entity* pCallingEnt = pVList->Get(5).GetEntity();
+	if (pCallingEnt)
+	{
+		pCallingEnt->SetTaggedForDeletion();
+	}
+}
+
+//Find the ScrollToZoomComponent on pEnt (script widgets always have one) and
+//hook the shared delete handler.  Centralized so each "add_*" handler is a
+//single line and we keep behavior in lockstep across widget kinds.
+static void HookDeleteWhileDragging(Entity* pEnt)
+{
+	if (!pEnt) return;
+	ScrollToZoomComponent* pScrollZoomComp = (ScrollToZoomComponent*)pEnt->GetComponentByName("ScrollToZoom");
+	if (pScrollZoomComp)
+	{
+		pScrollZoomComp->m_sig_input_while_mousedown.connect(&OnInputToScriptWidget);
+	}
+}
+
 static void KeepOnTopTick(Entity* pEnt, VariantList* /*pVList*/)
 {
 	if (pEnt && pEnt->GetParent())
@@ -672,7 +702,15 @@ void Script::Run()
 				}
 			}
 
-			AddNewStream(name, source, cacheMS, pGUIEnt, true, title, settings);
+			LibVlcStreamComponent* pNewStream = AddNewStream(name, source, cacheMS, pGUIEnt, true, title, settings);
+			if (pNewStream)
+			{
+				//AddNewStream returns the LibVlcStreamComponent; its parent is the
+				//draggable widget entity that owns the ScrollToZoomComponent.  Hook
+				//Delete-while-dragging here so add_stream widgets behave like images
+				//in the slideshow (which wire the same thing inside SlideManager).
+				HookDeleteWhileDragging(pNewStream->GetParent());
+			}
 		}
 
 		//process set_stream_vol|name|stream1|value (0 to 1)|%stream_vol%|
@@ -934,6 +972,7 @@ void Script::Run()
 			EntityComponent* pDragComp = pEnt->AddComponent(new TouchDragComponent);
 			EntityComponent* pDragMoveComp = pEnt->AddComponent(new TouchDragMoveComponent);
 			EntityComponent* pMouseWheelZoom = pEnt->AddComponent(new ScrollToZoomComponent);
+			HookDeleteWhileDragging(pEnt);
 		}
 
 		//process set_border_pixels|name|topbar|border|0|0|0|0|
@@ -994,6 +1033,7 @@ void Script::Run()
 			EntityComponent* pDragComp = pEnt->AddComponent(new TouchDragComponent);
 			EntityComponent* pDragMoveComp = pEnt->AddComponent(new TouchDragMoveComponent);
 			EntityComponent* pMouseWheelZoom = pEnt->AddComponent(new ScrollToZoomComponent);
+			HookDeleteWhileDragging(pEnt);
 
 			//add a rect background
 			//Entity* pRect = CreateOverlayRectEntity(pParent, CL_Vec2f(0, 0), CL_Vec2f(30, 10), MAKE_RGBA(0, 0, 0, 255));
@@ -1091,6 +1131,7 @@ void Script::Run()
 			EntityComponent* pDragComp = pEnt->AddComponent(new TouchDragComponent);
 			EntityComponent* pDragMoveComp = pEnt->AddComponent(new TouchDragMoveComponent);
 			EntityComponent* pMouseWheelZoom = pEnt->AddComponent(new ScrollToZoomComponent);
+			HookDeleteWhileDragging(pEnt);
 		}
 
 		//process set_alignment|name|topbar|alignment|center|
