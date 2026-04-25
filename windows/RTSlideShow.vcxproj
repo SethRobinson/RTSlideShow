@@ -57,7 +57,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\source;..\..\shared;..\..\shared\win\;..\..\shared\util\boost;..\..\shared\ClanLib-2.0\Sources;..\..\shared\win\include;..\..\shared\FliteTTS\include;..\..\shared\Irrlicht\include;..\hueplusplus\include;..\..\shared\\win\libVLC\sdk\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\source;..\..\shared;..\..\shared\win\;..\..\shared\util\boost;..\..\shared\ClanLib-2.0\Sources;..\..\shared\win\include;..\..\shared\FliteTTS\include;..\..\shared\Irrlicht\include;..\hueplusplus\include;..\..\shared\win\freetype\include;..\..\shared\\win\libVLC\sdk\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN;WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;BOOST_ALL_NO_LIB;C_GL_MODE;_HAS_ITERATOR_DEBUGGING=0;_SECURE_SCL=0;_NO_DEBUG_HEAP=1;RT_JPG_SUPPORT;RT_PNG_SUPPORT;RT_WIN_MULTITOUCH_SUPPORT;RT_RUNS_IN_BACKGROUND;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_SILENCE_CXX20_CISO646_REMOVED_WARNING;_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -69,9 +69,9 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>opengl32.lib;audiere.lib;zlibwapi.lib;ws2_32.lib;dinput8.lib;dxguid.lib;libvlccore.lib;libvlc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;audiere.lib;zlibwapi.lib;ws2_32.lib;dinput8.lib;dxguid.lib;freetype.lib;libvlccore.lib;libvlc.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>..\..\shared\win\lib\64;..\..\shared\win\fmodstudio\api\lowlevel\lib;..\..\shared\win\audiere\lib64;D:\pro\dxsdk\Lib\x64;..\..\shared\win\libVLC\sdk\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\shared\win\lib\64;..\..\shared\win\fmodstudio\api\lowlevel\lib;..\..\shared\win\audiere\lib64;D:\pro\dxsdk\Lib\x64;..\..\shared\win\freetype\win64;..\..\shared\win\libVLC\sdk\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)RTSlideShow.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
@@ -79,7 +79,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release GL|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\source;..\..\shared;..\..\shared\win\;..\..\shared\util\boost;..\..\shared\ClanLib-2.0\Sources;..\..\shared\win\include;..\..\shared\FliteTTS\include;..\hueplusplus\include;..\..\shared\\win\libVLC\sdk\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\source;..\..\shared;..\..\shared\win\;..\..\shared\util\boost;..\..\shared\ClanLib-2.0\Sources;..\..\shared\win\include;..\..\shared\FliteTTS\include;..\hueplusplus\include;..\..\shared\win\freetype\include;..\..\shared\\win\libVLC\sdk\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;BOOST_ALL_NO_LIB;C_GL_MODE;RT_JPG_SUPPORT;RT_PNG_SUPPORT;RT_WIN_MULTITOUCH_SUPPORT;RT_RUNS_IN_BACKGROUND;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_SILENCE_CXX20_CISO646_REMOVED_WARNING;_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -90,9 +90,9 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>opengl32.lib;audiere.lib;zlibwapi.lib;ws2_32.lib;dinput8.lib;dxguid.lib;libvlccore.lib;libvlc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;audiere.lib;zlibwapi.lib;ws2_32.lib;dinput8.lib;dxguid.lib;freetype.lib;libvlccore.lib;libvlc.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>..\..\shared\win\lib\64;..\..\shared\win\fmod\api\lib;..\..\shared\win\audiere\lib64;..\..\shared\win\lib\x64;..\..\shared\win\fmodstudio\api\lowlevel\lib;D:\pro\dxsdk\Lib\x64;..\..\shared\win\libVLC\sdk\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\shared\win\lib\64;..\..\shared\win\fmod\api\lib;..\..\shared\win\audiere\lib64;..\..\shared\win\lib\x64;..\..\shared\win\fmodstudio\api\lowlevel\lib;D:\pro\dxsdk\Lib\x64;..\..\shared\win\freetype\win64;..\..\shared\win\libVLC\sdk\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -231,6 +231,7 @@
     <ClCompile Include="..\..\shared\Gamepad\GamepadProviderXInput.cpp" />
     <ClCompile Include="..\..\shared\Gamepad\GamepadXInput.cpp" />
     <ClCompile Include="..\..\shared\GUI\RTFont.cpp" />
+    <ClCompile Include="..\..\shared\GUI\FreeTypeManager.cpp" />
     <ClCompile Include="..\..\shared\Irrlicht\source\Irrlicht\jpeglib\jcapimin.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug GL|x64'">
       </PrecompiledHeader>
@@ -940,6 +941,7 @@
     <ClInclude Include="..\..\shared\Gamepad\GamepadProviderXInput.h" />
     <ClInclude Include="..\..\shared\Gamepad\GamepadXInput.h" />
     <ClInclude Include="..\..\shared\GUI\RTFont.h" />
+    <ClInclude Include="..\..\shared\GUI\FreeTypeManager.h" />
     <ClInclude Include="..\..\shared\GUI\RTFontFileFormat.h" />
     <ClInclude Include="..\..\shared\iOS\app\EAGLView.h" />
     <ClInclude Include="..\..\shared\iOS\app\MyAppDelegate.h" />

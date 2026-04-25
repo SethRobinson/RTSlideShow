@@ -376,6 +376,9 @@
     <ClCompile Include="..\..\shared\GUI\RTFont.cpp">
       <Filter>shared\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\shared\GUI\FreeTypeManager.cpp">
+      <Filter>shared\GUI</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\shared\Entity\Component.cpp">
       <Filter>shared\Entity</Filter>
     </ClCompile>
@@ -994,6 +997,9 @@
       <Filter>shared\Renderer\LibJPeg</Filter>
     </ClInclude>
     <ClInclude Include="..\..\shared\GUI\RTFont.h">
+      <Filter>shared\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\GUI\FreeTypeManager.h">
       <Filter>shared\GUI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\shared\GUI\RTFontFileFormat.h">

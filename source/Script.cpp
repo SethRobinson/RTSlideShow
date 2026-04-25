@@ -10,6 +10,8 @@
 #include "Entity/TouchDragMoveComponent.h"
 #include "Entity/ScrollToZoomComponent.h"
 #include "Entity/LibVlcStreamComponent.h"
+#include "GUI/FreeTypeManager.h"
+#include "Renderer/SurfaceAnim.h"
 #include "WindowsFunctions.h"
 
 //Tracks active per-frame "keep_on_top" hooks so we can disconnect on enabled|0.
@@ -27,6 +29,53 @@ static void KeepOnTopTick(Entity* pEnt, VariantList* /*pVList*/)
 static void KeepOnTopOnRemoved(Entity* pEnt)
 {
 	g_keepOnTopConnections.erase(pEnt);
+}
+
+static string GetScriptKeyValue(const vector<string>& words, const string& key, const string& defaultValue = "")
+{
+	for (size_t i = 1; i + 1 < words.size(); i += 2)
+	{
+		if (words[i] == key)
+		{
+			return words[i + 1];
+		}
+	}
+
+	return defaultValue;
+}
+
+static bool ContainsUnsafeRelativePath(const string& path)
+{
+	return path.find("../") != string::npos || path.find("..\\") != string::npos;
+}
+
+static GLubyte ClampColorByte(int value)
+{
+	if (value < 0) return 0;
+	if (value > 255) return 255;
+	return (GLubyte)value;
+}
+
+static glColorBytes ParseScriptColor(string value, glColorBytes defaultColor)
+{
+	value = StripWhiteSpace(value);
+	if (value.empty())
+	{
+		return defaultColor;
+	}
+
+	vector<string> parts = StringTokenize(value, ",");
+	if (parts.size() != 3 && parts.size() != 4)
+	{
+		LogMsg("Expected color as r,g,b or r,g,b,a, got %s", value.c_str());
+		return defaultColor;
+	}
+
+	int r = atoi(parts[0].c_str());
+	int g = atoi(parts[1].c_str());
+	int b = atoi(parts[2].c_str());
+	int a = parts.size() == 4 ? atoi(parts[3].c_str()) : 255;
+	return glColorBytes(ClampColorByte(r), ClampColorByte(g), ClampColorByte(b), ClampColorByte(a));
 }
 
 int StringAndVarToInt(string in)
@@ -950,6 +999,98 @@ void Script::Run()
 			//Entity* pRect = CreateOverlayRectEntity(pParent, CL_Vec2f(0, 0), CL_Vec2f(30, 10), MAKE_RGBA(0, 0, 0, 255));
 			//pRect->SetName(name + "highlight");
 
+		}
+
+		//process add_freetype_text|name|caption|text|Hello UTF-8 text|x|100|y|100|size|64|width|900|height|180|
+		//or add_freetype_text|name|caption|file|captions/scene1.txt|x|100|y|100|size|64|width|900|height|300|
+		if (words[0] == "add_freetype_text")
+		{
+			string name = GetApp()->m_varMan.ReplaceVars(ReplaceLocalVariables(GetScriptKeyValue(words, "name", "FreeTypeText")));
+			string msg = GetApp()->m_varMan.ReplaceVars(ReplaceLocalVariables(GetScriptKeyValue(words, "text")));
+			string textFile = GetApp()->m_varMan.ReplaceVars(ReplaceLocalVariables(GetScriptKeyValue(words, "file")));
+			string fontName = GetApp()->m_varMan.ReplaceVars(ReplaceLocalVariables(GetScriptKeyValue(words, "font", "fonts/SourceHanSerif-Medium.ttc")));
+			string alignment = GetApp()->m_varMan.ReplaceVars(ReplaceLocalVariables(GetScriptKeyValue(words, "alignment", "upper_left")));
+
+			int x = StringAndVarToInt(ReplaceLocalVariables(GetScriptKeyValue(words, "x", "0")));
+			int y = StringAndVarToInt(ReplaceLocalVariables(GetScriptKeyValue(words, "y", "0")));
+			int width = StringAndVarToInt(ReplaceLocalVariables(GetScriptKeyValue(words, "width", toString((int)GetScreenSizeX()))));
+			int height = StringAndVarToInt(ReplaceLocalVariables(GetScriptKeyValue(words, "height", "160")));
+			float pixelHeight = StringAndVarToFloat(ReplaceLocalVariables(GetScriptKeyValue(words, "size", "64")));
+			bool smoothing = StringToBool(GetApp()->m_varMan.ReplaceVars(ReplaceLocalVariables(GetScriptKeyValue(words, "smoothing", "1"))));
+			bool wordWrap = StringToBool(GetApp()->m_varMan.ReplaceVars(ReplaceLocalVariables(GetScriptKeyValue(words, "word_wrap", "1"))));
+			bool useActualWidthForSpacing = StringToBool(GetApp()->m_varMan.ReplaceVars(ReplaceLocalVariables(GetScriptKeyValue(words, "use_actual_width", "0"))));
+
+			if (ContainsUnsafeRelativePath(textFile) || ContainsUnsafeRelativePath(fontName))
+			{
+				LogMsg("add_freetype_text: refusing unsafe relative path");
+				continue;
+			}
+
+			if (!textFile.empty())
+			{
+				TextScanner textScanner;
+				string locatedFile = LocateFile(textFile);
+				if (!textScanner.LoadFile(locatedFile, false))
+				{
+					LogMsg("add_freetype_text: can't load text file %s", locatedFile.c_str());
+					continue;
+				}
+				msg = GetApp()->m_varMan.ReplaceVars(ReplaceLocalVariables(textScanner.GetAllRaw()));
+			}
+
+			if (msg.empty())
+			{
+				LogMsg("add_freetype_text: no text or file supplied for %s", name.c_str());
+				continue;
+			}
+
+			if (width <= 0) width = (int)GetScreenSizeX();
+			if (height <= 0) height = 160;
+			if (pixelHeight <= 0) pixelHeight = 64.0f;
+
+			glColorBytes fgColor = ParseScriptColor(GetApp()->m_varMan.ReplaceVars(ReplaceLocalVariables(GetScriptKeyValue(words, "fg", "255,255,255,255"))), glColorBytes(255, 255, 255, 255));
+			glColorBytes bgColor = ParseScriptColor(GetApp()->m_varMan.ReplaceVars(ReplaceLocalVariables(GetScriptKeyValue(words, "bg", "0,0,0,0"))), glColorBytes(0, 0, 0, 0));
+			float wordWrapX = wordWrap ? (float)width : 0.0f;
+
+			FreeTypeManager freeTypeManager;
+			string locatedFont = LocateFile(fontName);
+			freeTypeManager.SetFontName(locatedFont);
+			if (!freeTypeManager.Init())
+			{
+				LogMsg("add_freetype_text: couldn't init font %s", locatedFont.c_str());
+				continue;
+			}
+
+			SurfaceAnim* pTextSurface = freeTypeManager.TextToSurfaceAnim(CL_Vec2f((float)width, (float)height), msg, pixelHeight,
+				bgColor, fgColor, useActualWidthForSpacing, NULL, wordWrapX);
+			if (!pTextSurface)
+			{
+				LogMsg("add_freetype_text: couldn't render text surface for %s", name.c_str());
+				continue;
+			}
+			pTextSurface->SetSmoothing(smoothing);
+
+			Entity* pParent = GetBaseApp()->GetEntityRoot()->GetEntityByName("GUI");
+			if (!pParent)
+			{
+				LogMsg("add_freetype_text: couldn't find GUI parent entity");
+				SAFE_DELETE(pTextSurface);
+				continue;
+			}
+
+			Entity* pEnt = pParent->AddEntity(new Entity(name));
+			pEnt->GetVar("pos2d")->Set((float)x, (float)y);
+			OverlayRenderComponent* pOverlayComp = (OverlayRenderComponent*)pEnt->AddComponent(new OverlayRenderComponent());
+			pOverlayComp->SetSurface(pTextSurface, true);
+
+			eAlignment textAlignment = GetAlignmentFromString(alignment);
+			SetAlignmentEntity(pEnt, textAlignment);
+			ManuallySetAlignmentEntity(pEnt, textAlignment);
+
+			SetTouchPaddingEntity(pEnt, CL_Rectf(0, 0, 0, 0));
+			EntityComponent* pDragComp = pEnt->AddComponent(new TouchDragComponent);
+			EntityComponent* pDragMoveComp = pEnt->AddComponent(new TouchDragMoveComponent);
+			EntityComponent* pMouseWheelZoom = pEnt->AddComponent(new ScrollToZoomComponent);
 		}
 
 		//process set_alignment|name|topbar|alignment|center|
