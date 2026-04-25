@@ -15,9 +15,10 @@ del %APP_BUILD_DIR%\log.txt
 
 REM Copy the executable into the dist directory
 copy "bin\RTSlideShow_Release GL_x64.exe" %APP_BUILD_DIR%\RTSlideShow.exe
+copy "bin\freetype.dll" %APP_BUILD_DIR%
 
 echo Signing time
-call %RT_PROJECTS%\Signing\sign.bat %APP_BUILD_DIR%\RTSlideShow.exe "RTSlideShow"
+call %RT_PROJECTS%\Signing\sign.bat %APP_BUILD_DIR%\RTSlideShow.exe "RTSlideShow" "https://www.rtsoft.com"
 
 echo Waiting 4 seconds because sometimes stuff doesn't work if I don't
 timeout 4
