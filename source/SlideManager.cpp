@@ -177,6 +177,59 @@ void SlideManager::GetRidOfActiveSlide(bool bBackwards)
 	}
 	
 	//the markup slide will automatically die as well, it knows because it listens for the dead of entity it's following
+
+	//Slide off & kill any script-spawned widgets that registered themselves via
+	//kill_on_slide_change.  We use the same direction + timing as the slide so
+	//overlays visually leave with their slide.  Disconnect each sig_onRemoved
+	//hook first so the OnTiedEntityRemoved callback (which would mutate the map
+	//we're iterating) doesn't fire when KillEntity later destroys the entity.
+	for (auto& pair : m_tiedToActiveSlide)
+	{
+		Entity* pTied = pair.first;
+		pair.second.disconnect();
+		if (!pTied) continue;
+
+		if (bBackwards)
+		{
+			SlideScreen(pTied, false, m_slideSpeedMS);
+		}
+		else
+		{
+			SlideScreenBackwards(pTied, false, m_slideSpeedMS);
+		}
+		KillEntity(pTied, m_slideSpeedMS + 500);
+	}
+	m_tiedToActiveSlide.clear();
+}
+
+void SlideManager::OnTiedEntityRemoved(Entity* pEnt)
+{
+	//Self-prune: entity died for some other reason (user pressed Delete on the
+	//widget, scripted kill, etc.) before the next slide change consumed it.
+	m_tiedToActiveSlide.erase(pEnt);
+}
+
+void SlideManager::RegisterEntityForActiveSlideKill(Entity* pEnt)
+{
+	if (!pEnt)
+	{
+		LogMsg("RegisterEntityForActiveSlideKill: null entity, ignoring");
+		return;
+	}
+
+	if (m_activeSlide == -1)
+	{
+		LogMsg("RegisterEntityForActiveSlideKill: no active slide, can't tie %s",
+			pEnt->GetName().c_str());
+		return;
+	}
+
+	//Idempotent: if already registered, leave the existing connection alone.
+	if (m_tiedToActiveSlide.find(pEnt) != m_tiedToActiveSlide.end()) return;
+
+	boost::signals2::connection conn = pEnt->sig_onRemoved.connect(
+		boost::bind(&SlideManager::OnTiedEntityRemoved, this, _1));
+	m_tiedToActiveSlide[pEnt] = conn;
 }
 
 void OnNextSlide(VariantList* pVList);

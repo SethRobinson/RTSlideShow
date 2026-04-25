@@ -13,6 +13,9 @@
 #include "GUI/FreeTypeManager.h"
 #include "Renderer/SurfaceAnim.h"
 #include "WindowsFunctions.h"
+#include "SlideManager.h"
+
+extern SlideManager g_slideManager;
 
 //Tracks active per-frame "keep_on_top" hooks so we can disconnect on enabled|0.
 //Entry is removed automatically (via sig_onRemoved) when the entity dies.
@@ -1314,6 +1317,26 @@ void Script::Run()
 				{
 					LogMsg("keep_on_top: released %s from per-frame top pinning", name.c_str());
 				}
+			}
+		}
+
+		//process kill_on_slide_change|name|caption1|
+		//Ties an existing entity to the currently active slide so it slides off (in
+		//the same direction as the slide) and is killed when the user advances or
+		//goes back.  Pair with add_freetype_text / add_image / add_text / add_stream
+		//inside a slide's companion .txt to make script-spawned overlays auto-disappear
+		//instead of persisting across slides.
+		if (words[0] == "kill_on_slide_change")
+		{
+			string name = GetApp()->m_varMan.ReplaceVars(words[2]);
+			Entity* pEnt = GetEntityRoot()->GetEntityByName(name);
+			if (!pEnt)
+			{
+				LogMsg("Can't find %s (kill_on_slide_change)", name.c_str());
+			}
+			else
+			{
+				g_slideManager.RegisterEntityForActiveSlideKill(pEnt);
 			}
 		}
 	}

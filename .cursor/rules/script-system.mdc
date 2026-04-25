@@ -32,6 +32,17 @@ set_hue_light_rgb|delayMS|0|name|Hue play 1|rgb|255,0,0|allow_partial|1
 run_script|delayMS|0|scriptname|ID1_ButtonB.txt
 ```
 
+#### Slide-tied Overlays
+```
+kill_on_slide_change|name|caption1|
+```
+Ties an existing entity (e.g. one just created by `add_freetype_text`, `add_text`,
+`add_image`, or `add_stream`) to the currently active slide. When the user advances
+or goes back, the entity slides off in the same direction as the slide and is then
+killed. Useful inside a slide's companion `<slidename>.txt` to make script-spawned
+overlays disappear with their slide instead of persisting across slides. Self-prunes
+if the entity is removed for any other reason (manual Delete, scripted `kill`, etc.).
+
 ## Variable System
 - Variables are processed by [VariableManager.cpp](mdc:source/VariableManager.cpp)
 - Use `${variable_name}` syntax in script commands

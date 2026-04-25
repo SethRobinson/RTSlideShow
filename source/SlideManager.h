@@ -10,6 +10,8 @@
 #ifndef SlideManager_h__
 #define SlideManager_h__
 
+#include <boost/signals2.hpp>
+
 class SlideManager
 {
 public:
@@ -40,12 +42,19 @@ public:
 	//relative spot when the virtual screen size changes (e.g. user maximizes the window).
 	void OnVirtualScreenResized(CL_Vec2f vOldSize, CL_Vec2f vNewSize);
 
+	//Tie pEnt to the currently active slide. On the next slide change, pEnt
+	//will slide off in the same direction as the slide and then be killed.
+	//No-op if there's no active slide. Safe to call multiple times for the
+	//same entity (later calls are ignored).
+	void RegisterEntityForActiveSlideKill(Entity* pEnt);
+
 private:
 
 	bool IsImageFile(string fileExtension);
 	bool IsMediaFile(string fileExtension);
 	bool IsAudioFile(string fileExtension);
 	void GetRidOfActiveSlide(bool bBackwards);
+	void OnTiedEntityRemoved(Entity* pEnt);
 
 	Entity *m_pParentEnt;
 	vector<string> m_files;
@@ -54,6 +63,10 @@ private:
 	unsigned int m_slideTimer;
 	int m_timeBetweenSlidesMS = 0;
 	const int m_slideSpeedMS = 200;
+
+	//entity -> sig_onRemoved connection (so the registry self-prunes when the
+	//entity dies for any other reason: user Delete, scripted kill, etc.)
+	std::map<Entity*, boost::signals2::connection> m_tiedToActiveSlide;
 
 };
 
