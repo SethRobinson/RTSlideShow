@@ -56,6 +56,11 @@ public:
 	int GetSpecial();
 	void OnExitApp(VariantList *pVarList);
 
+	//Single source of truth for the "show debug move/scale readout" modifier key.
+	//Currently Ctrl on Windows; change here to retarget to a different key (or input source)
+	//so the SlideManager and any future hooks all stay in sync without duplicating the check.
+	bool IsDebugOverlayHotkeyHeld() const;
+
 	//yeah I'm just using this for globals because I don't want to do it right.  fite me
 
 	string m_slideDir = "slides"; //overwritten by config.txt

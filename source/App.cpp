@@ -179,6 +179,15 @@ void App::OnExitApp(VariantList *pVarList)
 	GetBaseApp()->AddOSMessage(o);
 }
 
+bool App::IsDebugOverlayHotkeyHeld() const
+{
+#ifdef _WIN32
+	return (GetAsyncKeyState(VK_CONTROL) & 0x8000) != 0;
+#else
+	return false;
+#endif
+}
+
 bool App::Init()
 {
 	//SetDefaultAudioClickSound("audio/enter.wav");
@@ -455,6 +464,7 @@ void App::Update()
 	UpdateVariables();
 
 	g_gamepadManager.Update();
+	g_slideManager.Update();
 	if (!m_disableNowPlaying)
 	{
 		g_nowPlayingManager.Update();

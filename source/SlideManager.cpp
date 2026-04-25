@@ -360,12 +360,10 @@ Entity* SlideManager::CreateMediaFromFileName(string fileName, string entName, C
 	ScrollToZoomComponent* pScrollZoomComp = (ScrollToZoomComponent*)pEnt->GetComponentByName("ScrollToZoom");
 	pScrollZoomComp->m_sig_input_while_mousedown.connect(&OnInputToSlide);
 
-	//oh, do we want it to show the coordinates on the TouchDragMoveComponent and ScrollToZoomComponent?  We'll check and change the "showCoords" var on each component now
-
-	EntityComponent* pTouchDragMoveOnBaseEnt = pEnt->GetComponentByName("TouchDragMove");
-
-	pScrollZoomComp->GetVar("showCoords")->Set(uint32(GetApp()->m_showCoords));
-	pTouchDragMoveOnBaseEnt->GetVar("showCoords")->Set(uint32(GetApp()->m_showCoords));
+	//Note: showCoords on TouchDragMove/ScrollToZoom is driven each frame from
+	//SlideManager::Update() based on App::IsDebugOverlayHotkeyHeld(), so we don't
+	//set it once-and-forget here.  This way images, video, and audio widgets all
+	//behave the same and the modifier-key check lives in a single app-side place.
 
 	if (pLibVlcStreamComp)
 	{
@@ -551,6 +549,56 @@ void SlideManager::PreviousSlide()
 	}
 
 	ShowSlide(m_activeSlide-1);
+}
+
+//Walk an entity and all descendants, flipping showCoords on every TouchDragMove and
+//ScrollToZoom we find.  Recursive so it stays correct if any future widget tucks these
+//components onto a sub-entity (e.g. inside the LibVlc playControls subtree).
+static void ApplyShowCoordsRecursive(Entity* pEnt, uint32 desired)
+{
+	if (!pEnt) return;
+
+	EntityComponent* pTouchDragMove = pEnt->GetComponentByName("TouchDragMove");
+	if (pTouchDragMove)
+	{
+		pTouchDragMove->GetVar("showCoords")->Set(desired);
+	}
+
+	EntityComponent* pScrollToZoom = pEnt->GetComponentByName("ScrollToZoom");
+	if (pScrollToZoom)
+	{
+		pScrollToZoom->GetVar("showCoords")->Set(desired);
+	}
+
+	EntityList* pChildren = pEnt->GetChildren();
+	if (!pChildren) return;
+	for (EntityListItor it = pChildren->begin(); it != pChildren->end(); ++it)
+	{
+		ApplyShowCoordsRecursive(*it, desired);
+	}
+}
+
+void SlideManager::Update()
+{
+	//Single source of truth: just the modifier key.  We deliberately do NOT additionally
+	//gate on the legacy m_showCoords config because (a) the user's expectation is "Ctrl
+	//= show, no Ctrl = hide" regardless of config, and (b) when CreateMediaFromFileName
+	//used to set showCoords from m_showCoords explicitly, image entities ended up locked
+	//at 0 while video/audio entities (whose showCoords var was never created until first
+	//touched) lazily fell back to the proton default of 1 - producing the asymmetry the
+	//user originally reported.  Driving this purely from IsDebugOverlayHotkeyHeld() makes
+	//all widget kinds behave identically.
+	//
+	//Walk from the whole entity root, not just m_pParentEnt, because script commands like
+	//add_stream and add_freetype_text attach their draggable widgets to the "GUI" parent
+	//(a sibling of the slide root), and those would otherwise be missed - leaving them
+	//stuck at the proton-default "always show coords" behavior.
+	Entity* pRoot = GetBaseApp() ? GetBaseApp()->GetEntityRoot() : NULL;
+	if (!pRoot) return;
+
+	const uint32 desired = GetApp()->IsDebugOverlayHotkeyHeld() ? 1u : 0u;
+
+	ApplyShowCoordsRecursive(pRoot, desired);
 }
 
 void SlideManager::OnVirtualScreenResized(CL_Vec2f vOldSize, CL_Vec2f vNewSize)

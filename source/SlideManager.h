@@ -22,6 +22,13 @@ public:
 	bool Init(Entity* pParent, string dirName);
 	Entity * ShowSlide(int slideNum, bool bDoTransitions = true);
 
+	//Per-frame tick: drives the "showCoords" var on every TouchDragMove and ScrollToZoom
+	//component anywhere in the entity tree based on App::IsDebugOverlayHotkeyHeld(), so
+	//the move/scale debug readouts only appear while the modifier key is held - uniformly
+	//across slide images, video/audio widgets, script-created text/stream widgets, etc.,
+	//without us having to touch the proton SDK components.
+	void Update();
+
 	void NextSlide();
 	void ModScale(float mod, bool bApplyMovementToo);
 	void ModPos(CL_Vec2f vMod);
