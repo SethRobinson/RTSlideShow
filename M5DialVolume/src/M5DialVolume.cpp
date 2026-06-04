@@ -21,9 +21,20 @@ const char* third_host = SERVER_HOST_3;
 int currentVolume = 70; 
 int lastVolume = 50;
 unsigned long lastVolumeChangeTime = 0;
-const unsigned long VOLUME_SEND_DELAY = 50;  // 100ms delay before sending
+const unsigned long VOLUME_SEND_DELAY = 50;  // ms of stillness that counts as "settled"
 bool volumeNeedsSending = false;
 const int VOLUME_SENSITIVITY = 2;  // Volume change per encoder notch (in %)
+
+// Live-send throttle: while the knob is being turned we send the latest value at most this
+// often (instead of only after it settles), so the volume tracks the knob in real time.
+unsigned long lastVolumeSentTime = 0;
+const unsigned long VOLUME_LIVE_SEND_INTERVAL = 90;
+
+// Display throttle: redrawing the whole 240x240 screen on every notch dominates the loop
+// during a fast spin.  We just mark the screen dirty and repaint at most ~25fps.
+bool displayDirty = false;
+unsigned long lastDisplayDraw = 0;
+const unsigned long DISPLAY_MIN_INTERVAL = 40;
 
 // Audio feedback settings
 const bool ENABLE_ENCODER_CLICK_SOUND = false;  // Set to true to enable clicking sounds when rotating encoder
@@ -47,7 +58,12 @@ WiFiClient client;
 // detected in seconds instead of stalling until the long TCP retransmit timeout.
 unsigned long lastHeartbeat = 0;
 const unsigned long HEARTBEAT_INTERVAL = 3000;  // ping every 3s when otherwise idle
-const uint32_t CONNECT_TIMEOUT_MS = 1000;       // per-host non-blocking connect timeout
+const uint32_t CONNECT_TIMEOUT_MS = 1000;       // per-host connect timeout (initial setup)
+const uint32_t RECONNECT_TIMEOUT_MS = 600;      // bounded reconnect timeout (hot path)
+
+// Require two consecutive missed heartbeats before tearing down and reconnecting, so a
+// single transient hiccup doesn't orphan the socket (which the server then has to cull).
+int heartbeatMisses = 0;
 
 // Function declarations
 void ConnectToWifi(bool bForceDisconnect);
@@ -55,6 +71,7 @@ void SendMessage(int myDeviceID, String msg);
 bool SendRaw(const String& message);
 void EnableTcpKeepAlive();
 bool TryConnectHost(const char* h);
+bool ReconnectPreferred();
 void updateDisplay();
 void playClickSound(bool isIncreasing);
 void IRAM_ATTR encoderISR();
@@ -318,22 +335,39 @@ bool SendRaw(const String& message) {
     return client.connected();
 }
 
+// Bounded reconnect for the hot path: tries ONLY the last-known-good host with a short
+// timeout, and never runs the blocking WiFi-join loop, so it can't freeze the device for
+// seconds while you're turning the knob.  Returns true if reconnected.
+bool ReconnectPreferred() {
+    if (WiFi.status() != WL_CONNECTED) {
+        // Kick off (re)association without blocking; we'll retry on the next heartbeat.
+        WiFi.begin(ssid, password);
+        return false;
+    }
+    WiFi.setSleep(false);
+    client.stop();
+
+    String h = (activeHost.length() > 0 && activeHost != "None") ? activeHost : String(host);
+    if (client.connect(h.c_str(), port, RECONNECT_TIMEOUT_MS)) {
+        activeHost = h;
+        client.setNoDelay(true);
+        EnableTcpKeepAlive();
+        SendRaw("ID" + String(deviceID) + "_Dummy");
+        Serial.println("Reconnected to " + h);
+        return true;
+    }
+    return false;
+}
+
+// Non-blocking send: if the link is down we simply skip (the heartbeat handles reconnects).
+// This keeps the volume/spin path from ever freezing the loop.
 void SendMessage(int myDeviceID, String msg) {
     String message = "ID" + String(myDeviceID) + msg;
     Serial.println("Sending: " + message);
-    
-    if (!client.connected()) {
-        Serial.println("Connection lost, reconnecting...");
-        ConnectToWifi(true);
-        if (!client.connected()) {
-            Serial.println("Failed to reconnect");
-            updateDisplay();  // Update display to show disconnected status
-            return;
-        }
+
+    if (!SendRaw(message)) {
+        Serial.println("Skipped (not connected); heartbeat will reconnect.");
     }
-    
-    SendRaw(message);
-    Serial.println("Sent.");
 }
 
 void handleEncoder() {
@@ -365,9 +399,10 @@ void handleEncoder() {
             }
         }
         
-        // Always update display and send volume when encoder moves
+        // Mark the display for a (throttled) repaint and flag the volume to be sent.  We do
+        // NOT redraw here - the loop repaints at ~25fps so a fast spin stays responsive.
         if (encoderMoved) {
-            updateDisplay();
+            displayDirty = true;
             lastVolumeChangeTime = millis();
             volumeNeedsSending = true;
         }
@@ -427,16 +462,30 @@ void loop() {
     // Handle buttons
     handleButtons();
     
-    // Send volume update once the knob settles.  This coalesces a fast spin into a single
-    // send of the final value instead of flooding the link with every intermediate notch,
-    // and we skip it entirely if the value didn't actually change.
-    if (volumeNeedsSending && (millis() - lastVolumeChangeTime >= VOLUME_SEND_DELAY)) {
-        if (currentVolume != lastVolume) {
+    // Send volume updates.  While the knob is turning we send the latest value live (at most
+    // every VOLUME_LIVE_SEND_INTERVAL) so it tracks in real time, and we always send the
+    // final value once it settles.  Duplicate values are skipped.
+    if (volumeNeedsSending) {
+        bool settled = (millis() - lastVolumeChangeTime >= VOLUME_SEND_DELAY);
+        bool liveDue = (millis() - lastVolumeSentTime >= VOLUME_LIVE_SEND_INTERVAL);
+
+        if ((settled || liveDue) && currentVolume != lastVolume) {
             String volumeMsg = "_Volume|" + String(currentVolume) + "|";
             SendMessage(deviceID, volumeMsg);
             lastVolume = currentVolume;
+            lastVolumeSentTime = millis();
         }
-        volumeNeedsSending = false;
+
+        if (settled) {
+            volumeNeedsSending = false;
+        }
+    }
+
+    // Repaint the screen at most ~25fps when something changed (keeps fast spins smooth).
+    if (displayDirty && (millis() - lastDisplayDraw >= DISPLAY_MIN_INTERVAL)) {
+        lastDisplayDraw = millis();
+        displayDirty = false;
+        updateDisplay();
     }
 
     // Drain anything the server sent (e.g. heartbeat acks) so the RX buffer doesn't fill.
@@ -444,12 +493,22 @@ void loop() {
         client.read();
     }
 
-    // Heartbeat: send a tiny ping every few seconds and reconnect on a dead link.
+    // Heartbeat: send a tiny ping every few seconds.  Only after two consecutive misses do
+    // we reconnect (bounded, non-blocking) - this avoids tearing down the socket on a single
+    // transient and prevents the reconnect churn that orphans connections on the server.
     if (millis() - lastHeartbeat >= HEARTBEAT_INTERVAL) {
         lastHeartbeat = millis();
-        if (!client.connected() || !SendRaw("ID" + String(deviceID) + "_Ping")) {
-            ConnectToWifi(true);
-            updateDisplay();  // Refresh connection status after a reconnect attempt
+        bool alive = client.connected() && SendRaw("ID" + String(deviceID) + "_Ping");
+        if (alive) {
+            heartbeatMisses = 0;
+        } else {
+            heartbeatMisses++;
+            if (heartbeatMisses >= 2) {
+                if (ReconnectPreferred()) {
+                    heartbeatMisses = 0;
+                }
+                displayDirty = true;  // refresh connection status
+            }
         }
     }
 }

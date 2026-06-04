@@ -486,6 +486,20 @@ void Script::Run()
 		}
 		if (words[0] == "toggle_music")
 		{
+			//Debounce: a fast double-press (or a button bounce) would toggle twice and leave
+			//the music in the wrong ("opposite") state, because we can't read Spotify's real
+			//play/pause state - we just fire a blind toggle.  Ignore a repeat that arrives
+			//within this window of the previous toggle_music.
+			static unsigned int s_lastToggleMusicTick = 0;
+			const unsigned int TOGGLE_MUSIC_DEBOUNCE_MS = 600;
+			unsigned int nowTick = GetTick();
+			if (s_lastToggleMusicTick != 0 && (nowTick - s_lastToggleMusicTick) < TOGGLE_MUSIC_DEBOUNCE_MS)
+			{
+				LogMsg("toggle_music: ignored rapid duplicate (%u ms since last)", nowTick - s_lastToggleMusicTick);
+				continue;
+			}
+			s_lastToggleMusicTick = nowTick;
+
 			int timeMS = StringAndVarToInt(words[2]);
 			VariantList vList;
 			GetMessageManager()->CallStaticFunction(ToggleMusic, timeMS, &vList);

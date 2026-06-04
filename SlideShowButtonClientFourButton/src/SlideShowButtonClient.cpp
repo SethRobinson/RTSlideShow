@@ -33,7 +33,12 @@ bool bUseSleepMode = false;          // Optionally enable sleep mode
 // keepalive on the socket, this makes a dropped connection show up within seconds.
 unsigned long lastHeartbeat = 0;
 const unsigned long HEARTBEAT_INTERVAL = 3000;  // send a ping every 3s when otherwise idle
-const uint32_t CONNECT_TIMEOUT_MS = 1000;       // per-host non-blocking connect timeout
+const uint32_t CONNECT_TIMEOUT_MS = 1000;       // per-host connect timeout (initial setup)
+const uint32_t RECONNECT_TIMEOUT_MS = 600;      // bounded reconnect timeout (hot path)
+
+// Require two consecutive missed heartbeats before reconnecting, so a single transient
+// hiccup doesn't tear down and re-open the socket (which orphans a connection on the server).
+int heartbeatMisses = 0;
 
 // RTC time
 m5::rtc_datetime_t StartTime;
@@ -75,6 +80,7 @@ void SendMessage(int myDeviceID, String msg);
 bool SendRaw(const String& message);
 void EnableTcpKeepAlive();
 bool TryConnectHost(const char* h);
+bool ReconnectPreferred();
 
 void SetStartTime() {
     StartTime = M5.Rtc.getDateTime();
@@ -254,21 +260,39 @@ bool SendRaw(const String& message)
   return client.connected();
 }
 
-// User-facing send: reconnects if needed.  We push the bytes out FIRST (before the slower
-// LCD redraw) so the command reaches the server with minimal latency, then update the screen
-// for feedback.  No blocking delays, so a button press never freezes the device.
+// Bounded reconnect for the hot path: tries ONLY the last-known-good host with a short
+// timeout, and never runs the blocking WiFi-join loop, so a button press can't freeze the
+// device for seconds.  Returns true if reconnected.
+bool ReconnectPreferred()
+{
+  if (WiFi.status() != WL_CONNECTED)
+  {
+      // Kick off (re)association without blocking; we'll retry on the next heartbeat.
+      WiFi.begin(ssid, password);
+      return false;
+  }
+  WiFi.setSleep(false);
+  client.stop();
+
+  String h = (activeHost.length() > 0 && activeHost != "None") ? activeHost : String(host);
+  if (client.connect(h.c_str(), port, RECONNECT_TIMEOUT_MS))
+  {
+      activeHost = h;
+      client.setNoDelay(true);
+      EnableTcpKeepAlive();
+      SendRaw("ID" + String(deviceID) + "_Dummy");
+      return true;
+  }
+  return false;
+}
+
+// User-facing send: push the bytes out (no blocking reconnect - the heartbeat handles that),
+// then update the screen for feedback.  A button press never freezes the device.
 void SendMessage(int myDeviceID, String msg) 
 {
   lastButtonPress = millis();
 
   String message = "ID" + String(myDeviceID) + msg;
-
-  bool reconnected = false;
-  if (!client.connected())
-  {
-      ConnectToWifi(true);
-      reconnected = true;
-  }
 
   bool sent = SendRaw(message);
 
@@ -279,7 +303,7 @@ void SendMessage(int myDeviceID, String msg)
   ShowTimeElapsed();
   if (!sent)
   {
-      M5.Lcd.println(reconnected ? "Not sent (no host)." : "Send failed.");
+      M5.Lcd.println("Not sent (reconnecting).");
   }
   else
   {
@@ -359,12 +383,20 @@ void loop() {
         client.read();
     }
 
-    // --- Heartbeat: send a tiny ping every few seconds and reconnect on a dead link ---
+    // --- Heartbeat: ping every few seconds.  Only after two consecutive misses do we
+    // reconnect (bounded, non-blocking), to avoid orphaning the socket on a single transient.
     if (millis() - lastHeartbeat >= HEARTBEAT_INTERVAL) {
         lastHeartbeat = millis();
-        if (!client.connected() || !SendRaw("ID" + String(deviceID) + "_Ping")) {
-            // Link is gone - reconnect (fast, bounded by CONNECT_TIMEOUT_MS per host).
-            ConnectToWifi(true);
+        bool alive = client.connected() && SendRaw("ID" + String(deviceID) + "_Ping");
+        if (alive) {
+            heartbeatMisses = 0;
+        } else {
+            heartbeatMisses++;
+            if (heartbeatMisses >= 2) {
+                if (ReconnectPreferred()) {
+                    heartbeatMisses = 0;
+                }
+            }
         }
     }
     
