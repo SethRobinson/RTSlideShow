@@ -3,3 +3,6 @@
 .vscode/c_cpp_properties.json
 .vscode/launch.json
 .vscode/ipch
+
+# Real WiFi/server credentials - copy secrets.example.h to secrets.h (see README)
+include/secrets.h

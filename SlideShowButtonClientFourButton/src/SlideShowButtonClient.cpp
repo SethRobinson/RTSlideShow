@@ -1,6 +1,8 @@
 #include <Arduino.h>
 #include <M5StickCPlus2.h>
 #include <WiFi.h>
+#include <lwip/sockets.h> //for setsockopt() TCP keepalive on the raw socket fd
+#include "secrets.h"      //WiFi/server credentials - copy secrets.example.h to secrets.h
 
 // Device and pin definitions
 const uint16_t deviceID = 2;
@@ -11,12 +13,12 @@ const uint16_t deviceID = 2;
 #define FIFTH_BUTTON_PIN 0     //E
 const uint16_t port  = 8095;    // Port to communicate with the server
 
-// WiFi and host settings
-const char* ssid     = "C2 Private";
-const char* password = "(password)";
-const char* host     = "192.168.1.5";
-const char* secondary_host = "192.168.1.75";
-const char* third_host = "192.168.1.72";
+// WiFi and host settings (values come from secrets.h)
+const char* ssid     = WIFI_SSID;
+const char* password = WIFI_PASSWORD;
+const char* host     = SERVER_HOST;
+const char* secondary_host = SERVER_HOST_2;
+const char* third_host = SERVER_HOST_3;
 
 String activeHost;
 
@@ -25,9 +27,13 @@ unsigned long lastButtonPress = 0;
 unsigned long screenTimeout = 10000; // Screen timeout in ms
 bool bUseSleepMode = false;          // Optionally enable sleep mode
 
-// KeepAlive variables
-unsigned long lastKeepAliveCheck = 0;
-const unsigned long KEEP_ALIVE_INTERVAL = 10UL * 60 * 1000; // 10 minutes
+// Heartbeat / liveness variables
+// Instead of a 10-minute "keep alive" that never actually sent anything (and so could never
+// notice a half-open link), we send a tiny ping every few seconds.  Combined with TCP
+// keepalive on the socket, this makes a dropped connection show up within seconds.
+unsigned long lastHeartbeat = 0;
+const unsigned long HEARTBEAT_INTERVAL = 3000;  // send a ping every 3s when otherwise idle
+const uint32_t CONNECT_TIMEOUT_MS = 1000;       // per-host non-blocking connect timeout
 
 // RTC time
 m5::rtc_datetime_t StartTime;
@@ -65,8 +71,10 @@ WiFiClient client;
 void ShowTimeElapsed();
 void ConnectToWifi(bool bForceDisconnect);
 void ClearScreen();
-void KeepAliveChecker();
 void SendMessage(int myDeviceID, String msg);
+bool SendRaw(const String& message);
+void EnableTcpKeepAlive();
+bool TryConnectHost(const char* h);
 
 void SetStartTime() {
     StartTime = M5.Rtc.getDateTime();
@@ -102,6 +110,38 @@ void ShowBatteryLevel() {
   M5.Lcd.println("%");
 }
 
+// Turn on TCP keepalive for the live socket so the OS detects a dropped peer (we roamed
+// away, AP rebooted, server died) within a few seconds instead of stalling until the much
+// longer TCP retransmit timeout.  After this, client.connected() reliably goes false on a
+// dead link.
+void EnableTcpKeepAlive() {
+  int fd = client.fd();
+  if (fd < 0) return;
+
+  int enable = 1;
+  setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, &enable, sizeof(enable));
+
+  int idle = 5;    // begin probing after 5s of silence
+  int interval = 2; // probe every 2s
+  int count = 3;    // give up (declare dead) after 3 failed probes
+  setsockopt(fd, IPPROTO_TCP, TCP_KEEPIDLE, &idle, sizeof(idle));
+  setsockopt(fd, IPPROTO_TCP, TCP_KEEPINTVL, &interval, sizeof(interval));
+  setsockopt(fd, IPPROTO_TCP, TCP_KEEPCNT, &count, sizeof(count));
+}
+
+// Attempt one host with a bounded (non-blocking) timeout so a dead host can't freeze the
+// whole device for many seconds.
+bool TryConnectHost(const char* h) {
+  client.stop();
+  if (client.connect(h, port, CONNECT_TIMEOUT_MS)) {
+    activeHost = h;
+    client.setNoDelay(true); // Disable Nagle's algorithm for low latency
+    EnableTcpKeepAlive();
+    return true;
+  }
+  return false;
+}
+
 // Modified to use the global WiFiClient
 void ConnectToWifi(bool bForceDisconnect) {
   // Ensure WiFi is connected
@@ -112,52 +152,56 @@ void ConnectToWifi(bool bForceDisconnect) {
           delay(500);
           M5.Lcd.print(".");
       }
-      WiFi.setSleep(false); // Disable WiFi power save for low latency
       M5.Lcd.print("IP: ");
       M5.Lcd.println(WiFi.localIP());
   }
-  
-  // If already connected via our client and not forcing a reconnect, just return.
-  if (client.connected()) 
-  {
-      if (bForceDisconnect) 
-      {
-          client.stop();
-      } else 
-      {
-      }
-  } 
+  // Always disable WiFi power save for low latency (not just on the first connect) - modem
+  // sleep is a common cause of laggy/intermittent responses.
+  WiFi.setSleep(false);
 
-  if (!client.connected())
+  // If already connected via our client and not forcing a reconnect, nothing to do.
+  if (client.connected() && !bForceDisconnect)
   {
-    activeHost = host;
-    if (!client.connect(activeHost.c_str(), port)) {
-        ClearScreen();
-        M5.Lcd.println("Failed, trying secondary");
-        client.stop();
-        if (!client.connect(secondary_host, port)) {
-            ClearScreen();
-            M5.Lcd.println("Failed, trying third");
-            client.stop();
-            if (!client.connect(third_host, port)) {
-               M5.Lcd.println("Third failed, no host");
-               return;
-            } else {
-               activeHost = third_host;
-            }
-        } else {
-            activeHost = secondary_host;
-        }
-    }
-  
+      return;
   }
-  
-  // Try connecting to the primary host, or fall back if needed.
-  client.setNoDelay(true); // Disable Nagle's algorithm for low latency
+
+  if (bForceDisconnect)
+  {
+      client.stop();
+  }
+
+  // Build the candidate list with the last-known-good host FIRST.  At the cafe the dev box
+  // (primary) is usually off, so always retrying it first wasted a full connect timeout on
+  // every reconnect.  Remembering activeHost avoids that stall.
+  // Use a stable local copy so the candidate pointer doesn't alias activeHost's own buffer
+  // (which TryConnectHost reassigns).
+  String preferred = activeHost;
+  const char* candidates[3] = { host, secondary_host, third_host };
+  if (preferred.length() > 0)
+  {
+      candidates[0] = preferred.c_str();
+      int idx = 1;
+      if (preferred != host)           candidates[idx++] = host;
+      if (preferred != secondary_host) candidates[idx++] = secondary_host;
+      if (preferred != third_host)     candidates[idx++] = third_host;
+  }
+
+  bool connected = false;
+  for (int i = 0; i < 3 && !connected; i++)
+  {
+      if (candidates[i] == NULL) continue;
+      connected = TryConnectHost(candidates[i]);
+  }
+
+  if (!connected)
+  {
+      M5.Lcd.println("No host found.");
+      return;
+  }
 
   SendMessage(deviceID, "_Dummy");
-
-  M5.Lcd.println("Host found.");
+  M5.Lcd.print("Host: ");
+  M5.Lcd.println(activeHost);
 }
 
 void TurnScreenOff() {
@@ -199,37 +243,48 @@ void ClearScreen() {
   M5.Lcd.setCursor(0, 0);
 }
 
-// Modified to use the global client and not disconnect after sending
+// Silent send used for heartbeats and the actual byte writes - never touches the screen so
+// pings don't keep the display awake.  Returns false if the link looks dead.
+bool SendRaw(const String& message)
+{
+  if (!client.connected()) return false;
+  client.print(message);
+  client.print("\n");
+  // If the socket died (keepalive tripped, peer gone) this flips false right away.
+  return client.connected();
+}
+
+// User-facing send: reconnects if needed.  We push the bytes out FIRST (before the slower
+// LCD redraw) so the command reaches the server with minimal latency, then update the screen
+// for feedback.  No blocking delays, so a button press never freezes the device.
 void SendMessage(int myDeviceID, String msg) 
 {
   lastButtonPress = millis();
-  //M5.Beep.tone(4000);
-  //delay(40);
-  //M5.Beep.mute();
 
+  String message = "ID" + String(myDeviceID) + msg;
+
+  bool reconnected = false;
+  if (!client.connected())
+  {
+      ConnectToWifi(true);
+      reconnected = true;
+  }
+
+  bool sent = SendRaw(message);
+
+  // Now the (comparatively slow) display update for user feedback.
   TurnScreenOn();
   ClearScreen();
-  String message = "ID" + String(myDeviceID) + msg;
   M5.Lcd.println(message);
   ShowTimeElapsed();
-
-  if (!client.connected())
-   {
-      M5.Lcd.println("Connection lost, reconnecting...");
-      delay(500);
-      ConnectToWifi(true);
-      if (!client.connected())
-       {
-         M5.Lcd.println("Failed to reconnect. Message not sent.");
-         return;
-      }
-    }
-  
-  // Send message with controlled line ending
-  client.print(message);
-  client.print("\n");
-  client.flush();      // Ensure message is sent immediately
-  M5.Lcd.println("Sent.");
+  if (!sent)
+  {
+      M5.Lcd.println(reconnected ? "Not sent (no host)." : "Send failed.");
+  }
+  else
+  {
+      M5.Lcd.println("Sent.");
+  }
   // Note: We leave the connection open.
   ShowBatteryLevel();
 }
@@ -245,16 +300,6 @@ void EnterLightSleepUntilAButtonIsPressed()
   ShowBatteryLevel();
   delay(500);
   lastButtonPress = millis();
-}
-
-// New keep-alive function to check and reconnect if needed.
-void KeepAliveChecker() {
-    if (!client.connected()) {
-        M5.Lcd.println("KeepAlive: connection lost. Reconnecting...");
-        SendMessage(deviceID, "_Dummy");
-    } else {
-        M5.Lcd.println("KeepAlive: connection is healthy.");
-    }
 }
 
 void handleButton(ButtonState& state, uint32_t& pressTime, uint32_t& lastStateChangeTime, bool isPressed, const String& buttonName) {
@@ -309,14 +354,18 @@ void loop() {
         handleButton(stateE, buttonPressTimeE, lastStateChangeTimeE, digitalRead(FIFTH_BUTTON_PIN) == LOW, "E");
     }
     
-    // --- Run KeepAliveChecker every 10 minutes ---
-    if (millis() - lastKeepAliveCheck >= KEEP_ALIVE_INTERVAL) {
-        lastKeepAliveCheck = millis();
-        //if wifi disconnected, reconnect
+    // Drain anything the server sent (e.g. heartbeat acks) so the RX buffer doesn't fill.
+    while (client.available()) {
+        client.read();
+    }
 
-        ConnectToWifi(false);
-        
-        //KeepAliveChecker();
+    // --- Heartbeat: send a tiny ping every few seconds and reconnect on a dead link ---
+    if (millis() - lastHeartbeat >= HEARTBEAT_INTERVAL) {
+        lastHeartbeat = millis();
+        if (!client.connected() || !SendRaw("ID" + String(deviceID) + "_Ping")) {
+            // Link is gone - reconnect (fast, bounded by CONNECT_TIMEOUT_MS per host).
+            ConnectToWifi(true);
+        }
     }
     
     // --- Screen timeout and optional sleep ---

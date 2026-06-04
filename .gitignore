@@ -35,3 +35,6 @@ dist
 RTSlideShow_Win64.zip
 SlideShowButtonClient
 media/buttons.afphoto
+
+# ESP firmware credentials - never commit real secrets.h (copy secrets.example.h instead)
+**/secrets.h

@@ -1,6 +1,8 @@
 #include <Arduino.h>
 #include <M5Unified.h>
 #include <WiFi.h>
+#include <lwip/sockets.h> //for setsockopt() TCP keepalive on the raw socket fd
+#include "secrets.h"      //WiFi/server credentials - copy secrets.example.h to secrets.h
 
 // This code is written to work with the M5Dial, it allows volume control via wifi on the RTSlideShow app
 // https://docs.m5stack.com/en/core/M5Dial
@@ -8,11 +10,12 @@
 // Device and network settings
 const uint16_t deviceID = 3;
 const uint16_t port = 8095;
-const char* ssid = "C2 Private";
-const char* password = "(password)";
-const char* host = "192.168.1.5";
-const char* secondary_host = "192.168.1.75";
-const char* third_host = "192.168.1.72";
+// WiFi and host settings (values come from secrets.h)
+const char* ssid = WIFI_SSID;
+const char* password = WIFI_PASSWORD;
+const char* host = SERVER_HOST;
+const char* secondary_host = SERVER_HOST_2;
+const char* third_host = SERVER_HOST_3;
 
 // Volume control variables
 int currentVolume = 70; 
@@ -39,13 +42,19 @@ uint8_t encoderPinB = 41;
 String activeHost;
 WiFiClient client;
 
-// Timers
-unsigned long lastKeepAliveCheck = 0;
-const unsigned long KEEP_ALIVE_INTERVAL = 10UL * 60 * 1000;  // 10 minutes
+// Heartbeat / liveness timers
+// A tiny ping every few seconds (plus TCP keepalive on the socket) lets a dropped link be
+// detected in seconds instead of stalling until the long TCP retransmit timeout.
+unsigned long lastHeartbeat = 0;
+const unsigned long HEARTBEAT_INTERVAL = 3000;  // ping every 3s when otherwise idle
+const uint32_t CONNECT_TIMEOUT_MS = 1000;       // per-host non-blocking connect timeout
 
 // Function declarations
 void ConnectToWifi(bool bForceDisconnect);
 void SendMessage(int myDeviceID, String msg);
+bool SendRaw(const String& message);
+void EnableTcpKeepAlive();
+bool TryConnectHost(const char* h);
 void updateDisplay();
 void playClickSound(bool isIncreasing);
 void IRAM_ATTR encoderISR();
@@ -204,6 +213,40 @@ void playClickSound(bool isIncreasing) {
     }
 }
 
+// Turn on TCP keepalive so the OS detects a dropped peer within seconds instead of stalling
+// until the much longer TCP retransmit timeout.  After this, client.connected() reliably
+// goes false on a dead link.
+void EnableTcpKeepAlive() {
+    int fd = client.fd();
+    if (fd < 0) return;
+
+    int enable = 1;
+    setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, &enable, sizeof(enable));
+
+    int idle = 5;     // begin probing after 5s of silence
+    int interval = 2; // probe every 2s
+    int count = 3;    // declare dead after 3 failed probes
+    setsockopt(fd, IPPROTO_TCP, TCP_KEEPIDLE, &idle, sizeof(idle));
+    setsockopt(fd, IPPROTO_TCP, TCP_KEEPINTVL, &interval, sizeof(interval));
+    setsockopt(fd, IPPROTO_TCP, TCP_KEEPCNT, &count, sizeof(count));
+}
+
+// Attempt one host with a bounded (non-blocking) timeout so a dead host can't freeze the
+// device for many seconds.
+bool TryConnectHost(const char* h) {
+    client.stop();
+    Serial.print("Connecting to host: ");
+    Serial.println(h);
+    if (client.connect(h, port, CONNECT_TIMEOUT_MS)) {
+        activeHost = h;
+        client.setNoDelay(true); // Disable Nagle's algorithm for low latency
+        EnableTcpKeepAlive();
+        Serial.println("Connected to host!");
+        return true;
+    }
+    return false;
+}
+
 void ConnectToWifi(bool bForceDisconnect) {
     // Ensure WiFi is connected
     if (WiFi.status() != WL_CONNECTED) {
@@ -217,7 +260,6 @@ void ConnectToWifi(bool bForceDisconnect) {
             attempts++;
         }
         if (WiFi.status() == WL_CONNECTED) {
-            WiFi.setSleep(false); // Disable WiFi power save for low latency
             Serial.println("\nConnected!");
             Serial.print("IP: ");
             Serial.println(WiFi.localIP());
@@ -227,43 +269,53 @@ void ConnectToWifi(bool bForceDisconnect) {
             return;
         }
     }
-    
-    // Handle client connection
-    if (client.connected()) {
-        if (bForceDisconnect) {
-            client.stop();
-        } else {
-            return;
-        }
+    // Always disable WiFi power save for low latency (not just on the first connect) - modem
+    // sleep is a common cause of laggy/intermittent responses.
+    WiFi.setSleep(false);
+
+    // If already connected and not forcing a reconnect, nothing to do.
+    if (client.connected() && !bForceDisconnect) {
+        return;
     }
-    
-    if (!client.connected()) {
-        activeHost = host;
-        Serial.print("Connecting to primary host: ");
-        Serial.println(activeHost);
-        
-        if (!client.connect(activeHost.c_str(), port)) {
-            Serial.println("Failed, trying secondary host");
-            client.stop();
-            activeHost = secondary_host;
-            
-            if (!client.connect(secondary_host, port)) {
-                Serial.println("Failed, trying third host");
-                client.stop();
-                activeHost = third_host;
-                
-                if (!client.connect(third_host, port)) {
-                    Serial.println("All hosts failed");
-                    activeHost = "None";
-                    return;
-                }
-            }
-        }
-        
-        Serial.println("Connected to host!");
-        client.setNoDelay(true); // Disable Nagle's algorithm for low latency
-        SendMessage(deviceID, "_Dummy");
+
+    if (bForceDisconnect) {
+        client.stop();
     }
+
+    // Try the last-known-good host first.  At the cafe the dev box (primary) is usually off,
+    // so always retrying it first wasted a full connect timeout on every reconnect.
+    String preferred = activeHost;
+    const char* candidates[3] = { host, secondary_host, third_host };
+    if (preferred.length() > 0 && preferred != "None") {
+        candidates[0] = preferred.c_str();
+        int idx = 1;
+        if (preferred != host)           candidates[idx++] = host;
+        if (preferred != secondary_host) candidates[idx++] = secondary_host;
+        if (preferred != third_host)     candidates[idx++] = third_host;
+    }
+
+    bool connected = false;
+    for (int i = 0; i < 3 && !connected; i++) {
+        if (candidates[i] == NULL) continue;
+        connected = TryConnectHost(candidates[i]);
+    }
+
+    if (!connected) {
+        Serial.println("All hosts failed");
+        activeHost = "None";
+        return;
+    }
+
+    SendMessage(deviceID, "_Dummy");
+}
+
+// Silent send used for heartbeats and the actual byte writes - never redraws the screen.
+// Returns false if the link looks dead.
+bool SendRaw(const String& message) {
+    if (!client.connected()) return false;
+    client.print(message);
+    client.print("\n");
+    return client.connected();
 }
 
 void SendMessage(int myDeviceID, String msg) {
@@ -280,9 +332,7 @@ void SendMessage(int myDeviceID, String msg) {
         }
     }
     
-    client.print(message);
-    client.print("\n");
-    client.flush();
+    SendRaw(message);
     Serial.println("Sent.");
 }
 
@@ -377,22 +427,29 @@ void loop() {
     // Handle buttons
     handleButtons();
     
-    // Send volume update after delay
+    // Send volume update once the knob settles.  This coalesces a fast spin into a single
+    // send of the final value instead of flooding the link with every intermediate notch,
+    // and we skip it entirely if the value didn't actually change.
     if (volumeNeedsSending && (millis() - lastVolumeChangeTime >= VOLUME_SEND_DELAY)) {
-        String volumeMsg = "_Volume|" + String(currentVolume) + "|";
-        SendMessage(deviceID, volumeMsg);
-        lastVolume = currentVolume;
+        if (currentVolume != lastVolume) {
+            String volumeMsg = "_Volume|" + String(currentVolume) + "|";
+            SendMessage(deviceID, volumeMsg);
+            lastVolume = currentVolume;
+        }
         volumeNeedsSending = false;
     }
-    
-    // Keep-alive check
-    if (millis() - lastKeepAliveCheck >= KEEP_ALIVE_INTERVAL) {
-        lastKeepAliveCheck = millis();
-        Serial.println("Keep-alive check...");
-        ConnectToWifi(false);
-        if (client.connected()) {
-            SendMessage(deviceID, "_KeepAlive");
+
+    // Drain anything the server sent (e.g. heartbeat acks) so the RX buffer doesn't fill.
+    while (client.available()) {
+        client.read();
+    }
+
+    // Heartbeat: send a tiny ping every few seconds and reconnect on a dead link.
+    if (millis() - lastHeartbeat >= HEARTBEAT_INTERVAL) {
+        lastHeartbeat = millis();
+        if (!client.connected() || !SendRaw("ID" + String(deviceID) + "_Ping")) {
+            ConnectToWifi(true);
+            updateDisplay();  // Refresh connection status after a reconnect attempt
         }
-        updateDisplay();  // Refresh connection status
     }
 }

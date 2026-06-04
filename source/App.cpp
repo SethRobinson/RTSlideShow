@@ -346,7 +346,10 @@ bool App::Init()
 void App::Kill()
 {
 	m_varDB.Save("save.dat");
-	
+
+	//Stop the network I/O thread before the rest of the app tears down.
+	m_restManager.Stop();
+
 	BaseApp::Kill();
 	g_pApp = NULL;
 }

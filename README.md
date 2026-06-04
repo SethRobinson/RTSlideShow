@@ -71,6 +71,16 @@ It listens at port 8095 for commands that will trigger existing scripts such as 
 
 Oh, you can press 1 or 2 on the keyboard to fake remote button presses for testing.  They run the included ID0_ButtonA.txt and ID1_ButtonA.txt scripts which pop up a "correct" or "incorrect" graphic as well as play a sfx.
 
+### WiFi controller setup (ESP32 / M5 devices)
+
+The PlatformIO firmware for the physical controllers lives in <b>SlideShowButtonClientFourButton</b> (M5StickC Plus2 buttons) and <b>M5DialVolume</b> (M5Dial volume knob).  To keep WiFi passwords out of git, each project reads its credentials from an untracked <b>include/secrets.h</b>:
+
+1. In the project folder, copy <b>include/secrets.example.h</b> to <b>include/secrets.h</b>.
+2. Edit <b>secrets.h</b> with your WiFi SSID, password, and the IP(s) of the PC(s) running RTSlideShow.  (If you only use one PC, point all three SERVER_HOST entries at the same IP.)
+3. Build and upload with PlatformIO as usual.
+
+<b>secrets.h</b> is gitignored, so your real credentials are never committed.
+
 ## The config file
 
 Edit config.txt to change the default settings.  The file itself has some basic descriptions of its options.
