@@ -73,7 +73,7 @@ Oh, you can press 1 or 2 on the keyboard to fake remote button presses for testi
 
 ### WiFi controller setup (ESP32 / M5 devices)
 
-The PlatformIO firmware for the physical controllers lives in <b>SlideShowButtonClientFourButton</b> (M5StickC Plus2 buttons) and <b>M5DialVolume</b> (M5Dial volume knob).  To keep WiFi passwords out of git, each project reads its credentials from an untracked <b>include/secrets.h</b>:
+The PlatformIO firmware for the physical controllers lives in <b>SlideShowButtonClientFourButton</b> (M5StickC Plus2 buttons), <b>M5DialVolume</b> (M5Dial volume knob), and <b>M5StickButtonArduinoCode</b> (original M5StickC Plus lit-button remote).  To keep WiFi passwords out of git, each project reads its credentials from an untracked <b>include/secrets.h</b>:
 
 1. In the project folder, copy <b>include/secrets.example.h</b> to <b>include/secrets.h</b>.
 2. Edit <b>secrets.h</b> with your WiFi SSID, password, and the IP(s) of the PC(s) running RTSlideShow.  (If you only use one PC, point all three SERVER_HOST entries at the same IP.)
