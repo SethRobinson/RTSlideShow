@@ -12,6 +12,8 @@ const uint16_t deviceID = 2;
 #define FOURTH_BUTTON_PIN -1   //D (disabled due to pin 25/36 interference)
 #define FIFTH_BUTTON_PIN 0     //E
 const uint16_t port  = 8095;    // Port to communicate with the server
+// DHCP hostname so this unit is easy to find in the Deco app (instead of "espressif"/"Unknown").
+#define DEVICE_HOSTNAME "RTSlideShow-Buttons"
 
 // WiFi and host settings (values come from secrets.h)
 const char* ssid     = WIFI_SSID;
@@ -33,7 +35,9 @@ bool bUseSleepMode = false;          // Optionally enable sleep mode
 // keepalive on the socket, this makes a dropped connection show up within seconds.
 unsigned long lastHeartbeat = 0;
 const unsigned long HEARTBEAT_INTERVAL = 3000;  // send a ping every 3s when otherwise idle
-const uint32_t CONNECT_TIMEOUT_MS = 1000;       // per-host connect timeout (initial setup)
+const uint32_t CONNECT_TIMEOUT_MS = 3000;       // per-host connect timeout (initial setup); the
+                                                // first connect right after WiFi association can
+                                                // take >1s on a busy AP, so keep this generous
 const uint32_t RECONNECT_TIMEOUT_MS = 600;      // bounded reconnect timeout (hot path)
 
 // Require two consecutive missed heartbeats before reconnecting, so a single transient
@@ -81,6 +85,10 @@ bool SendRaw(const String& message);
 void EnableTcpKeepAlive();
 bool TryConnectHost(const char* h);
 bool ReconnectPreferred();
+void StartWifiJoin();
+bool ParseBssid(const char* s, uint8_t out[6]);
+String WifiNodeTag();
+void ShowIdentity();
 
 void SetStartTime() {
     StartTime = M5.Rtc.getDateTime();
@@ -139,13 +147,76 @@ void EnableTcpKeepAlive() {
 // whole device for many seconds.
 bool TryConnectHost(const char* h) {
   client.stop();
+  // Show which host we're attempting so the stick reports what it's actually doing - makes a
+  // "No host found." far easier to diagnose (wrong IP? one host up, others down? all timing out?).
+  M5.Lcd.print("Try ");
+  M5.Lcd.print(h);
   if (client.connect(h, port, CONNECT_TIMEOUT_MS)) {
     activeHost = h;
     client.setNoDelay(true); // Disable Nagle's algorithm for low latency
     EnableTcpKeepAlive();
+    M5.Lcd.println(" OK");
+    return true;
+  }
+  M5.Lcd.println(" X");
+  return false;
+}
+
+// Parse "aa:bb:cc:dd:ee:ff" into 6 bytes.  Returns false if the string isn't a valid MAC.
+bool ParseBssid(const char* s, uint8_t out[6]) {
+  if (!s) return false;
+  unsigned int b[6];
+  if (sscanf(s, "%x:%x:%x:%x:%x:%x", &b[0], &b[1], &b[2], &b[3], &b[4], &b[5]) == 6) {
+    for (int i = 0; i < 6; i++) out[i] = (uint8_t)b[i];
     return true;
   }
   return false;
+}
+
+// Short tag for the access point we're on (last byte of the BSSID) to show which mesh node.
+String WifiNodeTag() {
+  String b = WiFi.BSSIDstr();
+  if (b.length() >= 2) return b.substring(b.length() - 2);
+  return "??";
+}
+
+// Centralized WiFi association: friendly hostname, scan ALL channels and pick the STRONGEST
+// node (default WIFI_FAST_SCAN grabs the first/possibly-far node), cap at WPA2 (dodge
+// WiFi6E/WPA3/PMF handshake issues), and optionally HARD-LOCK to WIFI_BSSID if set in
+// secrets.h (unset = automatic strongest-node, so the Deco-app-only approach works).
+void StartWifiJoin() {
+  WiFi.persistent(false);
+  WiFi.mode(WIFI_STA);
+  WiFi.setHostname(DEVICE_HOSTNAME);
+  WiFi.setSleep(false);
+  WiFi.setScanMethod(WIFI_ALL_CHANNEL_SCAN);
+  WiFi.setSortMethod(WIFI_CONNECT_AP_BY_SIGNAL);
+  WiFi.setMinSecurity(WIFI_AUTH_WPA2_PSK);
+
+  uint8_t bssid[6];
+  bool haveBssid = false;
+#ifdef WIFI_BSSID
+  haveBssid = ParseBssid(WIFI_BSSID, bssid);
+#endif
+
+  if (haveBssid) {
+    WiFi.begin(ssid, password, 0, bssid);
+  } else {
+    WiFi.begin(ssid, password);
+  }
+  WiFi.setTxPower(WIFI_POWER_19_5dBm);  // max TX power for the best link
+}
+
+// Show this unit's identity (hostname/IP/MAC/RSSI/node) so it's easy to find in the Deco app.
+void ShowIdentity() {
+  ClearScreen();
+  M5.Lcd.println(DEVICE_HOSTNAME);
+  M5.Lcd.print("IP "); M5.Lcd.println(WiFi.localIP());
+  M5.Lcd.print("MAC "); M5.Lcd.println(WiFi.macAddress());
+  M5.Lcd.printf("%ddBm n:%s\n", WiFi.RSSI(), WifiNodeTag().c_str());
+  Serial.printf("Hostname:%s IP:%s MAC:%s RSSI:%d BSSID:%s ch:%d\n",
+                DEVICE_HOSTNAME, WiFi.localIP().toString().c_str(), WiFi.macAddress().c_str(),
+                WiFi.RSSI(), WiFi.BSSIDstr().c_str(), WiFi.channel());
 }
 
 // Modified to use the global WiFiClient
@@ -153,7 +224,7 @@ void ConnectToWifi(bool bForceDisconnect) {
   // Ensure WiFi is connected
   if (WiFi.status() != WL_CONNECTED) 
   {
-      WiFi.begin(ssid, password);
+      StartWifiJoin();
       while (WiFi.status() != WL_CONNECTED) {
           delay(500);
           M5.Lcd.print(".");
@@ -231,9 +302,16 @@ void setup() {
   TurnScreenOn();
   M5.Lcd.setTextSize(2);
   SetStartTime();
+  Serial.begin(115200);
   ShowBatteryLevel();
   ShowTimeElapsed();
   ConnectToWifi(false);
+
+  // Briefly show this unit's identity so it can be matched/pinned in the Deco app.
+  if (WiFi.status() == WL_CONNECTED) {
+    ShowIdentity();
+    delay(2500);
+  }
 
   if (FIRST_BUTTON_PIN >= 0) pinMode(FIRST_BUTTON_PIN, INPUT_PULLUP);
   if (SECOND_BUTTON_PIN >= 0) pinMode(SECOND_BUTTON_PIN, INPUT_PULLUP);
@@ -268,7 +346,7 @@ bool ReconnectPreferred()
   if (WiFi.status() != WL_CONNECTED)
   {
       // Kick off (re)association without blocking; we'll retry on the next heartbeat.
-      WiFi.begin(ssid, password);
+      StartWifiJoin();
       return false;
   }
   WiFi.setSleep(false);
@@ -311,6 +389,10 @@ void SendMessage(int myDeviceID, String msg)
   }
   // Note: We leave the connection open.
   ShowBatteryLevel();
+  // Link quality (RSSI + which mesh node) so a bad/far node is visible during use.
+  if (WiFi.status() == WL_CONNECTED) {
+    M5.Lcd.printf("%ddBm n:%s\n", WiFi.RSSI(), WifiNodeTag().c_str());
+  }
 }
 
 void EnterLightSleepUntilAButtonIsPressed() 

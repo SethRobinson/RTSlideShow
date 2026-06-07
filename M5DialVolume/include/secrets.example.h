@@ -19,3 +19,9 @@
 #define SERVER_HOST    "192.168.1.5"
 #define SERVER_HOST_2  "192.168.1.75"
 #define SERVER_HOST_3  "192.168.1.72"
+
+// OPTIONAL: hard-lock this device to ONE mesh node's 2.4GHz radio (helps if the mesh keeps
+// shoving it onto a far/weak node).  Leave commented out to auto-pick the STRONGEST node.
+// To get the exact value: connect the device, pin it to the desired node in the Deco app,
+// then read the BSSID it shows on screen / over Serial and paste it here.
+// #define WIFI_BSSID "aa:bb:cc:dd:ee:ff"

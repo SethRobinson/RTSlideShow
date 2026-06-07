@@ -81,6 +81,15 @@ The PlatformIO firmware for the physical controllers lives in <b>SlideShowButton
 
 <b>secrets.h</b> is gitignored, so your real credentials are never committed.
 
+#### Mesh WiFi reliability (important for multi-node systems like TP-Link Deco)
+
+ESP32 devices do not roam, and the Arduino default scan connects to the first AP it finds, not the closest one. On a multi-node mesh this can leave a controller stuck on a far/weak node (drops, lag). The firmware now scans all channels and picks the strongest node, caps security at WPA2 (to dodge WiFi 6E/WPA3/PMF handshake issues), and shows live link quality. Recommended setup:
+
+- Put the controllers on a dedicated 2.4 GHz, WPA2 SSID (on Deco: More > IoT Network) and use that SSID/password in <b>secrets.h</b>.
+- In the Deco app, pin each controller to the closest node: Clients > select device > Connection Preference > turn off Auto > choose the node + 2.4 GHz. (Requires Deco firmware 1.6.0+.) Turning off per-client "Mesh Technology" also stops forced steering.
+- Each device shows its <b>hostname</b> (RTSlideShow-VolumeDial / RTSlideShow-Buttons), <b>IP</b>, and <b>MAC</b> on screen at boot so you can find it among many clients in the Deco app, plus a live <b>RSSI/node</b> readout (red when the signal is weak).
+- Optional hard lock: if the mesh still misbehaves, set <b>WIFI_BSSID</b> in <b>secrets.h</b> to the exact BSSID shown on the device screen (after pinning it to the desired node) to force it onto that one radio. Leave it commented out for automatic strongest-node selection.
+
 ## The config file
 
 Edit config.txt to change the default settings.  The file itself has some basic descriptions of its options.
